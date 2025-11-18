@@ -1,3 +1,4 @@
+
 import type { CaseStudyProject, RecentWorkTheme } from './types';
 
 export const CLIENT_LOGOS: string[] = [
@@ -58,13 +59,27 @@ export const HERO_PROJECTS: CaseStudyProject[] = [
     title: 'MLB The Show Franchise',
     subtitle: 'Case Study: Global Brand Launch & Retail Success',
     heroImage: 'https://picsum.photos/seed/mlb/1200/800',
-    challenge: 'Launch a new flagship sports gaming franchise to compete against established market giants and capture the attention of a diverse audience, from hardcore baseball fans to casual gamers.',
+    challenge: 'Launch a new flagship sports gaming franchise to compete against established market giants and capture the attention of a diverse audience, from hardcore baseball fans to casual gamers. This required a multi-faceted approach to build hype and establish a strong brand identity from day one.',
     strategy: 'Directed a multi-disciplinary creative effort, structuring and managing in-house teams, external agencies, and freelance talent. We developed a cohesive, cross-channel campaign spanning broadcast TV, dynamic retail displays, packaging, and high-impact tradeshow experiences to create an unmissable launch event.',
     impact: 'Achieved record-breaking launch sales, surpassing initial projections by 40%. Secured #1 market share in the genre within the first year and established a franchise that has shown incredible longevity, winning multiple "Game of the Year" awards.',
     processImages: [
       'https://picsum.photos/seed/mlb-process1/600/400',
       'https://picsum.photos/seed/mlb-process2/600/400',
       'https://picsum.photos/seed/mlb-process3/600/400',
+    ],
+    // New data for detail page
+    client: 'Sony PlayStation',
+    tags: ['Packaging', 'Broadcast TV', 'Retail', 'Trade Show'],
+    description2: "The campaign's success was built on a deep understanding of the target audience. We combined authentic baseball simulation with high-energy, accessible marketing that spoke to both hardcore fans and newcomers. The retail presence was particularly crucial, with custom displays and interactive kiosks that allowed players to experience the game firsthand. This hands-on approach, coupled with a massive broadcast push, cemented MLB The Show as the premier baseball gaming experience.",
+    galleryImages: [
+      'https://picsum.photos/seed/mlb-gallery1/1200/800',
+      'https://picsum.photos/seed/mlb-gallery2/1200/800',
+      'https://picsum.photos/seed/mlb-gallery3/1200/800',
+    ],
+    footerImages: [
+      'https://picsum.photos/seed/mlb-footer1/400/1200',
+      'https://picsum.photos/seed/mlb-footer2/400/1200',
+      'https://picsum.photos/seed/mlb-footer3/400/1200',
     ],
   },
   {
@@ -79,6 +94,19 @@ export const HERO_PROJECTS: CaseStudyProject[] = [
       'https://picsum.photos/seed/atari-process1/600/400',
       'https://picsum.photos/seed/atari-process2/600/400',
       'https://picsum.photos/seed/atari-process3/600/400',
+    ],
+    client: 'Atari / Interplay',
+    tags: ['Brand Identity', 'Packaging', 'Digital Campaign', 'Social Media'],
+    description2: "The key to this project was striking the perfect balance between honoring the past and appealing to the present. We dove deep into the archives to extract core visual elements—pixel art, typography, color palettes—and reinterpreted them for a high-definition world. The result was a brand identity that felt instantly familiar yet undeniably fresh, capturing the imagination of both old-school gamers and a new generation.",
+    galleryImages: [
+      'https://picsum.photos/seed/atari-gallery1/1200/800',
+      'https://picsum.photos/seed/atari-gallery2/1200/800',
+      'https://picsum.photos/seed/atari-gallery3/1200/800',
+    ],
+    footerImages: [
+      'https://picsum.photos/seed/atari-footer1/400/1200',
+      'https://picsum.photos/seed/atari-footer2/400/1200',
+      'https://picsum.photos/seed/atari-footer3/400/1200',
     ],
   },
 ];
@@ -143,21 +171,46 @@ export const ABOUT_ME = {
       text: "I specialize in bridging complicated technical requirements with compelling user experiences, translating product features into emotional connections that resonate with audiences."
     },
   ],
-  experienceAdvantage: [
-    {
-      title: 'A Deep Well of Strategic Insight',
-      text: "30+ years of diverse industry experience provides a deep well of strategic insight, allowing me to anticipate challenges and identify opportunities that others might miss."
-    },
-    {
-      title: 'Adaptable and Future-Focused',
-      text: "I've successfully navigated multiple technological shifts—from print to digital, from consoles to mobile. I understand how to future-proof creative teams and build brands that last."
-    },
-    {
-      title: 'Unshakeable Foundation, Modern Approach',
-      text: "My foundation in classic brand building is unshakeable, but I have a relentless commitment to current and emerging technologies, including AI integration in creative workflows and brand strategy in social/short-form video."
-    },
+  obsessions: [
+    'Swiss Typography', 
+    'Japanese Denim', 
+    'Vintage Synthesizers', 
+    'Perfect Espresso',
+    'Mid-Century Furniture',
+    'Film Photography'
+  ],
+  travelLog: [
+    'Tokyo, Japan', 
+    'Reykjavik, Iceland', 
+    'Berlin, Germany', 
+    'Kyoto, Japan',
+    'Mexico City',
+    'Copenhagen, Denmark',
+    'Buenos Aires',
+    'Seoul, South Korea',
+    'Lisbon, Portugal'
+  ],
+  quotes: [
+    { text: "Good design is as little design as possible.", author: "Dieter Rams" },
+    { text: "The details are not the details. They make the design.", author: "Charles Eames" }
+  ],
+  favorites: {
+    movies: ['Blade Runner 2049', 'Arrival', 'Grand Budapest Hotel'],
+    shows: ['Severance', 'The Bear', 'Succession'],
+    podcasts: ['99% Invisible', 'Design Matters', 'How I Built This'],
+    audiobooks: ['The Creative Act', 'Steve Jobs', 'Kitchen Confidential']
+  },
+  panoramaImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2000&auto=format&fit=crop', // Wide landscape
+  inspirationGrid: [
+    'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', // Updated to abstract art
+    'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=1200&auto=format&fit=crop', 
+    'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?q=80&w=1200&auto=format&fit=crop'
   ],
   resumeUrl: '#', // Placeholder for actual resume link
   linkedInUrl: 'https://linkedin.com/in/davidrgaines',
   email: 'dave@gainesdg.com',
+  phone: '+1 (555) 123-0987',
 };

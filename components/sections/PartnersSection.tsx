@@ -1,55 +1,53 @@
 
-import React, { useState, useEffect } from 'react';
-import { LogoGrid } from '../ui/InfiniteLogoWall';
-import { client } from '../../lib/sanityClient';
-import type { SanityClientLogo } from '../../types';
+import React from 'react';
+import { useContent } from '../../context/ContentContext';
 
-const SkeletonLoader: React.FC = () => (
-  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 max-w-7xl mx-auto">
-    {Array.from({ length: 10 }).map((_, index) => (
-      <div 
-        key={index} 
-        className="aspect-[2/1] bg-slate-200 rounded-md animate-pulse"
-      />
-    ))}
-  </div>
-);
+const Marquee: React.FC<{ logos: string[], direction: 'left' | 'right' }> = ({ logos, direction }) => {
+  // If no logos, return null
+  if (!logos || logos.length === 0) return null;
 
-export const PartnersSection: React.FC = () => {
-  const [logos, setLogos] = useState<SanityClientLogo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchLogos = async () => {
-      try {
-        setLoading(true);
-        const query = '*[_type == "clientLogo"]{_id, name, "logoUrl": logo.asset->url}';
-        const result = await client.fetch<SanityClientLogo[]>(query);
-        setLogos(result);
-      } catch (err) {
-        console.error('Failed to fetch logos from Sanity:', err);
-        setError('Failed to load partner logos.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchLogos();
-  }, []);
+  // Duplicate logos for a seamless, continuous loop
+  const allLogos = [...logos, ...logos]; 
+  const animationClass = direction === 'left' ? 'animate-infinite-scroll-left' : 'animate-infinite-scroll-right';
 
   return (
-    <section className="py-20 md:py-28 bg-white text-slate-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-           <h2 className="text-3xl font-bold tracking-tight uppercase text-slate-800">
-            CLIENTS
-           </h2>
-        </div>
+    <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+      <ul className={`flex items-center justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none ${animationClass} hover:[animation-play-state:paused]`}>
+        {allLogos.map((logo, index) => (
+          <li key={index} className="flex-shrink-0" aria-hidden={true}>
+            <img src={logo} alt="" className="max-h-8 hover:scale-110 transition-transform duration-300" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-        {loading && <SkeletonLoader />}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {!loading && !error && <LogoGrid logos={logos} />}
+export const PartnersSection: React.FC = () => {
+  const { clientLogos, brandLogos } = useContent();
+
+  return (
+    <section className="pb-12 pt-12 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center w-full">
+            
+            {/* Top Label */}
+            <h3 className="text-center text-xs font-bold text-gray-300 tracking-[0.25em] uppercase mb-6">
+                CLIENTS
+            </h3>
+
+            {/* Logo Group - Moved together */}
+            <div className="w-full flex flex-col gap-12 mb-6">
+               <Marquee logos={clientLogos} direction="left" />
+               <Marquee logos={brandLogos} direction="right" />
+            </div>
+
+            {/* Bottom Label - Moved below brands */}
+            <h3 className="text-center text-xs font-bold text-gray-300 tracking-[0.25em] uppercase">
+                BRANDS
+            </h3>
+
+        </div>
       </div>
     </section>
   );

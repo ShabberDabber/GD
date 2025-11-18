@@ -1,38 +1,74 @@
 
 import React from 'react';
-import { ABOUT_ME } from '../constants';
+import { useContent } from '../context/ContentContext';
 import { LinkedInIcon } from './icons/LinkedInIcon';
 import { useCursorHover } from './ui/CustomCursor';
 
 export const Footer: React.FC = () => {
+  const { aboutMe } = useContent();
   const { setIsHovering } = useCursorHover();
+  
+  const handleAdminClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.hash = '#/admin';
+  };
+
   return (
     <footer className="bg-base-medium border-t border-base-light">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold text-text-primary">{ABOUT_ME.name}</h3>
-            <p className="text-text-tertiary">{ABOUT_ME.title}</p>
-            <a href={`mailto:${ABOUT_ME.email}`} 
-               className="text-brand-primary hover:underline mt-1 inline-block"
-               onMouseEnter={() => setIsHovering(true)}
-               onMouseLeave={() => setIsHovering(false)}
-            >{ABOUT_ME.email}</a>
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8 md:gap-4">
+          
+          {/* Column 1: Name & Title (Top Aligned) */}
+          <div className="text-left md:w-1/3">
+            <h3 className="text-2xl font-bold text-text-primary mb-1">{aboutMe.name}</h3>
+            <p className="text-text-tertiary text-sm">{aboutMe.title}</p>
           </div>
-          <div className="flex items-center gap-4">
-            <a href={ABOUT_ME.linkedInUrl} 
+
+          {/* Column 2: Contact Info (Center, Top Aligned) */}
+          <div className="flex flex-col items-start md:items-center md:w-1/3 gap-1">
+              <a href={`mailto:${aboutMe.email}`} 
+                 className="text-brand-primary hover:text-white transition-colors text-xl font-bold"
+                 onMouseEnter={() => setIsHovering(true)}
+                 onMouseLeave={() => setIsHovering(false)}
+              >
+                {aboutMe.email}
+              </a>
+              <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} 
+                 className="text-text-secondary hover:text-white transition-colors text-base font-medium"
+                 onMouseEnter={() => setIsHovering(true)}
+                 onMouseLeave={() => setIsHovering(false)}
+              >
+                {aboutMe.phone}
+              </a>
+          </div>
+
+          {/* Column 3: Socials (Right, Top Aligned) */}
+          <div className="flex flex-col items-start md:items-end md:w-1/3 gap-3">
+             <span className="text-text-tertiary text-xs uppercase tracking-wider">Connect on Social</span>
+             <a href={aboutMe.linkedInUrl} 
                target="_blank" 
                rel="noopener noreferrer" 
-               className="text-text-tertiary hover:text-brand-primary transition-colors duration-300"
+               className="text-text-secondary hover:text-brand-primary transition-colors duration-300 p-2 bg-base-dark rounded-lg"
                onMouseEnter={() => setIsHovering(true)}
                onMouseLeave={() => setIsHovering(false)}
+               aria-label="LinkedIn Profile"
             >
-              <LinkedInIcon className="w-8 h-8"/>
+              <LinkedInIcon className="w-6 h-6"/>
             </a>
           </div>
         </div>
-        <div className="text-center text-text-tertiary text-sm mt-8 border-t border-base-light pt-6">
-          <p>&copy; {new Date().getFullYear()} {ABOUT_ME.name}. All rights reserved.</p>
+        
+        <div className="text-center text-text-tertiary text-xs mt-8 border-t border-base-light pt-6">
+          <p>&copy; {new Date().getFullYear()} {aboutMe.name}. All rights reserved.</p>
+          <div className="mt-2">
+            <a 
+              href="#/admin" 
+              onClick={handleAdminClick}
+              className="text-base-light hover:text-text-tertiary transition-colors"
+            >
+              Admin
+            </a>
+          </div>
         </div>
       </div>
     </footer>

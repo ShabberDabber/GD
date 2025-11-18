@@ -36,17 +36,20 @@ export const CustomCursor: React.FC = () => {
     const mousePositionRef = React.useRef({ x: -100, y: -100 });
     const isHoveringRef = React.useRef(isHovering);
 
-    // Physics model
+    // Physics model for position and scale
     const physicsRef = React.useRef({
-        x: -100, y: -100,
-        vx: 0, vy: 0,
-        scale: 1, vScale: 0,
+        x: -100,
+        y: -100,
+        vx: 0,
+        vy: 0,
+        scale: 1, 
+        vScale: 0,
     });
 
     const animationFrameRef = React.useRef<number | null>(null);
     
     // Constants for spring physics
-    const STIFFNESS = 0.2;
+    const STIFFNESS = 0.15;
     const DAMPING = 0.75;
     const SCALE_STIFFNESS = 0.1;
     const SCALE_DAMPING = 0.8;
@@ -61,6 +64,8 @@ export const CustomCursor: React.FC = () => {
         const startY = window.innerHeight / 2;
         mousePositionRef.current = { x: startX, y: startY };
         setPosition({ x: startX, y: startY });
+        
+        // Initialize physics
         physicsRef.current.x = startX;
         physicsRef.current.y = startY;
         
@@ -81,20 +86,21 @@ export const CustomCursor: React.FC = () => {
             const phys = physicsRef.current;
             const target = mousePositionRef.current;
             const isHovering = isHoveringRef.current;
-
-            // Smoothed position follow
+            
+            // 1. Position Physics (Rubber Band Effect)
             const dx = target.x - phys.x;
             const dy = target.y - phys.y;
-            
+
             phys.vx += dx * STIFFNESS;
             phys.vy += dy * STIFFNESS;
+
             phys.vx *= DAMPING;
             phys.vy *= DAMPING;
+
             phys.x += phys.vx;
-            
             phys.y += phys.vy;
-            
-            // Smoothed scaling for hover effect
+
+            // 2. Scale Physics for hover effect
             const targetScale = isHovering ? 0.5 : 1;
             const dScale = targetScale - phys.scale;
             phys.vScale += dScale * SCALE_STIFFNESS;
@@ -102,6 +108,7 @@ export const CustomCursor: React.FC = () => {
             phys.scale += phys.vScale;
 
             if (tailRef.current) {
+                // Use physics position for rubbery lag
                 tailRef.current.style.transform = `translate(${phys.x}px, ${phys.y}px) translate(-50%, -50%) scale(${phys.scale})`;
             }
             
@@ -126,7 +133,7 @@ export const CustomCursor: React.FC = () => {
                 className={`absolute w-8 h-8 rounded-full transition-colors duration-300 ${
                     isHovering 
                     ? 'bg-white' 
-                    : 'border border-brand-primary'
+                    : 'border border-gray-400'
                 }`}
                 style={{
                     top: 0,
