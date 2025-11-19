@@ -64,11 +64,6 @@ const RelatedProjects: React.FC<{ currentProjectId: string }> = ({ currentProjec
   const related = heroProjects.filter(p => p.id !== currentProjectId);
 
   if (related.length === 0) return null;
-
-  const handleHomeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.hash = '#/';
-  };
   
   const handleProjectClick = (e: React.MouseEvent, projectId: string) => {
     e.preventDefault();
@@ -100,17 +95,6 @@ const RelatedProjects: React.FC<{ currentProjectId: string }> = ({ currentProjec
               </div>
             </a>
           ))}
-        </div>
-        <div className="text-center mt-16">
-            <a
-                href="#/"
-                onClick={handleHomeClick}
-                onMouseEnter={() => setHoverState({ isHovering: true })}
-                onMouseLeave={() => setHoverState({ isHovering: false })}
-                className="inline-block bg-brand-primary text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 hover:scale-105"
-            >
-                View All Work
-            </a>
         </div>
       </div>
     </div>

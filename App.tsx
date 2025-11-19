@@ -41,7 +41,7 @@ const AppContent: React.FC = () => {
         }
       }
 
-      return <CaseStudyDetailPage projectId={projectId} layoutOverride={layoutModeOverride} />;
+      return <CaseStudyDetailPage key={projectId} projectId={projectId} layoutOverride={layoutModeOverride} />;
     }
     
     return <HomePage />;
