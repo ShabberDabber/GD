@@ -1,4 +1,3 @@
-
 import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -11,18 +10,14 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-// FIX: Corrected the ErrorBoundary class to properly extend React.Component and initialize state in the constructor.
-// This resolves TypeScript errors where `state`, `setState`, and `props` were not recognized, and ensures
-// the component can correctly function as an error boundary and accept child components.
+// FIX: Corrected the ErrorBoundary to be a proper React class component.
+// This resolves errors where `state`, `setState`, and `props` were not recognized.
 class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
-  }
+  state: State = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
 
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error, errorInfo: null };
