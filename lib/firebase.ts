@@ -30,7 +30,20 @@ import { getFirestore } from 'firebase/firestore';
 
 // Only initialize if config is present and placeholders are replaced
 const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("PASTE_");
-const app = isConfigured ? initializeApp(firebaseConfig) : null;
 
-export const auth = app ? getAuth(app) : null;
-export const db = app ? getFirestore(app) : null;
+let app = null;
+let auth = null;
+let db = null;
+
+if (isConfigured) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (error) {
+    console.error("Firebase initialization failed. The app will run in offline mode.", error);
+    // app, auth, and db will remain null, allowing graceful degradation.
+  }
+}
+
+export { auth, db };
