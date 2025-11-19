@@ -41,10 +41,18 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Initialize Data (Hybrid Strategy)
   useEffect(() => {
     // 1. Load from LocalStorage immediately (Fastest for Demo)
-    const loadLocal = (key: string, setter: any, defaultVal: any) => {
+    const loadLocal = (key: string, setter: (value: any) => void, defaultVal: any) => {
+      try {
         const stored = localStorage.getItem(key);
-        if (stored) setter(JSON.parse(stored));
-        else setter(defaultVal);
+        if (stored) {
+          setter(JSON.parse(stored));
+        } else {
+          setter(defaultVal);
+        }
+      } catch (error) {
+        console.error(`Error parsing ${key} from localStorage. Using default.`, error);
+        setter(defaultVal);
+      }
     };
     loadLocal('heroProjects', setHeroProjects, HERO_PROJECTS);
     loadLocal('aboutMe', setAboutMe, ABOUT_ME);
