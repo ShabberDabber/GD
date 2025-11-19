@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useContent } from '../../context/ContentContext';
 import { useCursorHover } from '../ui/CustomCursor';
@@ -446,7 +447,7 @@ const LayoutThree: React.FC<{ project: CaseStudyProject; allProjects: CaseStudyP
 // MAIN PAGE COMPONENT
 // ---------------------------------------------------------------------------
 
-export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?: '1' | '2' | '3' }> = ({ projectId, layoutOverride }) => {
+export const CaseStudyDetailPage: React.FC<{ projectId: string; }> = ({ projectId }) => {
   const { setHoverState } = useCursorHover();
   const { heroProjects } = useContent();
 
@@ -478,8 +479,8 @@ export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?:
   }
 
   const caseStudy = project as CaseStudyProject;
-  // Layout priority: URL Override > Project Preference > Default '2'
-  const activeLayout = layoutOverride || caseStudy.layout || '2';
+  // Layout is now driven only by project data or a default
+  const activeLayout = caseStudy.layout || '2';
 
   // Main Case Study Layouts
   switch (activeLayout) {

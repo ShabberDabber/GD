@@ -25,23 +25,13 @@ const AppContent: React.FC = () => {
     }
     
     if (path.startsWith('#/project/')) {
-      // Split path to get ID and query params
+      // Split path to get ID
       const pathParts = path.split('/');
-      const idAndQuery = pathParts[2]; 
+      const idAndQuery = pathParts[2] || ''; 
       
-      const [projectId, queryString] = idAndQuery.split('?');
-      
-      // Parse layout param override (optional)
-      let layoutModeOverride: '1' | '2' | '3' | undefined = undefined;
-      if (queryString) {
-        const params = new URLSearchParams(queryString);
-        const layoutParam = params.get('layout');
-        if (layoutParam === '1' || layoutParam === '2' || layoutParam === '3') {
-          layoutModeOverride = layoutParam;
-        }
-      }
+      const [projectId] = idAndQuery.split('?'); // Still split to handle old bookmarks gracefully
 
-      return <CaseStudyDetailPage key={projectId} projectId={projectId} layoutOverride={layoutModeOverride} />;
+      return <CaseStudyDetailPage key={projectId} projectId={projectId} />;
     }
     
     return <HomePage />;
