@@ -10,8 +10,10 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-// FIX: Corrected the ErrorBoundary to be a proper React class component.
-// This resolves errors where `state`, `setState`, and `props` were not recognized.
+// FIX: Converted the ErrorBoundary to a class component.
+// React requires Error Boundaries to be class components to use the `getDerivedStateFromError`
+// and `componentDidCatch` lifecycle methods. This change resolves the errors where `setState`
+// and `this.props` were incorrectly accessed.
 class ErrorBoundary extends React.Component<Props, State> {
   state: State = {
     hasError: false,
