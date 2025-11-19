@@ -1,8 +1,122 @@
-
 import React from 'react';
 import { useContent } from '../../context/ContentContext';
 import { useCursorHover } from '../ui/CustomCursor';
-import type { CaseStudyProject, RecentWorkProject } from '../../types';
+import type { CaseStudyProject } from '../../types';
+
+// ---------------------------------------------------------------------------
+// PROJECT NAVIGATION
+// ---------------------------------------------------------------------------
+
+const ChevronIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+  </svg>
+);
+
+const ProjectNavigation: React.FC<{ currentProjectId: string; projects: CaseStudyProject[] }> = ({ currentProjectId, projects }) => {
+  const { setHoverState } = useCursorHover();
+  const currentIndex = projects.findIndex(p => p.id === currentProjectId);
+  if (currentIndex === -1 || projects.length <= 1) return null;
+
+  const prevProject = projects[(currentIndex - 1 + projects.length) % projects.length];
+  const nextProject = projects[(currentIndex + 1) % projects.length];
+
+  const handlePrev = (e: React.MouseEvent) => { e.preventDefault(); window.location.hash = `#/project/${prevProject.id}`; };
+  const handleNext = (e: React.MouseEvent) => { e.preventDefault(); window.location.hash = `#/project/${nextProject.id}`; };
+
+  const buttonClass = "absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-24 md:w-16 md:h-32 bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 text-slate-800 hover:bg-white/80 hover:scale-105 z-30";
+
+  return (
+    <>
+      <a
+        href={`#/project/${prevProject.id}`}
+        onClick={handlePrev}
+        onMouseEnter={() => setHoverState({ isHovering: true })}
+        onMouseLeave={() => setHoverState({ isHovering: false })}
+        className={`${buttonClass} left-0 rounded-r-lg`}
+        aria-label={`Previous project: ${prevProject.title}`}
+      >
+        <ChevronIcon className="w-6 h-6 transform rotate-180" />
+      </a>
+      <a
+        href={`#/project/${nextProject.id}`}
+        onClick={handleNext}
+        onMouseEnter={() => setHoverState({ isHovering: true })}
+        onMouseLeave={() => setHoverState({ isHovering: false })}
+        className={`${buttonClass} right-0 rounded-l-lg`}
+        aria-label={`Next project: ${nextProject.title}`}
+      >
+        <ChevronIcon className="w-6 h-6" />
+      </a>
+    </>
+  );
+};
+
+
+// ---------------------------------------------------------------------------
+// RELATED PROJECTS
+// ---------------------------------------------------------------------------
+
+const RelatedProjects: React.FC<{ currentProjectId: string }> = ({ currentProjectId }) => {
+  const { heroProjects } = useContent();
+  const { setHoverState } = useCursorHover();
+
+  const related = heroProjects.filter(p => p.id !== currentProjectId);
+
+  if (related.length === 0) return null;
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.hash = '#/';
+  };
+  
+  const handleProjectClick = (e: React.MouseEvent, projectId: string) => {
+    e.preventDefault();
+    window.location.hash = `#/project/${projectId}`;
+  };
+
+  return (
+    <div className="bg-white py-16 md:py-24 border-t border-gray-100">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-12">More Work</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {related.map(project => (
+            <a 
+              key={project.id}
+              href={`#/project/${project.id}`}
+              onClick={(e) => handleProjectClick(e, project.id)}
+              className="group block relative overflow-hidden rounded-lg bg-base-medium shadow-lg aspect-[16/9]"
+              onMouseEnter={() => setHoverState({ isHovering: true })}
+              onMouseLeave={() => setHoverState({ isHovering: false })}
+            >
+              <img src={project.heroImage} alt={project.title} className="w-full h-full object-cover transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              <span className="absolute top-4 left-4 z-10 inline-block bg-brand-primary text-text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                  PROJECT
+              </span>
+              <div className="absolute bottom-0 left-0 p-6">
+                <h3 className="text-xl font-bold text-white">{project.title}</h3>
+                <p className="text-gray-300 text-sm mt-1 max-w-sm">{project.subtitle}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div className="text-center mt-16">
+            <a
+                href="#/"
+                onClick={handleHomeClick}
+                onMouseEnter={() => setHoverState({ isHovering: true })}
+                onMouseLeave={() => setHoverState({ isHovering: false })}
+                className="inline-block bg-brand-primary text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 hover:scale-105"
+            >
+                View All Work
+            </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 // ---------------------------------------------------------------------------
 // SHARED COMPONENTS
@@ -11,7 +125,7 @@ import type { CaseStudyProject, RecentWorkProject } from '../../types';
 const ProjectImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isPaused, setIsPaused] = React.useState(false);
-  const { setIsHovering } = useCursorHover();
+  const { setHoverState } = useCursorHover();
 
   React.useEffect(() => {
     if (images.length <= 1 || isPaused) return;
@@ -20,6 +134,9 @@ const ProjectImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
     }, 4000);
     return () => clearInterval(timer);
   }, [images.length, isPaused]);
+  
+  if (!images || images.length === 0) return null;
+
 
   return (
     <div 
@@ -45,8 +162,8 @@ const ProjectImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
+              onMouseEnter={() => setHoverState({ isHovering: true })}
+              onMouseLeave={() => setHoverState({ isHovering: false })}
               className={`w-3 h-3 rounded-full border border-white transition-all duration-300 ${
                 index === currentIndex 
                   ? 'bg-white scale-125' 
@@ -87,7 +204,7 @@ const ProjectTitle: React.FC<{ project: CaseStudyProject }> = ({ project }) => (
 // Hero is 3 vertical images. Text has small floated images.
 // ---------------------------------------------------------------------------
 
-const LayoutOne: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
+const LayoutOne: React.FC<{ project: CaseStudyProject; allProjects: CaseStudyProject[] }> = ({ project, allProjects }) => {
   // Determine hero images. Prefer footerImages (verticals), then processImages, then duplicate hero.
   let heroImages: string[] = [];
   if (project.footerImages && project.footerImages.length >= 3) {
@@ -105,9 +222,9 @@ const LayoutOne: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
   };
 
   return (
-    <article className="text-slate-800 animate-fade-in-up bg-white pb-20">
+    <article className="text-slate-800 animate-fade-in-up bg-white">
       {/* Vertical Hero Section - Contained to match Layout 2 */}
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12">
+      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12 relative group">
         <div className="grid grid-cols-3 gap-4 md:gap-8">
            {heroImages.map((img, i) => (
              <div key={i} className="relative overflow-hidden rounded-lg shadow-xl aspect-[16/9] sm:aspect-[16/27]">
@@ -115,6 +232,7 @@ const LayoutOne: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
              </div>
            ))}
         </div>
+        <ProjectNavigation currentProjectId={project.id} projects={allProjects} />
       </header>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mt-12 md:mt-20">
@@ -161,6 +279,7 @@ const LayoutOne: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
             <img src={project.heroImage} alt="Final shot" className="w-full h-full object-cover" />
          </div>
       </div>
+      <RelatedProjects currentProjectId={project.id} />
     </article>
   );
 };
@@ -169,19 +288,24 @@ const LayoutOne: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
 // LAYOUT 2: STANDARD (The Original Layout)
 // ---------------------------------------------------------------------------
 
-const LayoutTwo: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
+const LayoutTwo: React.FC<{ project: CaseStudyProject; allProjects: CaseStudyProject[] }> = ({ project, allProjects }) => {
   const headings = {
     challenge: project.challengeHeading || 'The Challenge',
     strategy: project.strategyHeading || 'Strategy & Execution',
     impact: project.impactHeading || 'Impact'
   };
+  
+  const galleryImages = (project.galleryImages && project.galleryImageCount) 
+    ? project.galleryImages.slice(0, project.galleryImageCount) 
+    : project.galleryImages;
 
   return (
     <article className="text-slate-800 animate-fade-in-up bg-white">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12">
+      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12 relative group">
         <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-xl">
           <img src={project.heroImage} alt={`${project.title} hero image`} className="w-full h-full object-cover" />
         </div>
+        <ProjectNavigation currentProjectId={project.id} projects={allProjects} />
       </header>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12 md:py-16">
@@ -223,11 +347,12 @@ const LayoutTwo: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
       )}
 
       {/* Middle Section: Carousel (Moved down from middle) */}
-      {project.galleryImages && project.galleryImages.length > 0 && (
+      {galleryImages && galleryImages.length > 0 && (
          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl my-12 md:my-16">
-           <ProjectImageCarousel images={project.galleryImages} />
+           <ProjectImageCarousel images={galleryImages} />
         </div>
       )}
+      <RelatedProjects currentProjectId={project.id} />
     </article>
   );
 };
@@ -237,7 +362,7 @@ const LayoutTwo: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
 // Grid layouts, expanded text, more visual density
 // ---------------------------------------------------------------------------
 
-const LayoutThree: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
+const LayoutThree: React.FC<{ project: CaseStudyProject; allProjects: CaseStudyProject[] }> = ({ project, allProjects }) => {
   const heroImg1 = project.heroImage;
   // Use the first gallery image for the second hero slot if available, otherwise fallback
   const heroImg2 = project.galleryImages?.[0] || project.processImages?.[0] || project.heroImage;
@@ -251,7 +376,7 @@ const LayoutThree: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
   return (
     <article className="text-slate-800 animate-fade-in-up bg-white">
       {/* Hero - 2 Images Side by Side. Container is 16/9 on desktop to match other layouts height */}
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12">
+      <header className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-10 md:mt-12 relative group">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 md:aspect-[16/9]">
            <div className="relative w-full aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-lg shadow-xl">
               <img src={heroImg1} alt={`${project.title} hero 1`} className="w-full h-full object-cover" />
@@ -260,6 +385,7 @@ const LayoutThree: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
               <img src={heroImg2} alt={`${project.title} hero 2`} className="w-full h-full object-cover" />
            </div>
         </div>
+        <ProjectNavigation currentProjectId={project.id} projects={allProjects} />
       </header>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 md:py-16">
@@ -326,6 +452,7 @@ const LayoutThree: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
         )}
 
       </div>
+       <RelatedProjects currentProjectId={project.id} />
     </article>
   );
 };
@@ -335,47 +462,11 @@ const LayoutThree: React.FC<{ project: CaseStudyProject }> = ({ project }) => {
 // MAIN PAGE COMPONENT
 // ---------------------------------------------------------------------------
 
-const RecentWorkLayout: React.FC<{ project: RecentWorkProject }> = ({ project }) => {
-  const { setIsHovering } = useCursorHover();
-  
-  const handleHomeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.hash = '#/';
-  };
-
-  return (
-    <article className="text-slate-800 animate-fade-in-up bg-white min-h-screen flex flex-col items-center justify-center">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12 md:py-16 text-center">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{project.title}</h1>
-            <div className="prose prose-lg max-w-none mx-auto mt-8 text-slate-600">
-                <p>{project.description}</p>
-            </div>
-            <img src={project.image} alt={`${project.title} hero image`} className="w-full h-auto object-cover mt-12 rounded-lg shadow-xl"/>
-            <a
-              href="#/"
-              onClick={handleHomeClick}
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              className="mt-12 inline-block bg-brand-primary text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 hover:scale-105"
-            >
-              Back to Home
-            </a>
-        </div>
-    </article>
-  );
-};
-
-
 export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?: '1' | '2' | '3' }> = ({ projectId, layoutOverride }) => {
-  const { setIsHovering } = useCursorHover();
-  const { heroProjects, recentWork } = useContent();
-  
-  const allProjects = [
-      ...heroProjects,
-      ...recentWork.flatMap(theme => theme.projects)
-  ];
+  const { setHoverState } = useCursorHover();
+  const { heroProjects } = useContent();
 
-  const project = allProjects.find(p => p.id === projectId);
+  const project = heroProjects.find(p => p.id === projectId);
 
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -384,15 +475,15 @@ export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?:
 
   if (!project) {
     return (
-      <div className="text-slate-900 py-20">
+      <div className="text-slate-900 py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold text-base-dark">Project Not Found</h1>
           <p className="mt-4 text-base-light">Sorry, we couldn't find the project you were looking for.</p>
           <a
             href="#/"
             onClick={handleHomeClick}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            onMouseEnter={() => setHoverState({ isHovering: true })}
+            onMouseLeave={() => setHoverState({ isHovering: false })}
             className="mt-8 inline-block bg-brand-primary text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 hover:scale-105"
           >
             Back to Home
@@ -402,11 +493,6 @@ export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?:
     );
   }
 
-  // Recent Work projects (Simple ones) always use a default simple layout
-  if (!('challenge' in project)) {
-    return <RecentWorkLayout project={project as RecentWorkProject} />;
-  }
-
   const caseStudy = project as CaseStudyProject;
   // Layout priority: URL Override > Project Preference > Default '2'
   const activeLayout = layoutOverride || caseStudy.layout || '2';
@@ -414,11 +500,11 @@ export const CaseStudyDetailPage: React.FC<{ projectId: string; layoutOverride?:
   // Main Case Study Layouts
   switch (activeLayout) {
     case '1':
-      return <LayoutOne project={caseStudy} />;
+      return <LayoutOne project={caseStudy} allProjects={heroProjects} />;
     case '3':
-      return <LayoutThree project={caseStudy} />;
+      return <LayoutThree project={caseStudy} allProjects={heroProjects} />;
     case '2':
     default:
-      return <LayoutTwo project={caseStudy} />;
+      return <LayoutTwo project={caseStudy} allProjects={heroProjects} />;
   }
 };

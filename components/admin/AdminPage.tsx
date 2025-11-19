@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useContent } from '../../context/ContentContext';
-import { CaseStudyProject, RecentWorkTheme, RecentWorkProject } from '../../types';
+import { CaseStudyProject, AboutMeData } from '../../types';
 import { auth } from '../../lib/firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -27,6 +27,86 @@ const InputField: React.FC<{ label: string; value: string; onChange: (v: string)
     )}
   </div>
 );
+
+// Helper for complex data types
+const HelperText: React.FC<{ children: React.ReactNode}> = ({ children }) => (
+    <div className="p-3 bg-blue-50 text-blue-800 text-xs rounded mb-3">{children}</div>
+);
+
+// --- Draggable Logo Grid ---
+const DraggableLogoGrid: React.FC<{
+  title: string;
+  logos: string[];
+  onUpdate: (logos: string[]) => void;
+}> = ({ title, logos, onUpdate }) => {
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const dragOverIndex = useRef<number | null>(null);
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    setDraggingIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault();
+    dragOverIndex.current = index;
+    // Optional: add visual feedback for drag over
+    e.currentTarget.style.border = '2px dashed #0891b2'; 
+  };
+  
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      e.currentTarget.style.border = '1px solid #e5e7eb';
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.style.border = '1px solid #e5e7eb';
+    if (draggingIndex === null || dragOverIndex.current === null || draggingIndex === dragOverIndex.current) {
+      setDraggingIndex(null);
+      return;
+    }
+
+    const reorderedLogos = [...logos];
+    const draggedItem = reorderedLogos.splice(draggingIndex, 1)[0];
+    reorderedLogos.splice(dragOverIndex.current, 0, draggedItem);
+    
+    onUpdate(reorderedLogos);
+    setDraggingIndex(null);
+    dragOverIndex.current = null;
+  };
+
+  const handleDragEnd = () => {
+    setDraggingIndex(null);
+  };
+
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-sm">
+      <h3 className="text-xl font-bold mb-4">{title}</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {logos.map((logo, index) => (
+          <div
+            key={`${logo}-${index}`}
+            draggable
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onDragEnd={handleDragEnd}
+            className={`group relative cursor-move transition-all ${draggingIndex === index ? 'opacity-50 scale-95' : 'opacity-100'}`}
+          >
+            <div className="absolute -top-2 -left-2 w-5 h-5 bg-slate-800 text-white text-xs font-bold flex items-center justify-center rounded-full z-10">
+              {index + 1}
+            </div>
+            <div className="w-full h-16 flex justify-center items-center p-2 border border-gray-200 rounded-md bg-slate-50">
+              <img src={logo} alt={`Logo ${index + 1}`} className="max-w-full max-h-full object-contain" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 
 // --- EDITORS ---
 
@@ -64,9 +144,10 @@ const ProjectEditor: React.FC<{ project: CaseStudyProject; onSave: (p: CaseStudy
                 <option value="3">Layout 3 (Editorial Grid)</option>
             </select>
           </div>
-
+          
+          <HelperText>Recommended: 1200x800px JPG/PNG for best results.</HelperText>
           <InputField label="Hero Image URL" value={formData.heroImage} onChange={v => handleChange('heroImage', v)} />
-          <InputField label="Tags (comma separated)" value={formData.tags?.join(', ') || ''} onChange={v => handleArrayChange('tags', v)} />
+          <InputField label="Tags (comma separated)" value={formData.tags?.join(', ') || ''} onChange={v => handleArrayChange('tags', v)} multiline/>
         </div>
         
         <div>
@@ -103,8 +184,24 @@ const ProjectEditor: React.FC<{ project: CaseStudyProject; onSave: (p: CaseStudy
 
       <div className="mt-4 bg-slate-50 p-4 rounded">
         <h4 className="font-bold text-slate-900 mb-2">Media Collections (Enter URLs)</h4>
+        <div className="mb-4">
+            <label className="block text-sm font-bold text-gray-700 mb-1">Gallery Image Count</label>
+            <HelperText>Specify the number of images to show in carousels. Leave blank to show all.</HelperText>
+            <input 
+                type="number" 
+                value={formData.galleryImageCount || ''} 
+                onChange={e => handleChange('galleryImageCount', e.target.value ? parseInt(e.target.value, 10) : undefined)} 
+                placeholder="Leave blank to show all"
+                className="w-full p-2 border rounded text-slate-900 bg-gray-50 focus:ring-2 focus:ring-brand-primary outline-none transition-all"
+            />
+        </div>
+        <HelperText>Recommended: 600x400px JPG/PNG. Used in sidebars or smaller grids.</HelperText>
         <InputField label="Process Images (Small side images)" value={formData.processImages.join(', ')} onChange={v => handleArrayChange('processImages', v)} multiline />
+        
+        <HelperText>Recommended: 1200x800px JPG/PNG for carousels and large displays.</HelperText>
         <InputField label="Gallery Images (Carousel)" value={formData.galleryImages?.join(', ') || ''} onChange={v => handleArrayChange('galleryImages', v)} multiline />
+        
+        <HelperText>Recommended: Vertical images (e.g., 9:16) or standard horizontal (16:9) depending on the layout.</HelperText>
         <InputField label="Footer Images (Bottom Grid)" value={formData.footerImages?.join(', ') || ''} onChange={v => handleArrayChange('footerImages', v)} multiline />
       </div>
 
@@ -116,61 +213,38 @@ const ProjectEditor: React.FC<{ project: CaseStudyProject; onSave: (p: CaseStudy
   );
 };
 
-// Recent Work Editor
-const RecentWorkEditor: React.FC<{ 
-    themes: RecentWorkTheme[]; 
-    onSave: (themes: RecentWorkTheme[]) => void; 
-}> = ({ themes, onSave }) => {
-    const [localThemes, setLocalThemes] = useState(themes);
+// Component to fix textarea newline issue
+const TextAreaListEditor: React.FC<{
+  label: string;
+  helperText: string;
+  value: string[];
+  onSave: (text: string) => void;
+}> = ({ label, helperText, value, onSave }) => {
+  const [text, setText] = useState(value.join('\n'));
+  
+  useEffect(() => {
+    // Sync with external changes
+    setText(value.join('\n'));
+  }, [value]);
 
-    const updateThemeTitle = (index: number, title: string) => {
-        const newThemes = [...localThemes];
-        newThemes[index].theme = title;
-        setLocalThemes(newThemes);
-    };
-
-    const updateProject = (themeIndex: number, projectIndex: number, field: keyof RecentWorkProject, value: string) => {
-        const newThemes = [...localThemes];
-        const project = newThemes[themeIndex].projects[projectIndex];
-        (project as any)[field] = value;
-        setLocalThemes(newThemes);
-    };
-
-    return (
-        <div className="space-y-8">
-            {localThemes.map((theme, tIdx) => (
-                <div key={tIdx} className="bg-white p-6 rounded shadow-md">
-                    <InputField label="Section Theme Title" value={theme.theme} onChange={(v) => updateThemeTitle(tIdx, v)} />
-                    
-                    <div className="space-y-4 mt-4">
-                        {theme.projects.map((project, pIdx) => (
-                            <div key={project.id} className="border p-4 rounded bg-slate-50">
-                                <h4 className="text-xs font-bold uppercase text-gray-400 mb-2">Project {pIdx + 1}</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <InputField label="Title" value={project.title} onChange={(v) => updateProject(tIdx, pIdx, 'title', v)} />
-                                    <InputField label="Image URL" value={project.image} onChange={(v) => updateProject(tIdx, pIdx, 'image', v)} />
-                                    <div className="md:col-span-2">
-                                        <InputField label="Description" value={project.description} onChange={(v) => updateProject(tIdx, pIdx, 'description', v)} multiline />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ))}
-            <div className="flex justify-end">
-                <button onClick={() => onSave(localThemes)} className="px-6 py-2 bg-brand-primary text-white font-bold rounded hover:opacity-90">
-                    Save Recent Work
-                </button>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <label className="block text-sm font-bold text-gray-700 mb-1">{label}</label>
+      <HelperText>{helperText}</HelperText>
+      <textarea
+        className="w-full h-48 p-3 border border-gray-300 bg-slate-50 rounded text-xs focus:ring-2 focus:ring-brand-primary outline-none"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={() => onSave(text)}
+      />
+    </div>
+  );
 };
+
 
 export const AdminPage: React.FC = () => {
   const { 
     heroProjects, updateHeroProjects, 
-    recentWork, updateRecentWork,
     aboutMe, updateAboutMe,
     clientLogos, updateClientLogos,
     brandLogos, updateBrandLogos,
@@ -181,8 +255,23 @@ export const AdminPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const [activeTab, setActiveTab] = useState<'profile' | 'projects' | 'recent' | 'partners'>('profile');
+  const [activeTab, setActiveTab] = useState('home');
   const [editingProject, setEditingProject] = useState<CaseStudyProject | null>(null);
+  const [jsonErrors, setJsonErrors] = useState<Record<string, string | null>>({});
+
+  // Local state for textareas to prevent cursor jumping
+  const [clientLogosText, setClientLogosText] = useState(clientLogos.join('\n'));
+  const [brandLogosText, setBrandLogosText] = useState(brandLogos.join('\n'));
+
+  useEffect(() => {
+    // Sync local state if global context changes
+    setClientLogosText(clientLogos.join('\n'));
+  }, [clientLogos]);
+
+  useEffect(() => {
+    // Sync local state if global context changes
+    setBrandLogosText(brandLogos.join('\n'));
+  }, [brandLogos]);
 
   useEffect(() => {
       // Firebase Auth Listener
@@ -194,6 +283,29 @@ export const AdminPage: React.FC = () => {
           return () => unsubscribe();
       }
   }, []);
+  
+  const TABS: Record<string, string> = {
+    home: 'HOME',
+    projects: 'PROJECTS',
+    brands: 'BRANDS',
+    profile: 'PROFILE'
+  };
+
+  const handleJsonChange = (field: keyof AboutMeData, value: string) => {
+    try {
+        const parsed = JSON.parse(value);
+        updateAboutMe({ ...aboutMe, [field]: parsed });
+        setJsonErrors(prev => ({ ...prev, [field]: null }));
+    } catch (e) {
+        setJsonErrors(prev => ({ ...prev, [field]: 'Invalid JSON format.' }));
+    }
+  };
+
+  const handleStringArrayChange = (field: keyof AboutMeData, value: string, separator: string | RegExp = '\n') => {
+      const arr = value.split(separator).map(s => s.trim()).filter(Boolean);
+      updateAboutMe({ ...aboutMe, [field]: arr });
+  };
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -265,6 +377,25 @@ export const AdminPage: React.FC = () => {
     if (type === 'client') updateClientLogos(urls);
     else updateBrandLogos(urls);
   };
+
+  const siteColors = [
+    { name: 'Default', value: '' },
+    { name: 'Brand Primary (Teal)', value: '#0891b2' },
+    { name: 'Text Primary (White)', value: '#f8fafc' },
+    { name: 'Text Secondary (Light Gray)', value: '#cbd5e1' },
+    { name: 'Text Tertiary (Gray)', value: '#94a3b8' },
+    { name: 'Base Dark (Slate)', value: '#0f172a' },
+    { name: 'Base Medium (Slate)', value: '#1e293b' },
+  ];
+
+  const ColorSelector: React.FC<{ label: string; value: string; onChange: (v: string) => void }> = ({ label, value, onChange }) => (
+    <div className="mb-4">
+      <label className="block text-sm font-bold text-gray-700 mb-1">{label}</label>
+      <select value={value || ''} onChange={e => onChange(e.target.value)} className="w-full p-2 border rounded text-slate-900 bg-gray-50 focus:ring-2 focus:ring-brand-primary outline-none">
+        {siteColors.map(c => <option key={c.name} value={c.value}>{c.name}</option>)}
+      </select>
+    </div>
+  );
 
   // Styles to override global cursor:none for admin pages
   const restoreCursorStyles = (
@@ -344,35 +475,107 @@ export const AdminPage: React.FC = () => {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Tabs */}
         <div className="flex overflow-x-auto gap-2 md:gap-4 border-b border-slate-300 mb-8 pb-1">
-          {['profile', 'projects', 'recent', 'partners'].map((tab) => (
+          {Object.entries(TABS).map(([key, value]) => (
             <button 
-              key={tab}
-              onClick={() => { setActiveTab(tab as any); setEditingProject(null); }}
-              className={`px-4 md:px-6 py-3 font-bold capitalize transition-all whitespace-nowrap ${
-                activeTab === tab 
+              key={key}
+              onClick={() => { setActiveTab(key); setEditingProject(null); }}
+              className={`px-4 md:px-6 py-3 font-bold transition-all whitespace-nowrap ${
+                activeTab === key 
                   ? 'text-brand-primary border-b-4 border-brand-primary bg-white rounded-t-lg' 
                   : 'text-slate-500 hover:text-slate-700 hover:bg-white/50 rounded-t-lg'
               }`}
             >
-              {tab === 'recent' ? 'Recent Work' : tab}
+              {value}
             </button>
           ))}
         </div>
 
+        {/* HOME TAB */}
+        {activeTab === 'home' && (
+             <div className="bg-white p-8 rounded-lg shadow-sm animate-fade-in-up space-y-8">
+                <div>
+                  <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Homepage Hero Section</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+                    <div>
+                      <InputField label="Hero Title" value={aboutMe.name} onChange={v => updateAboutMe({...aboutMe, name: v})} />
+                      <InputField label="Hero Subtitle" value={aboutMe.title} onChange={v => updateAboutMe({...aboutMe, title: v})} />
+                      <InputField 
+                          label="Hero Introduction Text" 
+                          value={aboutMe.heroIntro} 
+                          onChange={v => updateAboutMe({...aboutMe, heroIntro: v})} 
+                          multiline 
+                      />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold mb-2">Hero Colors</h3>
+                        <ColorSelector label="Background Color" value={aboutMe.heroBackgroundColor || ''} onChange={v => updateAboutMe({...aboutMe, heroBackgroundColor: v})} />
+                        <ColorSelector label="Title Color" value={aboutMe.heroTitleColor || ''} onChange={v => updateAboutMe({...aboutMe, heroTitleColor: v})} />
+                        <ColorSelector label="Subtitle Color" value={aboutMe.heroSubtitleColor || ''} onChange={v => updateAboutMe({...aboutMe, heroSubtitleColor: v})} />
+                        <ColorSelector label="Intro Text Color" value={aboutMe.heroIntroColor || ''} onChange={v => updateAboutMe({...aboutMe, heroIntroColor: v})} />
+                    </div>
+                  </div>
+                </div>
+             </div>
+        )}
+
         {/* PROFILE TAB */}
         {activeTab === 'profile' && (
-          <div className="bg-white p-8 rounded-lg shadow-sm animate-fade-in-up">
-            <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Personal Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField label="Full Name" value={aboutMe.name} onChange={v => updateAboutMe({...aboutMe, name: v})} />
-              <InputField label="Job Title" value={aboutMe.title} onChange={v => updateAboutMe({...aboutMe, title: v})} />
-              <InputField label="Email Address" value={aboutMe.email} onChange={v => updateAboutMe({...aboutMe, email: v})} />
-              <InputField label="Phone Number" value={aboutMe.phone} onChange={v => updateAboutMe({...aboutMe, phone: v})} />
-              <div className="md:col-span-2">
-                <InputField label="Intro Statement (Hero)" value={aboutMe.introStatement} onChange={v => updateAboutMe({...aboutMe, introStatement: v})} multiline />
-              </div>
-              <InputField label="Hero Image URL" value={aboutMe.heroImage} onChange={v => updateAboutMe({...aboutMe, heroImage: v})} />
-              <InputField label="Panorama Image URL" value={aboutMe.panoramaImage} onChange={v => updateAboutMe({...aboutMe, panoramaImage: v})} />
+          <div className="bg-white p-8 rounded-lg shadow-sm animate-fade-in-up space-y-8">
+            <div>
+                <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Contact &amp; Global Info</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InputField label="Email Address" value={aboutMe.email} onChange={v => updateAboutMe({...aboutMe, email: v})} />
+                    <InputField label="Phone Number" value={aboutMe.phone} onChange={v => updateAboutMe({...aboutMe, phone: v})} />
+                    <InputField label="LinkedIn URL" value={aboutMe.linkedInUrl} onChange={v => updateAboutMe({...aboutMe, linkedInUrl: v})} />
+                    <InputField label="Resume URL" value={aboutMe.resumeUrl} onChange={v => updateAboutMe({...aboutMe, resumeUrl: v})} />
+                </div>
+            </div>
+            <div>
+                <h2 className="text-2xl font-bold mb-6 pb-2 border-b">About Page Content</h2>
+                <InputField label="About Page Intro Statement" value={aboutMe.introStatement} onChange={v => updateAboutMe({...aboutMe, introStatement: v})} multiline />
+                <HelperText>Recommended: 1200x800px or larger. Will be displayed with a dark overlay.</HelperText>
+                <InputField label="About Page Hero Image URL" value={aboutMe.heroImage} onChange={v => updateAboutMe({...aboutMe, heroImage: v})} />
+                <HelperText>Recommended: Wide aspect ratio, e.g., 2000x600px.</HelperText>
+                <InputField label="Panorama Image URL" value={aboutMe.panoramaImage} onChange={v => updateAboutMe({...aboutMe, panoramaImage: v})} />
+                
+                <div className="mt-6">
+                    <label className="block text-sm font-bold text-gray-700 mb-1">Philosophy Section</label>
+                    <HelperText>Edit the content below using JSON format. Each item should have a "title" and a "text".</HelperText>
+                    <textarea value={JSON.stringify(aboutMe.philosophy, null, 2)} onChange={e => handleJsonChange('philosophy', e.target.value)} className={`w-full p-2 border rounded text-slate-900 bg-gray-50 h-48 focus:ring-2 outline-none font-mono text-xs ${jsonErrors.philosophy ? 'border-red-500 ring-red-500' : 'focus:ring-brand-primary'}`} />
+                    {jsonErrors.philosophy && <p className="text-red-500 text-xs mt-1">{jsonErrors.philosophy}</p>}
+                </div>
+
+                 <div className="mt-6">
+                    <TextAreaListEditor
+                      label="Inspiration Grid Images"
+                      helperText="Recommended: 16:9 aspect ratio, e.g., 1200x675px. Enter one image URL per line."
+                      value={aboutMe.inspirationGrid}
+                      onSave={(text) => handleStringArrayChange('inspirationGrid', text)}
+                    />
+                </div>
+            </div>
+             <div>
+                <h2 className="text-2xl font-bold mb-6 pb-2 border-b">About Page Lists</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <TextAreaListEditor
+                        label="Obsessions"
+                        helperText="One item per line."
+                        value={aboutMe.obsessions}
+                        onSave={(text) => handleStringArrayChange('obsessions', text)}
+                    />
+                    <TextAreaListEditor
+                        label="Bucket List (Travel)"
+                        helperText="One item per line."
+                        value={aboutMe.travelLog}
+                        onSave={(text) => handleStringArrayChange('travelLog', text)}
+                    />
+                </div>
+                 <div className="mt-6">
+                    <label className="block text-sm font-bold text-gray-700 mb-1">Media Diet (Favorites)</label>
+                    <HelperText>Edit as JSON. Keys are "movies", "shows", "podcasts", "audiobooks".</HelperText>
+                    <textarea value={JSON.stringify(aboutMe.favorites, null, 2)} onChange={e => handleJsonChange('favorites', e.target.value)} className={`w-full p-2 border rounded text-slate-900 bg-gray-50 h-48 focus:ring-2 outline-none font-mono text-xs ${jsonErrors.favorites ? 'border-red-500 ring-red-500' : 'focus:ring-brand-primary'}`} />
+                    {jsonErrors.favorites && <p className="text-red-500 text-xs mt-1">{jsonErrors.favorites}</p>}
+                </div>
             </div>
           </div>
         )}
@@ -384,8 +587,8 @@ export const AdminPage: React.FC = () => {
               <>
                 <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm">
                     <div>
-                        <h2 className="text-2xl font-bold">Case Studies</h2>
-                        <p className="text-sm text-gray-500">Manage your main portfolio case studies.</p>
+                        <h2 className="text-2xl font-bold">PROJECTS</h2>
+                        <p className="text-sm text-gray-500">Manage your main portfolio projects.</p>
                     </div>
                     <button onClick={handleAddProject} className="bg-brand-primary text-white px-4 py-2 rounded font-bold shadow hover:bg-opacity-90 flex items-center gap-2">
                         <span className="text-xl leading-none">+</span> Add Project
@@ -393,9 +596,10 @@ export const AdminPage: React.FC = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 gap-4">
-                    {heroProjects.map(project => (
+                    {heroProjects.map((project, index) => (
                         <div key={project.id} className="bg-white p-4 rounded shadow-sm border border-transparent hover:border-gray-200 transition-all flex justify-between items-center group">
                             <div className="flex items-center gap-4">
+                                <span className="font-bold text-gray-400 text-lg w-6 text-center">{index + 1}.</span>
                                 <div className="w-16 h-16 rounded overflow-hidden bg-gray-200 flex-shrink-0">
                                     <img src={project.heroImage} className="w-full h-full object-cover" alt="thumb"/>
                                 </div>
@@ -425,50 +629,52 @@ export const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* RECENT WORK TAB */}
-        {activeTab === 'recent' && (
-             <div className="bg-white p-8 rounded-lg shadow-sm animate-fade-in-up">
-                <div className="mb-6">
-                    <h2 className="text-2xl font-bold">Recent Work Sections</h2>
-                    <p className="text-sm text-gray-500">Manage the smaller project cards that appear below the case studies.</p>
-                </div>
-                <RecentWorkEditor themes={recentWork} onSave={updateRecentWork} />
-             </div>
-        )}
-
-        {/* PARTNERS TAB */}
-        {activeTab === 'partners' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in-up">
-            <div className="bg-white p-6 rounded shadow-sm h-full">
-               <div className="flex justify-between items-end mb-4">
-                   <h3 className="text-xl font-bold">Client Logos</h3>
-                   <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">{clientLogos.length} items</span>
-               </div>
-               <div className="p-3 bg-blue-50 text-blue-800 text-xs rounded mb-3">
-                   <strong>Instructions:</strong> Enter one image URL per line. Rearrange lines to change the order on the homepage.
-               </div>
-               <textarea 
-                 className="w-full h-96 p-3 border border-gray-300 bg-slate-50 rounded text-xs font-mono focus:ring-2 focus:ring-brand-primary outline-none leading-relaxed"
-                 value={clientLogos.join('\n')}
-                 onChange={e => handleLogosUpdate('client', e.target.value)}
-                 placeholder="https://..."
-               />
+        {/* BRANDS TAB */}
+        {activeTab === 'brands' && (
+          <div className="space-y-8 animate-fade-in-up">
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Logo Organization</h2>
+              <p className="text-sm text-gray-500 mb-6">Drag and drop logos to reorder them for the homepage carousel. Use the text boxes below to add or remove logos from the lists.</p>
+              <div className="space-y-8">
+                <DraggableLogoGrid title="Client Logos" logos={clientLogos} onUpdate={updateClientLogos} />
+                <DraggableLogoGrid title="Brand Logos" logos={brandLogos} onUpdate={updateBrandLogos} />
+              </div>
             </div>
-            
-            <div className="bg-white p-6 rounded shadow-sm h-full">
-               <div className="flex justify-between items-end mb-4">
-                   <h3 className="text-xl font-bold">Brand Logos</h3>
-                   <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">{brandLogos.length} items</span>
-               </div>
-               <div className="p-3 bg-blue-50 text-blue-800 text-xs rounded mb-3">
-                   <strong>Instructions:</strong> Enter one image URL per line. These appear in the second marquee row.
-               </div>
-               <textarea 
-                 className="w-full h-96 p-3 border border-gray-300 bg-slate-50 rounded text-xs font-mono focus:ring-2 focus:ring-brand-primary outline-none leading-relaxed"
-                 value={brandLogos.join('\n')}
-                 onChange={e => handleLogosUpdate('brand', e.target.value)}
-                 placeholder="https://..."
-               />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t">
+              <div className="bg-white p-6 rounded shadow-sm h-full">
+                 <div className="flex justify-between items-end mb-4">
+                     <h3 className="text-xl font-bold">Client Logos List</h3>
+                     <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">{clientLogos.length} items</span>
+                 </div>
+                 <HelperText>
+                     <strong>Instructions:</strong> Enter one image URL per line. Use SVG or transparent PNGs with a max height of 32px for best results.
+                 </HelperText>
+                 <textarea 
+                   className="w-full h-96 p-3 border border-gray-300 bg-slate-50 rounded text-xs font-mono focus:ring-2 focus:ring-brand-primary outline-none leading-relaxed"
+                   value={clientLogosText}
+                   onChange={e => setClientLogosText(e.target.value)}
+                   onBlur={e => handleLogosUpdate('client', e.target.value)}
+                   placeholder="https://..."
+                 />
+              </div>
+              
+              <div className="bg-white p-6 rounded shadow-sm h-full">
+                 <div className="flex justify-between items-end mb-4">
+                     <h3 className="text-xl font-bold">Brand Logos List</h3>
+                     <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">{brandLogos.length} items</span>
+                 </div>
+                 <HelperText>
+                     <strong>Instructions:</strong> Enter one image URL per line. These appear in the second marquee row.
+                 </HelperText>
+                 <textarea 
+                   className="w-full h-96 p-3 border border-gray-300 bg-slate-50 rounded text-xs font-mono focus:ring-2 focus:ring-brand-primary outline-none leading-relaxed"
+                   value={brandLogosText}
+                   onChange={e => setBrandLogosText(e.target.value)}
+                   onBlur={e => handleLogosUpdate('brand', e.target.value)}
+                   placeholder="https://..."
+                 />
+              </div>
             </div>
           </div>
         )}

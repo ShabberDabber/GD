@@ -2,7 +2,7 @@
 import React from 'react';
 import { useContent } from '../../context/ContentContext';
 
-const Marquee: React.FC<{ logos: string[], direction: 'left' | 'right' }> = ({ logos, direction }) => {
+const Marquee: React.FC<{ logos: string[], direction: 'left' | 'right', showBorders?: boolean }> = ({ logos, direction, showBorders }) => {
   // If no logos, return null
   if (!logos || logos.length === 0) return null;
 
@@ -12,10 +12,10 @@ const Marquee: React.FC<{ logos: string[], direction: 'left' | 'right' }> = ({ l
 
   return (
     <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-      <ul className={`flex items-center justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none ${animationClass} hover:[animation-play-state:paused]`}>
+      <ul className={`flex items-center justify-center md:justify-start [&_img]:max-w-none ${animationClass}`}>
         {allLogos.map((logo, index) => (
-          <li key={index} className="flex-shrink-0" aria-hidden={true}>
-            <img src={logo} alt="" className="max-h-8 hover:scale-110 transition-transform duration-300" />
+          <li key={index} className={`flex-shrink-0 w-48 h-16 flex justify-center items-center px-4 ${showBorders ? 'border border-gray-200' : ''}`} aria-hidden={true}>
+            <img src={logo} alt="" className="max-w-full max-h-full object-contain hover:scale-110 transition-transform duration-300" />
           </li>
         ))}
       </ul>
@@ -23,7 +23,7 @@ const Marquee: React.FC<{ logos: string[], direction: 'left' | 'right' }> = ({ l
   );
 };
 
-export const PartnersSection: React.FC = () => {
+export const PartnersSection: React.FC<{ showBorders?: boolean }> = ({ showBorders = false }) => {
   const { clientLogos, brandLogos } = useContent();
 
   return (
@@ -38,8 +38,8 @@ export const PartnersSection: React.FC = () => {
 
             {/* Logo Group - Moved together */}
             <div className="w-full flex flex-col gap-12 mb-6">
-               <Marquee logos={clientLogos} direction="left" />
-               <Marquee logos={brandLogos} direction="right" />
+               <Marquee logos={clientLogos} direction="left" showBorders={showBorders} />
+               <Marquee logos={brandLogos} direction="right" showBorders={showBorders} />
             </div>
 
             {/* Bottom Label - Moved below brands */}

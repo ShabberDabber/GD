@@ -1,20 +1,18 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { HERO_PROJECTS, RECENT_WORK, ABOUT_ME, CLIENT_LOGOS, BRAND_LOGOS } from '../constants';
-import type { CaseStudyProject, RecentWorkTheme, AboutMeData } from '../types';
+import { HERO_PROJECTS, ABOUT_ME, CLIENT_LOGOS, BRAND_LOGOS } from '../constants';
+import type { CaseStudyProject, AboutMeData } from '../types';
 import { db, auth } from '../lib/firebase';
 import { doc, setDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
 interface ContentContextType {
   heroProjects: CaseStudyProject[];
-  recentWork: RecentWorkTheme[];
   aboutMe: AboutMeData;
   clientLogos: string[];
   brandLogos: string[];
   updateAboutMe: (data: AboutMeData) => void;
   updateHeroProjects: (projects: CaseStudyProject[]) => void;
-  updateRecentWork: (themes: RecentWorkTheme[]) => void;
   updateClientLogos: (logos: string[]) => void;
   updateBrandLogos: (logos: string[]) => void;
   resetToDefaults: () => void;
@@ -34,7 +32,6 @@ export const useContent = () => {
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // State
   const [heroProjects, setHeroProjects] = useState<CaseStudyProject[]>(HERO_PROJECTS);
-  const [recentWork, setRecentWork] = useState<RecentWorkTheme[]>(RECENT_WORK);
   const [aboutMe, setAboutMe] = useState<AboutMeData>(ABOUT_ME);
   const [clientLogos, setClientLogos] = useState<string[]>(CLIENT_LOGOS);
   const [brandLogos, setBrandLogos] = useState<string[]>(BRAND_LOGOS);
@@ -50,7 +47,6 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         else setter(defaultVal);
     };
     loadLocal('heroProjects', setHeroProjects, HERO_PROJECTS);
-    loadLocal('recentWork', setRecentWork, RECENT_WORK);
     loadLocal('aboutMe', setAboutMe, ABOUT_ME);
     loadLocal('clientLogos', setClientLogos, CLIENT_LOGOS);
     loadLocal('brandLogos', setBrandLogos, BRAND_LOGOS);
@@ -70,9 +66,6 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const unsubH = onSnapshot(doc(db, 'content', 'heroProjects'), (doc) => {
             if (doc.exists()) setHeroProjects(doc.data().data);
         });
-        const unsubR = onSnapshot(doc(db, 'content', 'recentWork'), (doc) => {
-            if (doc.exists()) setRecentWork(doc.data().data);
-        });
         const unsubA = onSnapshot(doc(db, 'content', 'aboutMe'), (doc) => {
             if (doc.exists()) setAboutMe(doc.data().data);
         });
@@ -84,7 +77,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         });
 
         return () => {
-            unsubH(); unsubR(); unsubA(); unsubL();
+            unsubH(); unsubA(); unsubL();
         };
     }
   }, []);
@@ -122,10 +115,6 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setHeroProjects(projects);
       persist('heroProjects', projects);
   };
-  const updateRecentWork = (themes: RecentWorkTheme[]) => {
-      setRecentWork(themes);
-      persist('recentWork', themes);
-  };
   const updateClientLogos = (logos: string[]) => {
       setClientLogos(logos);
       persist('clientLogos', logos);
@@ -137,14 +126,12 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const resetToDefaults = () => {
     setHeroProjects(HERO_PROJECTS);
-    setRecentWork(RECENT_WORK);
     setAboutMe(ABOUT_ME);
     setClientLogos(CLIENT_LOGOS);
     setBrandLogos(BRAND_LOGOS);
     
     // Clear storage
     localStorage.removeItem('heroProjects');
-    localStorage.removeItem('recentWork');
     localStorage.removeItem('aboutMe');
     localStorage.removeItem('clientLogos');
     localStorage.removeItem('brandLogos');
@@ -156,13 +143,11 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <ContentContext.Provider value={{
       heroProjects,
-      recentWork,
       aboutMe,
       clientLogos,
       brandLogos,
       updateAboutMe,
       updateHeroProjects,
-      updateRecentWork,
       updateClientLogos,
       updateBrandLogos,
       resetToDefaults,

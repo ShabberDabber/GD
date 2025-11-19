@@ -1,10 +1,15 @@
-
 import React from 'react';
+
+// Define the shape of the hover state
+interface HoverState {
+  isHovering: boolean;
+  text?: string;
+}
 
 // Context to manage hover state
 interface CursorHoverContextType {
-  isHovering: boolean;
-  setIsHovering: (isHovering: boolean) => void;
+  hoverState: HoverState;
+  setHoverState: (state: HoverState) => void;
 }
 
 const CursorHoverContext = React.createContext<CursorHoverContextType | undefined>(undefined);
@@ -18,8 +23,8 @@ export const useCursorHover = () => {
 };
 
 export const CursorHoverProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isHovering, setIsHovering] = React.useState(false);
-  const value = { isHovering, setIsHovering };
+  const [hoverState, setHoverState] = React.useState<HoverState>({ isHovering: false, text: undefined });
+  const value = { hoverState, setHoverState };
   return (
     <CursorHoverContext.Provider value={value}>
       {children}
@@ -29,12 +34,13 @@ export const CursorHoverProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
 
 export const CustomCursor: React.FC = () => {
-    const { isHovering } = useCursorHover();
+    const { hoverState } = useCursorHover();
+    const { isHovering, text } = hoverState;
     const [position, setPosition] = React.useState({ x: -100, y: -100 });
     
     const tailRef = React.useRef<HTMLDivElement>(null);
     const mousePositionRef = React.useRef({ x: -100, y: -100 });
-    const isHoveringRef = React.useRef(isHovering);
+    const hoverStateRef = React.useRef(hoverState);
 
     // Physics model for position and scale
     const physicsRef = React.useRef({
@@ -56,8 +62,8 @@ export const CustomCursor: React.FC = () => {
 
 
     React.useEffect(() => {
-        isHoveringRef.current = isHovering;
-    }, [isHovering]);
+        hoverStateRef.current = hoverState;
+    }, [hoverState]);
 
     React.useEffect(() => {
         const startX = window.innerWidth / 2;
@@ -85,7 +91,7 @@ export const CustomCursor: React.FC = () => {
         const updateCursor = () => {
             const phys = physicsRef.current;
             const target = mousePositionRef.current;
-            const isHovering = isHoveringRef.current;
+            const currentHoverState = hoverStateRef.current;
             
             // 1. Position Physics (Rubber Band Effect)
             const dx = target.x - phys.x;
@@ -101,7 +107,7 @@ export const CustomCursor: React.FC = () => {
             phys.y += phys.vy;
 
             // 2. Scale Physics for hover effect
-            const targetScale = isHovering ? 0.5 : 1;
+            const targetScale = currentHoverState.text ? 1.5 : (currentHoverState.isHovering ? 0.5 : 1);
             const dScale = targetScale - phys.scale;
             phys.vScale += dScale * SCALE_STIFFNESS;
             phys.vScale *= SCALE_DAMPING;
@@ -126,12 +132,14 @@ export const CustomCursor: React.FC = () => {
         };
     }, []);
 
+    const hasText = !!text;
+
     return (
         <div className="custom-cursor-container pointer-events-none fixed inset-0 z-[9999] hidden md:block">
             <div
                 ref={tailRef}
-                className={`absolute w-8 h-8 rounded-full transition-colors duration-300 ${
-                    isHovering 
+                className={`absolute w-8 h-8 rounded-full transition-colors duration-300 flex items-center justify-center ${
+                    (isHovering || hasText) 
                     ? 'bg-white' 
                     : 'border border-gray-400'
                 }`}
@@ -141,14 +149,18 @@ export const CustomCursor: React.FC = () => {
                     willChange: 'transform',
                 }}
             >
-                {/* Dot has been removed */}
+              {hasText && (
+                <span className="text-[5px] font-bold text-base-dark tracking-widest uppercase">
+                  {text}
+                </span>
+              )}
             </div>
             <div
                 className={`absolute w-2 h-2 rounded-full bg-brand-primary transition-transform duration-200 ease-out`}
                 style={{
                     left: `${position.x}px`,
                     top: `${position.y}px`,
-                    transform: `translate(-50%, -50%) scale(${isHovering ? 0 : 1})`,
+                    transform: `translate(-50%, -50%) scale(${isHovering || hasText ? 0 : 1})`,
                     willChange: 'transform',
                 }}
             />

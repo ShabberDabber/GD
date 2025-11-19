@@ -1,11 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useCursorHover } from './CustomCursor';
 import { useContent } from '../../context/ContentContext';
 
 export const FloatingContactButton: React.FC = () => {
   const { aboutMe } = useContent();
-  const { setIsHovering } = useCursorHover();
+  const { setHoverState } = useCursorHover();
   const [isHovered, setIsHovered] = useState(false);
   
   // Refs
@@ -146,11 +145,11 @@ export const FloatingContactButton: React.FC = () => {
         style={{ willChange: 'width, height' }}
         onMouseEnter={() => {
             setIsHovered(true);
-            setIsHovering(true);
+            setHoverState({ isHovering: true });
         }}
         onMouseLeave={() => {
             setIsHovered(false);
-            setIsHovering(false);
+            setHoverState({ isHovering: false });
         }}
         onMouseMove={handleMouseMove}
       >

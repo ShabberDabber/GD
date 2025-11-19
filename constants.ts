@@ -1,5 +1,5 @@
 
-import type { CaseStudyProject, RecentWorkTheme } from './types';
+import type { CaseStudyProject, AboutMeData } from './types';
 
 export const CLIENT_LOGOS: string[] = [
     'https://logo.clearbit.com/transistor.fm',
@@ -109,54 +109,54 @@ export const HERO_PROJECTS: CaseStudyProject[] = [
       'https://picsum.photos/seed/atari-footer3/400/1200',
     ],
   },
-];
-
-export const RECENT_WORK: RecentWorkTheme[] = [
-  {
-    theme: 'Building New Brands in Regulated Markets',
-    projects: [
-      {
+    {
         id: 'aura-health',
         title: 'Aura Health - Medical Device Launch',
-        description: 'Developed a trustworthy and accessible brand identity and patient portal UI/UX, simplifying complex medical information.',
-        image: 'https://picsum.photos/seed/aura/800/600',
-        mockupType: 'desktop',
-      },
-      {
+        subtitle: 'Developed a trustworthy and accessible brand identity and patient portal UI/UX, simplifying complex medical information.',
+        heroImage: 'https://picsum.photos/seed/aura/800/600',
+        challenge: 'Challenge details for Aura Health...',
+        strategy: 'Strategy details for Aura Health...',
+        impact: 'Impact details for Aura Health...',
+        processImages: [],
+    },
+    {
         id: 'elysian-beauty',
         title: 'Elysian Beauty - Cosmetics Line',
-        description: 'Created elegant packaging and a cohesive digital campaign that navigated complex cosmetic regulations while appealing to a luxury market.',
-        image: 'https://picsum.photos/seed/elysian/800/600',
-        mockupType: 'print',
-      },
-    ],
-  },
-  {
-    theme: 'Modern Digital & Travel Campaigns',
-    projects: [
-      {
+        subtitle: 'Created elegant packaging and a cohesive digital campaign that navigated complex cosmetic regulations while appealing to a luxury market.',
+        heroImage: 'https://picsum.photos/seed/elysian/800/600',
+        challenge: 'Challenge details for Elysian Beauty...',
+        strategy: 'Strategy details for Elysian Beauty...',
+        impact: 'Impact details for Elysian Beauty...',
+        processImages: [],
+    },
+    {
         id: 'nomad-escapes',
         title: 'Nomad Escapes - Travel Booking',
-        description: 'Designed a mobile-first booking platform focused on intuitive user flow and immersive destination visuals to drive conversions.',
-        image: 'https://picsum.photos/seed/nomad/800/600',
-        mockupType: 'mobile',
-      },
-       {
+        subtitle: 'Designed a mobile-first booking platform focused on intuitive user flow and immersive destination visuals to drive conversions.',
+        heroImage: 'https://picsum.photos/seed/nomad/800/600',
+        challenge: 'Challenge details for Nomad Escapes...',
+        strategy: 'Strategy details for Nomad Escapes...',
+        impact: 'Impact details for Nomad Escapes...',
+        processImages: [],
+    },
+    {
         id: 'streamline-corp',
         title: 'Streamline - B2B SaaS',
-        description: 'Led the creative for a B2B platform launch, focusing on clear value propositions and a professional, data-driven aesthetic.',
-        image: 'https://picsum.photos/seed/streamline/800/600',
-        mockupType: 'desktop',
-      },
-    ],
-  },
+        subtitle: 'Led the creative for a B2B platform launch, focusing on clear value propositions and a professional, data-driven aesthetic.',
+        heroImage: 'https://picsum.photos/seed/streamline/800/600',
+        challenge: 'Challenge details for Streamline...',
+        strategy: 'Strategy details for Streamline...',
+        impact: 'Impact details for Streamline...',
+        processImages: [],
+    },
 ];
 
-export const ABOUT_ME = {
+export const ABOUT_ME: AboutMeData = {
   name: 'David Gaines',
   title: 'Creative Director & Brand Strategist',
   heroImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // A professional placeholder
   introStatement: "A highly accomplished Creative Leader with 20+ years of experience solving complex marketing challenges by leading and mentoring creative teams. Committed to elevating craft standards and translating brand strategy into high-impact digital-first concepts.",
+  heroIntro: "A creative leader translating complex brand strategy into high-impact, pixel-perfect design across digital, print, and retail experiences.",
   philosophy: [
     {
       title: 'Strategy-Driven Creative',
@@ -212,5 +212,5 @@ export const ABOUT_ME = {
   resumeUrl: '#', // Placeholder for actual resume link
   linkedInUrl: 'https://linkedin.com/in/davidrgaines',
   email: 'dave@gainesdg.com',
-  phone: '+1 (555) 123-0987',
+  phone: '949.463.1867',
 };

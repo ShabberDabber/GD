@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { LinkedInIcon } from './icons/LinkedInIcon';
@@ -6,7 +5,7 @@ import { useCursorHover } from './ui/CustomCursor';
 
 export const Footer: React.FC = () => {
   const { aboutMe } = useContent();
-  const { setIsHovering } = useCursorHover();
+  const { setHoverState } = useCursorHover();
   
   const handleAdminClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,32 +24,31 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Column 2: Contact Info (Center, Top Aligned) */}
-          <div className="flex flex-col items-start md:items-center md:w-1/3 gap-1">
+          <div className="flex flex-row items-center justify-start md:justify-center md:w-1/3 gap-6">
               <a href={`mailto:${aboutMe.email}`} 
-                 className="text-brand-primary hover:text-white transition-colors text-xl font-bold"
-                 onMouseEnter={() => setIsHovering(true)}
-                 onMouseLeave={() => setIsHovering(false)}
+                 className="text-white hover:text-brand-secondary transition-colors text-xl font-bold"
+                 onMouseEnter={() => setHoverState({ isHovering: true })}
+                 onMouseLeave={() => setHoverState({ isHovering: false })}
               >
                 {aboutMe.email}
               </a>
               <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} 
                  className="text-text-secondary hover:text-white transition-colors text-base font-medium"
-                 onMouseEnter={() => setIsHovering(true)}
-                 onMouseLeave={() => setIsHovering(false)}
+                 onMouseEnter={() => setHoverState({ isHovering: true })}
+                 onMouseLeave={() => setHoverState({ isHovering: false })}
               >
                 {aboutMe.phone}
               </a>
           </div>
 
           {/* Column 3: Socials (Right, Top Aligned) */}
-          <div className="flex flex-col items-start md:items-end md:w-1/3 gap-3">
-             <span className="text-text-tertiary text-xs uppercase tracking-wider">Connect on Social</span>
+          <div className="flex flex-col items-start md:items-end md:w-1/3">
              <a href={aboutMe.linkedInUrl} 
                target="_blank" 
                rel="noopener noreferrer" 
                className="text-text-secondary hover:text-brand-primary transition-colors duration-300 p-2 bg-base-dark rounded-lg"
-               onMouseEnter={() => setIsHovering(true)}
-               onMouseLeave={() => setIsHovering(false)}
+               onMouseEnter={() => setHoverState({ isHovering: true })}
+               onMouseLeave={() => setHoverState({ isHovering: false })}
                aria-label="LinkedIn Profile"
             >
               <LinkedInIcon className="w-6 h-6"/>

@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { useCursorHover } from './ui/CustomCursor';
 import { useRouter } from '../hooks/useRouter';
 
 export const Header: React.FC = () => {
-  const { setIsHovering } = useCursorHover();
+  const { setHoverState } = useCursorHover();
   const { path } = useRouter();
 
   const handleHomeClick = (e: React.MouseEvent) => {
@@ -48,8 +47,8 @@ export const Header: React.FC = () => {
             ? 'bg-brand-primary text-white border-brand-primary' 
             : 'text-base-light border-gray-300 hover:border-brand-primary hover:text-brand-primary'
         }`}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+        onMouseEnter={() => setHoverState({ isHovering: true })}
+        onMouseLeave={() => setHoverState({ isHovering: false })}
       >
         {number}
       </button>
@@ -64,8 +63,8 @@ export const Header: React.FC = () => {
              <a href="#/" 
                 onClick={handleHomeClick}
                 className="text-xl font-black text-text-primary transition-transform duration-300 hover:scale-110"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
+                onMouseEnter={() => setHoverState({ isHovering: true })}
+                onMouseLeave={() => setHoverState({ isHovering: false })}
              >GD!</a>
              
              {isProjectPage && (
@@ -83,8 +82,8 @@ export const Header: React.FC = () => {
                 href="#/"
                 onClick={handleHomeClick}
                 className={`relative px-3 py-2 text-sm font-medium transition-colors ${path === '#/' || path === '' ? 'text-brand-primary' : 'text-text-secondary hover:text-text-primary'}`}
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
+                onMouseEnter={() => setHoverState({ isHovering: true })}
+                onMouseLeave={() => setHoverState({ isHovering: false })}
               >
                 Home
                 {(path === '#/' || path === '') && (
@@ -95,8 +94,8 @@ export const Header: React.FC = () => {
                 href="#/about"
                 onClick={handleAboutClick}
                 className={`relative px-3 py-2 text-sm font-medium transition-colors ${path === '#/about' ? 'text-brand-primary' : 'text-text-secondary hover:text-text-primary'}`}
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
+                onMouseEnter={() => setHoverState({ isHovering: true })}
+                onMouseLeave={() => setHoverState({ isHovering: false })}
               >
                 About
                 {path === '#/about' && (

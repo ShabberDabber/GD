@@ -12,6 +12,7 @@ export interface CaseStudyProject {
   client?: string;
   tags?: string[];
   galleryImages?: string[];
+  galleryImageCount?: number;
   description2?: string;
   footerImages?: string[];
   layout?: '1' | '2' | '3'; // Preference for which template to use
@@ -21,24 +22,12 @@ export interface CaseStudyProject {
   impactHeading?: string;
 }
 
-export interface RecentWorkProject {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  mockupType: 'desktop' | 'mobile' | 'print';
-}
-
-export interface RecentWorkTheme {
-  theme: string;
-  projects: RecentWorkProject[];
-}
-
 export interface AboutMeData {
   name: string;
   title: string;
   heroImage: string;
   introStatement: string;
+  heroIntro: string;
   philosophy: { title: string; text: string }[];
   obsessions: string[];
   travelLog: string[];
@@ -55,4 +44,9 @@ export interface AboutMeData {
   linkedInUrl: string;
   email: string;
   phone: string;
+  // New hero customization fields
+  heroTitleColor?: string;
+  heroSubtitleColor?: string;
+  heroIntroColor?: string;
+  heroBackgroundColor?: string;
 }
