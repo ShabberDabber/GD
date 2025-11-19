@@ -13,23 +13,29 @@ interface State {
 
 // Fix: Explicitly extend React.Component to resolve a potential type resolution issue where properties like `props` and `setState` were not being correctly inferred on the class instance.
 class ErrorBoundary extends React.Component<Props, State> {
-  public state: State = {
-    hasError: false,
-    error: null,
-    errorInfo: null,
-  };
+  // FIX: Replaced state class property with initialization in the constructor.
+  // This ensures compatibility with build environments that might not support
+  // class field syntax, which can lead to the reported type errors for `setState` and `props`.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    };
+  }
 
-  public static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error, errorInfo: null };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error, errorInfo });
     // We still log here, although the user might not see it.
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  public render() {
+  render() {
     if (this.state.hasError) {
       return (
         <div style={{
