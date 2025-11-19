@@ -1,14 +1,2 @@
-import React from 'react';
-import { HeroSection } from '../sections/HeroSection';
-import { PartnersSection } from '../sections/PartnersSection';
-import { WorkOverviewSection } from '../sections/WorkOverviewSection';
-
-export const HomePage: React.FC = () => {
-  return (
-    <>
-      <HeroSection />
-      <WorkOverviewSection />
-      <PartnersSection />
-    </>
-  );
-};
+// This file's content has been moved into index.html to resolve loading errors.
+// It is no longer used.
