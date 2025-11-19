@@ -40,20 +40,31 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Initialize Data (Hybrid Strategy)
   useEffect(() => {
-    // 1. Load from LocalStorage immediately (Fastest for Demo)
+    // 1. Load from LocalStorage with robust validation
     const loadLocal = (key: string, setter: (value: any) => void, defaultVal: any) => {
       try {
         const stored = localStorage.getItem(key);
         if (stored) {
-          setter(JSON.parse(stored));
+          const parsed = JSON.parse(stored);
+          // Validate data type to prevent crashes from corrupted storage
+          if (Array.isArray(defaultVal) && Array.isArray(parsed)) {
+            setter(parsed);
+          } else if (typeof defaultVal === 'object' && defaultVal !== null && typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+            setter(parsed);
+          } else {
+            console.warn(`Data for '${key}' in localStorage is corrupted or has a mismatched type. Using default.`);
+            setter(defaultVal);
+          }
         } else {
           setter(defaultVal);
         }
       } catch (error) {
-        console.error(`Error parsing ${key} from localStorage. Using default.`, error);
+        console.error(`Error parsing '${key}' from localStorage. Clearing corrupted item and using default.`, error);
+        localStorage.removeItem(key); // Also clear the corrupted key
         setter(defaultVal);
       }
     };
+
     loadLocal('heroProjects', setHeroProjects, HERO_PROJECTS);
     loadLocal('aboutMe', setAboutMe, ABOUT_ME);
     loadLocal('clientLogos', setClientLogos, CLIENT_LOGOS);
@@ -66,21 +77,26 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         });
     }
 
-    // 3. Sync with Firebase if available
+    // 3. Sync with Firebase if available, with data validation
     if (db) {
         setIsFirebaseActive(true);
         
-        // Listen for updates from Firestore
         const unsubH = onSnapshot(doc(db, 'content', 'heroProjects'), (doc) => {
-            if (doc.exists()) setHeroProjects(doc.data().data);
+            if (doc.exists() && Array.isArray(doc.data().data)) {
+                setHeroProjects(doc.data().data);
+            }
         });
         const unsubA = onSnapshot(doc(db, 'content', 'aboutMe'), (doc) => {
-            if (doc.exists()) setAboutMe(doc.data().data);
+            const data = doc.data()?.data;
+            if (doc.exists() && typeof data === 'object' && data !== null && !Array.isArray(data)) {
+                setAboutMe(data as AboutMeData);
+            }
         });
         const unsubL = onSnapshot(doc(db, 'content', 'logos'), (doc) => {
             if (doc.exists()) {
-                setClientLogos(doc.data().clientLogos || []);
-                setBrandLogos(doc.data().brandLogos || []);
+                const data = doc.data();
+                if (Array.isArray(data.clientLogos)) setClientLogos(data.clientLogos);
+                if (Array.isArray(data.brandLogos)) setBrandLogos(data.brandLogos);
             }
         });
 
