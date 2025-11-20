@@ -315,12 +315,7 @@ const ContentProvider = ({ children }) => {
     localStorage.setItem(key, JSON.stringify(data));
     if (db && isAuthenticated) {
       try {
-        if (key === 'clientLogos' || key === 'brandLogos') {
-          const docRef = doc(db, firestoreCollection, 'logos');
-          await setDoc(docRef, { clientLogos: key === 'clientLogos' ? data : clientLogos, brandLogos: key === 'brandLogos' ? data : brandLogos }, { merge: true });
-        } else {
-          await setDoc(doc(db, firestoreCollection, key), { data });
-        }
+        await setDoc(doc(db, firestoreCollection, key), { data });
       } catch (e) {
         console.error("Error saving to Firebase", e);
       }
@@ -329,8 +324,20 @@ const ContentProvider = ({ children }) => {
 
   const updateAboutMe = (data) => { setAboutMe(data); persist('aboutMe', data); };
   const updateHeroProjects = (projects) => { setHeroProjects(projects); persist('heroProjects', projects); };
-  const updateClientLogos = (logos) => { setClientLogos(logos); persist('clientLogos', logos); };
-  const updateBrandLogos = (logos) => { setBrandLogos(logos); persist('brandLogos', logos); };
+  
+  const updateLogos = (newClientLogos, newBrandLogos) => {
+    setClientLogos(newClientLogos);
+    setBrandLogos(newBrandLogos);
+    
+    localStorage.setItem('clientLogos', JSON.stringify(newClientLogos));
+    localStorage.setItem('brandLogos', JSON.stringify(newBrandLogos));
+
+    if (db && isAuthenticated) {
+        const docRef = doc(db, 'content', 'logos');
+        setDoc(docRef, { clientLogos: newClientLogos, brandLogos: newBrandLogos })
+            .catch(e => console.error("Error saving logos to Firebase", e));
+    }
+  };
 
   const resetToDefaults = () => {
     setHeroProjects(HERO_PROJECTS); setAboutMe(ABOUT_ME); setClientLogos(CLIENT_LOGOS); setBrandLogos(BRAND_LOGOS);
@@ -339,7 +346,7 @@ const ContentProvider = ({ children }) => {
   };
 
   return (
-    <ContentContext.Provider value={{ heroProjects, aboutMe, clientLogos, brandLogos, updateAboutMe, updateHeroProjects, updateClientLogos, updateBrandLogos, resetToDefaults, isFirebaseActive }}>
+    <ContentContext.Provider value={{ heroProjects, aboutMe, clientLogos, brandLogos, updateAboutMe, updateHeroProjects, updateLogos, resetToDefaults, isFirebaseActive }}>
       {children}
     </ContentContext.Provider>
   );
@@ -676,7 +683,7 @@ const CaseStudyDetailPage = ({ projectId }) => {
 const AdminPage = () => {
     const { 
         aboutMe, heroProjects, clientLogos, brandLogos, 
-        updateAboutMe, updateHeroProjects, updateClientLogos, updateBrandLogos,
+        updateAboutMe, updateHeroProjects, updateLogos,
         resetToDefaults, isFirebaseActive 
     } = useContent();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -922,7 +929,10 @@ const AdminPage = () => {
 
         useEffect(() => { setLocalClientLogos(clientLogos); setLocalBrandLogos(brandLogos); }, [clientLogos, brandLogos]);
 
-        const handleSave = () => { updateClientLogos(localClientLogos); updateBrandLogos(localBrandLogos); alert('Logos saved!'); };
+        const handleSave = () => { 
+            updateLogos(localClientLogos, localBrandLogos); 
+            alert('Logos saved!'); 
+        };
         const addLogo = (type) => {
             if (type === 'client' && newClientLogo) { setLocalClientLogos([...localClientLogos, newClientLogo]); setNewClientLogo(''); }
             if (type === 'brand' && newBrandLogo) { setLocalBrandLogos([...localBrandLogos, newBrandLogo]); setNewBrandLogo(''); }
@@ -937,11 +947,11 @@ const AdminPage = () => {
                  <div className="sticky top-0 bg-base-dark/80 backdrop-blur-sm z-10 py-4 mb-4 flex justify-end"><button onClick={handleSave} className={buttonClasses}>Save Logos</button></div>
                  <AdminSection title="Client Logos" gridCols="md:grid-cols-1">
                     <DraggableLogoGrid logos={localClientLogos} onUpdate={setLocalClientLogos} onRemove={(index) => removeLogo('client', index)} />
-                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Client Logo URL" value={newClientLogo} onChange={(e) => setNewClientLogo(e.target.value)} placeholder="Image URL..." recommendation="Recommended size: 192x64px. Format: SVG, PNG." /><button onClick={() => addLogo('client')} className={buttonClasses + " self-end"}>Add</button></div>
+                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Client Logo URL" value={newClientLogo} onChange={(e) => setNewClientLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/v0/b/your-project.appspot.com/o/file.jpg?alt=media&token=..." recommendation="In Firebase Storage, click the file, then copy the full 'Download URL' from the 'File location' panel. It must start with `https://firebasestorage.googleapis.com/...` and include an access token. A `gs://` link will not work." /><button onClick={() => addLogo('client')} className={buttonClasses + " self-end"}>Add</button></div>
                  </AdminSection>
                  <AdminSection title="Brand Logos" gridCols="md:grid-cols-1">
                     <DraggableLogoGrid logos={localBrandLogos} onUpdate={setLocalBrandLogos} onRemove={(index) => removeLogo('brand', index)} />
-                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Brand Logo URL" value={newBrandLogo} onChange={(e) => setNewBrandLogo(e.target.value)} placeholder="Image URL..." recommendation="Recommended size: 192x64px. Format: SVG, PNG." /><button onClick={() => addLogo('brand')} className={buttonClasses + " self-end"}>Add</button></div>
+                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Brand Logo URL" value={newBrandLogo} onChange={(e) => setNewBrandLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/v0/b/your-project.appspot.com/o/file.jpg?alt=media&token=..." recommendation="In Firebase Storage, click the file, then copy the full 'Download URL' from the 'File location' panel. It must start with `https://firebasestorage.googleapis.com/...` and include an access token. A `gs://` link will not work." /><button onClick={() => addLogo('brand')} className={buttonClasses + " self-end"}>Add</button></div>
                  </AdminSection>
             </div>
         );
