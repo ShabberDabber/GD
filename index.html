@@ -35,7 +35,7 @@
         position: absolute;
         inset: 0;
         z-index: -1;
-        background-color: rgba(15, 23, 42, 0.8); /* Corresponds to bg-base-dark/80 */
+        background-color: rgba(var(--header-bg-color-rgb, 15, 23, 42), 0.8);
         -webkit-backdrop-filter: blur(12px); /* Corresponds to backdrop-blur-lg */
         backdrop-filter: blur(12px);
       }
@@ -125,7 +125,7 @@ const HERO_PROJECTS = [
   { id: 'streamline-corp', title: 'Streamline - B2B SaaS', subtitle: 'Led the creative for a B2B platform launch, focusing on clear value propositions and a professional, data-driven aesthetic.', heroImage: 'https://picsum.photos/seed/streamline/800/600', challenge: 'Challenge details for Streamline...', strategy: 'Strategy details for Streamline...', impact: 'Impact details for Streamline...', processImages: [], galleryImages: [], footerImages: [], layout: '2', },
 ];
 const ABOUT_ME = {
-  name: 'David Gaines', title: 'Creative Director & Brand Strategist', logoText: 'GD!', heroImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', introStatement: "A highly accomplished Creative Leader with 20+ years of experience solving complex marketing challenges by leading and mentoring creative teams. Committed to elevating craft standards and translating brand strategy into high-impact digital-first concepts.", heroIntro: "A creative leader translating complex brand strategy into high-impact, pixel-perfect design across digital, print, and retail experiences.", philosophy: [{ title: 'Strategy-Driven Creative', text: 'I believe great creative is driven by strategic insight, not just aesthetics. My process begins with understanding the business challenge to ensure every design choice has a purpose and delivers measurable results.' }, { title: 'Mentorship & Team Building', text: "My role as a leader is to mentor the next generation of creatives. I focus on building collaborative, empowered teams where talent can thrive and produce their best work." }, { title: 'Bridging Complexity and User Experience', text: "I specialize in bridging complicated technical requirements with compelling user experiences, translating product features into emotional connections that resonate with audiences." },], obsessions: ['Swiss Typography', 'Japanese Denim', 'Vintage Synthesizers', 'Perfect Espresso', 'Mid-Century Furniture', 'Film Photography'], travelLog: [{ text: 'Tokyo, Japan', completed: true }, { text: 'Reykjavik, Iceland', completed: false }, { text: 'Berlin, Germany', completed: true }, { text: 'Kyoto, Japan', completed: false }, { text: 'Mexico City', completed: false }, { text: 'Copenhagen, Denmark', completed: false }, { text: 'Buenos Aires', completed: false }, { text: 'Seoul, South Korea', completed: false }, { text: 'Lisbon, Portugal', completed: false }], quotes: [{ text: "Good design is as little design as possible.", author: "Dieter Rams" }, { text: "The details are not the details. They make the design.", author: "Charles Eames" }], favorites: { movies: ['Blade Runner 2049', 'Arrival', 'Grand Budapest Hotel'], shows: ['Severance', 'The Bear', 'Succession'], podcasts: ['99% Invisible', 'Design Matters', 'How I Built This'], audiobooks: ['The Creative Act', 'Steve Jobs', 'Kitchen Confidential'] }, panoramaImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2000&auto=format&fit=crop', inspirationGrid: ['https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?q=80&w=1200&auto=format&fit=crop'], resumeUrl: '#', linkedInUrl: 'https://linkedin.com/in/davidrgaines', email: 'dave@gainesdg.com', phone: '949.463.1867', brandPrimary: '#0891b2', brandSecondary: '#f0f9ff',
+  name: 'David Gaines', title: 'Creative Director & Brand Strategist', logoText: 'GD!', heroImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', introStatement: "A highly accomplished Creative Leader with 20+ years of experience solving complex marketing challenges by leading and mentoring creative teams. Committed to elevating craft standards and translating brand strategy into high-impact digital-first concepts.", heroIntro: "A creative leader translating complex brand strategy into high-impact, pixel-perfect design across digital, print, and retail experiences.", philosophy: [{ title: 'Strategy-Driven Creative', text: 'I believe great creative is driven by strategic insight, not just aesthetics. My process begins with understanding the business challenge to ensure every design choice has a purpose and delivers measurable results.' }, { title: 'Mentorship & Team Building', text: "My role as a leader is to mentor the next generation of creatives. I focus on building collaborative, empowered teams where talent can thrive and produce their best work." }, { title: 'Bridging Complexity and User Experience', text: "I specialize in bridging complicated technical requirements with compelling user experiences, translating product features into emotional connections that resonate with audiences." },], obsessions: ['Swiss Typography', 'Japanese Denim', 'Vintage Synthesizers', 'Perfect Espresso', 'Mid-Century Furniture', 'Film Photography'], travelLog: [{ text: 'Tokyo, Japan', completed: true }, { text: 'Reykjavik, Iceland', completed: false }, { text: 'Berlin, Germany', completed: true }, { text: 'Kyoto, Japan', completed: false }, { text: 'Mexico City', completed: false }, { text: 'Copenhagen, Denmark', completed: false }, { text: 'Buenos Aires', completed: false }, { text: 'Seoul, South Korea', completed: false }, { text: 'Lisbon, Portugal', completed: false }], quotes: [{ text: "Good design is as little design as possible.", author: "Dieter Rams" }, { text: "The details are not the details. They make the design.", author: "Charles Eames" }], favorites: { movies: ['Blade Runner 2049', 'Arrival', 'Grand Budapest Hotel'], shows: ['Severance', 'The Bear', 'Succession'], podcasts: ['99% Invisible', 'Design Matters', 'How I Built This'], audiobooks: ['The Creative Act', 'Steve Jobs', 'Kitchen Confidential'] }, panoramaImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2000&auto=format&fit=crop', inspirationGrid: ['https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?q=80&w=1200&auto=format&fit=crop'], resumeUrl: '#', linkedInUrl: 'https://linkedin.com/in/davidrgaines', email: 'dave@gainesdg.com', phone: '949.463.1867', brandPrimary: '#0891b2', brandSecondary: '#f0f9ff', headerBgColor: '#0f172a', heroBgColor: '#0f172a',
   pageHeadings: {
     aboutTitle: 'About Me <span class="text-brand-primary">&</span> <br/>The Process',
     philosophySubtitle: 'Strategy first. <br/> Design second.',
@@ -306,7 +306,18 @@ const ContentProvider = ({ children }) => {
   useEffect(() => {
     document.documentElement.style.setProperty('--brand-primary', aboutMe.brandPrimary || '#0891b2');
     document.documentElement.style.setProperty('--brand-secondary', aboutMe.brandSecondary || '#f0f9ff');
-  }, [aboutMe.brandPrimary, aboutMe.brandSecondary]);
+    document.documentElement.style.setProperty('--hero-bg-color', aboutMe.heroBgColor || '#0f172a');
+    
+    const hexToRgb = (hex) => {
+        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+    };
+    const headerRgb = hexToRgb(aboutMe.headerBgColor || '#0f172a');
+    if (headerRgb) {
+        document.documentElement.style.setProperty('--header-bg-color-rgb', `${headerRgb.r}, ${headerRgb.g}, ${headerRgb.b}`);
+    }
+
+  }, [aboutMe.brandPrimary, aboutMe.brandSecondary, aboutMe.headerBgColor, aboutMe.heroBgColor]);
 
   const persist = async (key, data, firestoreCollection = 'content') => {
     localStorage.setItem(key, JSON.stringify(data));
@@ -424,17 +435,19 @@ const Header = () => {
                 </div>
                 
                 <div
-                  className={`absolute top-full right-0 mt-2 w-64 origin-top-right rounded-md shadow-lg bg-base-dark/80 backdrop-blur-md ring-1 ring-base-light ring-opacity-5 focus:outline-none transition-all duration-200 ease-out
-                    ${isContactOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`
+                  className={`absolute top-full right-0 w-64 origin-top-right focus:outline-none transition-all duration-300 ease-out
+                    ${isContactOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`
                   }
                 >
-                  <div className="py-2" role="menu" aria-orientation="vertical">
-                    <a href={`mailto:${aboutMe.email}`} className="block px-4 py-2 text-sm text-right text-text-secondary hover:text-text-primary hover:bg-base-medium transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
-                      {aboutMe.email}
-                    </a>
-                    <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} className="block px-4 py-2 text-sm text-right text-text-secondary hover:text-text-primary hover:bg-base-medium transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
-                      {aboutMe.phone}
-                    </a>
+                  <div className="bg-base-dark/80 backdrop-blur-md rounded-b-md overflow-hidden ring-1 ring-base-light ring-opacity-5">
+                    <div className="py-2" role="menu" aria-orientation="vertical">
+                      <a href={`mailto:${aboutMe.email}`} className="block px-4 py-2 text-sm text-right text-text-secondary hover:text-text-primary hover:bg-base-medium transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
+                        {aboutMe.email}
+                      </a>
+                      <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} className="block px-4 py-2 text-sm text-right text-text-secondary hover:text-text-primary hover:bg-base-medium transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
+                        {aboutMe.phone}
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -479,7 +492,7 @@ const SectionHeader = ({ title, subtitle, titleClassName = 'text-text-primary' }
 const HeroSection = () => {
   const { aboutMe } = useContent();
   return (
-    <section className="relative py-12 md:py-16 text-center bg-base-dark">
+    <section className="relative py-12 md:py-16 text-center" style={{ backgroundColor: aboutMe.heroBgColor }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-text-primary tracking-tighter uppercase">{aboutMe.name}</h1>
         <p className="mt-4 text-xl md:text-2xl text-brand-primary font-semibold">{aboutMe.title}</p>
@@ -845,6 +858,8 @@ const AdminPage = () => {
                  <AdminSection title="Theme Colors">
                     <div className="flex items-center gap-4"><AdminInput type="color" label="Primary Brand Color" name="brandPrimary" value={data.brandPrimary || '#0891b2'} onChange={handleChange} className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" /><span className="text-text-secondary">{data.brandPrimary}</span></div>
                     <div className="flex items-center gap-4"><AdminInput type="color" label="Secondary Brand Color" name="brandSecondary" value={data.brandSecondary || '#f0f9ff'} onChange={handleChange} className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" /><span className="text-text-secondary">{data.brandSecondary}</span></div>
+                    <div className="flex items-center gap-4"><AdminInput type="color" label="Header Background Color" name="headerBgColor" value={data.headerBgColor || '#0f172a'} onChange={handleChange} className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" /><span className="text-text-secondary">{data.headerBgColor}</span></div>
+                    <div className="flex items-center gap-4"><AdminInput type="color" label="Hero Background Color" name="heroBgColor" value={data.heroBgColor || '#0f172a'} onChange={handleChange} className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" /><span className="text-text-secondary">{data.heroBgColor}</span></div>
                 </AdminSection>
             </div>
         );
@@ -1095,6 +1110,35 @@ const AdminPage = () => {
             </div>
         );
     };
+
+    const EditingGuide = () => {
+        const [playgroundText, setPlaygroundText] = useState('<b>Hello world!</b>\n\nTry editing me.\n<span class="text-brand-primary">I am using the brand primary color.</span>\n\nUse <br/> for line breaks.');
+        return (
+            <div className="space-y-8">
+                <AdminSection title="Text Formatting Guide" gridCols="md:grid-cols-1">
+                    <div className="prose prose-invert max-w-none text-text-secondary leading-relaxed">
+                        <p>You can use basic HTML tags to format text in most multi-line text areas (like project descriptions or the 'About Me' intro). This allows for more dynamic content styling.</p>
+                        <h4 className="text-lg font-bold text-text-primary">Commonly Used Tags:</h4>
+                        <ul>
+                            <li>For <strong>bold text</strong>, wrap your text in <code>&lt;b&gt;</code> tags. Example: <code>&lt;b&gt;Important&lt;/b&gt;</code></li>
+                            <li>For <span className="text-brand-primary">brand-colored text</span>, use a span with a special class. Example: <code>&lt;span class="text-brand-primary"&gt;Highlight&lt;/span&gt;</code></li>
+                            <li>For a line break,<br/>use the self-closing <code>&lt;br/&gt;</code> tag where you want the line to end.</li>
+                        </ul>
+                        <p>Feel free to experiment in the playground below to see how your text will look before saving it.</p>
+                    </div>
+                </AdminSection>
+                <AdminSection title="Live Preview Playground" gridCols="md:grid-cols-1">
+                    <AdminTextarea label="Enter your text with HTML here:" value={playgroundText} onChange={(e) => setPlaygroundText(e.target.value)} rows={8} />
+                    <div>
+                        <label className={labelClasses}>Live Preview:</label>
+                        <div className="border border-base-light rounded p-4 bg-base-dark min-h-[100px] text-text-secondary">
+                            <p className="leading-relaxed" dangerouslySetInnerHTML={{ __html: playgroundText.replace(/\n/g, '<br/>') }} />
+                        </div>
+                    </div>
+                </AdminSection>
+            </div>
+        );
+    };
     
     const DangerZone = () => (
         <div className="bg-red-900/20 border border-red-700 p-6 rounded-lg">
@@ -1140,6 +1184,7 @@ const AdminPage = () => {
                         <TabButton label="About Page" tabName="about" />
                         <TabButton label="Projects" tabName="projects" />
                         <TabButton label="Logos" tabName="logos" />
+                        <TabButton label="Editing Guide" tabName="editing" />
                     </div>
                     <div>
                         <TabButton label="Danger Zone" tabName="danger" danger={true} />
@@ -1151,6 +1196,7 @@ const AdminPage = () => {
                     {activeTab === 'about' && <AboutPageSettings />}
                     {activeTab === 'projects' && <ProjectEditor />}
                     {activeTab === 'logos' && <LogoEditor />}
+                    {activeTab === 'editing' && <EditingGuide />}
                     {activeTab === 'danger' && <DangerZone />}
                 </main>
             </div>
