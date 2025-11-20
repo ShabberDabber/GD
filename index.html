@@ -713,8 +713,17 @@ const AdminPage = () => {
     const AdminSection = ({ title, children, gridCols = 'md:grid-cols-2' }) => (
         <div className="bg-base-medium p-6 rounded-lg shadow-lg mb-8"><h3 className="text-xl font-bold text-text-primary border-b border-base-light pb-3 mb-4">{title}</h3><div className={`grid grid-cols-1 ${gridCols} gap-6`}>{children}</div></div>
     );
-    const TabButton = ({ label, tabName }) => (
-        <button onClick={() => setActiveTab(tabName)} className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors focus:outline-none ${activeTab === tabName ? 'bg-base-medium text-brand-primary' : 'text-text-secondary hover:text-text-primary'}`}>{label}</button>
+    const TabButton = ({ label, tabName, danger = false }) => (
+        <button 
+            onClick={() => setActiveTab(tabName)} 
+            className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors focus:outline-none ${
+                activeTab === tabName 
+                    ? (danger ? 'bg-red-900/50 text-red-400' : 'bg-base-medium text-brand-primary') 
+                    : (danger ? 'text-red-500 hover:text-red-400 hover:bg-red-900/30' : 'text-text-secondary hover:text-text-primary')
+            }`}
+        >
+            {label}
+        </button>
     );
 
     // --- Tab Content Components ---
@@ -975,13 +984,17 @@ const AdminPage = () => {
                         <button onClick={handleLogout} className="bg-base-light hover:bg-base-medium text-text-primary font-bold py-2 px-4 rounded">Logout</button>
                     </div>
                 </header>
-                <nav className="flex space-x-1 sm:space-x-2 border-b border-base-light mb-8 overflow-x-auto">
-                    <TabButton label="Theme & General" tabName="theme" />
-                    <TabButton label="Home Page" tabName="home" />
-                    <TabButton label="About Page" tabName="about" />
-                    <TabButton label="Projects" tabName="projects" />
-                    <TabButton label="Logos" tabName="logos" />
-                    <TabButton label="Danger Zone" tabName="danger" />
+                <nav className="flex justify-between items-end border-b border-base-light mb-8">
+                    <div className="flex space-x-1 sm:space-x-2 overflow-x-auto">
+                        <TabButton label="Theme & General" tabName="theme" />
+                        <TabButton label="Home Page" tabName="home" />
+                        <TabButton label="About Page" tabName="about" />
+                        <TabButton label="Projects" tabName="projects" />
+                        <TabButton label="Logos" tabName="logos" />
+                    </div>
+                    <div>
+                        <TabButton label="Danger Zone" tabName="danger" danger={true} />
+                    </div>
                 </nav>
                 <main>
                     {activeTab === 'theme' && <ThemeGeneralSettings />}
