@@ -118,44 +118,115 @@ const BRAND_LOGOS = [
     'https://logo.clearbit.com/sony.com', 'https://logo.clearbit.com/nike.com', 'https://logo.clearbit.com/cocacola.com', 'https://logo.clearbit.com/netflix.com', 'https://logo.clearbit.com/spotify.com', 'https://logo.clearbit.com/playstation.com', 'https://logo.clearbit.com/nintendo.com', 'https://logo.clearbit.com/lego.com', 'https://logo.clearbit.com/redbull.com', 'https://logo.clearbit.com/starbucks.com', 'https://logo.clearbit.com/disney.com', 'https://logo.clearbit.com/amazon.com', 'https://logo.clearbit.com/apple.com', 'https://logo.clearbit.com/tesla.com', 'https://logo.clearbit.com/mcdonalds.com',
 ];
 const HERO_PROJECTS = [
-  { id: 'mlb-the-show', title: 'MLB The Show Franchise', subtitle: 'Case Study: Global Brand Launch & Retail Success', client: 'Sony PlayStation', tags: ['Packaging', 'Broadcast TV', 'Retail', 'Trade Show'], heroImage: { url: 'https://picsum.photos/seed/mlb/1200/800', alt: 'MLB The Show promotional image' },
+  {
+    id: 'aura-health',
+    title: 'Aura Health & Wellness App',
+    client: 'Mindful Technologies',
+    tags: ['UI/UX Design', 'Mobile App', 'Health & Wellness', 'Branding'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop', alt: 'A serene mobile app interface for a wellness application.' },
+    homePageTitle: 'Aura: Mindful Wellness',
+    homePageSubtitle: 'Crafting a calming, user-centric mobile experience for mental well-being.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=800&auto=format&fit=crop', alt: 'A person meditating in a peaceful, natural environment.' },
     contentBlocks: [
-      { type: 'hero', data: { images: [{ url: 'https://picsum.photos/seed/mlb-footer1/400/1200', alt: 'MLB Footer Image 1' }, { url: 'https://picsum.photos/seed/mlb-footer2/400/1200', alt: 'MLB Footer Image 2' }, { url: 'https://picsum.photos/seed/mlb-footer3/400/1200', alt: 'MLB Footer Image 3' }], style: 'trio' } },
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop', alt: 'Aura App Meditation Screen' }], style: 'single' } },
       { type: 'title', data: {} },
-      { type: 'text', data: { heading: 'The Challenge', body: 'Launch a new flagship sports gaming franchise to compete against established market giants and capture the attention of a diverse audience, from hardcore baseball fans to casual gamers. This required a multi-faceted approach to build hype and establish a strong brand identity from day one.' } },
-      { type: 'imageGrid', data: { images: [{ url: 'https://picsum.photos/seed/mlb-process1/600/400', alt: 'MLB Process Image 1' }, { url: 'https://picsum.photos/seed/mlb-process2/600/400', alt: 'MLB Process Image 2' }] } },
-      { type: 'text', data: { heading: 'Strategy', body: 'Directed a multi-disciplinary creative effort, structuring and managing in-house teams, external agencies, and freelance talent. We developed a cohesive, cross-channel campaign spanning broadcast TV, dynamic retail displays, packaging, and high-impact tradeshow experiences to create an unmissable launch event.<br/><br/>The campaign\'s success was built on a deep understanding of the target audience. We combined authentic baseball simulation with high-energy, accessible marketing that spoke to both hardcore fans and newcomers. The retail presence was particularly crucial, with custom displays and interactive kiosks that allowed players to experience the game firsthand. This hands-on approach, coupled with a massive broadcast push, cemented MLB The Show as the premier baseball gaming experience.' } },
-      { type: 'stats', data: { stats: [{ value: '40%', label: 'Launch Sales Above Projections' }, { value: '#1', label: 'Market Share in Genre (Year 1)' }, { value: '5x', label: 'Game of the Year Awards' }] } },
-      { type: 'quote', data: { quotes: [{ text: 'This campaign redefined what a sports game launch could be.', author: 'IGN Review' }], style: 'single' } },
-      { type: 'text', data: { heading: 'The Impact', body: 'Achieved record-breaking launch sales, surpassing initial projections by 40%. Secured #1 market share in the genre within the first year and established a franchise that has shown incredible longevity, winning multiple "Game of the Year" awards.' } },
-      { type: 'image', data: { image: { url: 'https://picsum.photos/seed/mlb-gallery1/1200/800', alt: 'MLB Gallery Image 1' }, size: 'full', caption: '' } },
+      { type: 'text', data: { heading: 'The Challenge', body: 'Design and launch Aura, a new mobile app aimed at making mindfulness and meditation accessible to a wider audience. The goal was to create a sanctuary-like digital space that reduces stress, not adds to it, standing out in a crowded market of wellness apps.' } },
+      { type: 'stats', data: { stats: [{ value: '500K+', label: 'Downloads in Year One' }, { value: '4.8 ★', label: 'Average App Store Rating' }, { value: 'Featured', label: 'by Apple as App of the Day' }] } },
+      { type: 'textWithImages', data: { heading: 'A Human-Centered Approach', body: 'Our process began with deep user research into anxiety triggers and relaxation techniques. This informed a minimalist UI with a soothing color palette, gentle animations, and intuitive navigation. We focused on creating guided meditation journeys that were easy to follow for beginners while still offering depth for experienced users.', images: [{ url: 'https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?q=80&w=800&auto=format&fit=crop', alt: 'Wireframes and sketches of the Aura app' }], imagePosition: 'right', imageAspectRatio: 'tall' } },
+      { type: 'quote', data: { quotes: [{ text: 'Using Aura feels like a deep breath in a chaotic world. It’s beautifully designed and genuinely helpful.', author: 'User Review' }], style: 'single' } },
+      { type: 'carousel', data: { images: [{ url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop', alt: 'Aura app guided breathing exercise' }, { url: 'https://images.unsplash.com/photo-1599301859914-0a6b4a5e0f7e?q=80&w=800&auto=format&fit=crop', alt: 'Aura app sleep stories interface' }, { url: 'https://images.unsplash.com/photo-1605320922883-500b3f790a3c?q=80&w=800&auto=format&fit=crop', alt: 'Aura app progress tracking screen' }] } },
     ]
   },
-  { id: 'atari-revival', title: 'Interplay/Atari Launches', subtitle: 'Case Study: Revitalizing Legacy Brands for a Modern Audience', client: 'Atari / Interplay', tags: ['Brand Identity', 'Packaging', 'Digital Campaign', 'Social Media'], heroImage: { url: 'https://picsum.photos/seed/atari/1200/800', alt: 'Atari promotional image' },
+  {
+    id: 'quantum-leap-ai',
+    title: 'QuantumLeap AI SaaS Platform',
+    client: 'Cognitive Dynamics Inc.',
+    tags: ['B2B', 'SaaS', 'AI', 'Brand Identity', 'Web Design'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1200&auto=format&fit=crop', alt: 'A sophisticated dashboard for an AI SaaS platform shown on a laptop.' },
+    homePageTitle: 'QuantumLeap AI',
+    homePageSubtitle: 'Designing the brand and UI for a next-generation enterprise AI platform.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1620712943543-2858200f745a?q=80&w=800&auto=format=fit=crop', alt: 'Abstract visualization of an artificial intelligence network.' },
     contentBlocks: [
-      { type: 'hero', data: { images: [{ url: 'https://picsum.photos/seed/atari/1200/800', alt: 'Atari promotional image' }], style: 'single' } },
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop', alt: 'QuantumLeap data visualization dashboard' }, { url: 'https://images.unsplash.com/photo-1614064548237-02f0d1467812?q=80&w=800&auto=format&fit=crop', alt: 'QuantumLeap machine learning model builder' }], style: 'duo' } },
       { type: 'title', data: {} },
-      { type: 'text', data: { heading: 'The Challenge', body: "Re-introduce iconic gaming brands to a new generation of players while honoring the nostalgic connection of the original fanbase. The goal was to bridge the gap between retro appeal and modern gaming expectations." } },
-      { type: 'text', data: { heading: 'Strategy & Execution', body: 'As the agency-of-record creative lead, I developed a "Modern Nostalgia" creative platform. This involved a complete visual identity refresh, innovative packaging that paid homage to the originals, and digital campaigns that leveraged retro aesthetics within contemporary channels.' } },
-      { type: 'text', data: { heading: 'Impact', body: 'Successfully managed creative for 5+ major title launches, resulting in a 300% increase in brand engagement on social media and strong sales in a competitive market. The campaigns were praised for their authentic yet fresh approach to beloved IP.' } },
-      { type: 'imageRow', data: { images: [{ url: 'https://picsum.photos/seed/atari-footer1/1200/400', alt: 'Atari Footer Image 1' }, { url: 'https://picsum.photos/seed/atari-footer2/600/400', alt: 'Atari Footer Image 2' }, { url: 'https://picsum.photos/seed/atari-footer3/600/400', alt: 'Atari Footer Image 3' }], style: 'twoNarrow' } },
-      { type: 'text', data: { body: "The key to this project was striking the perfect balance between honoring the past and appealing to the present. We dove deep into the archives to extract core visual elements—pixel art, typography, color palettes—and reinterpreted them for a high-definition world. The result was a brand identity that felt instantly familiar yet undeniably fresh, capturing the imagination of both old-school gamers and a new generation." } },
-      { type: 'carousel', data: { images: [{ url: 'https://picsum.photos/seed/atari-gallery1/1200/800', alt: 'Atari Gallery Image 1' }, { url: 'https://picsum.photos/seed/atari-gallery2/1200/800', alt: 'Atari Gallery Image 2' }, { url: 'https://picsum.photos/seed/atari-gallery3/1200/800', alt: 'Atari Gallery Image 3' }] } },
+      { type: 'text', data: { heading: 'The Mission', body: 'Develop a powerful and intuitive brand identity and user interface for QuantumLeap, an AI platform designed to help enterprises make sense of massive datasets. The challenge was to communicate immense technical power while ensuring the product felt accessible and manageable to data scientists and business analysts alike.' } },
+      { type: 'imageGrid', data: { images: [{ url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop', alt: 'Data stream visualization' }, { url: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?q=80&w=600&auto=format&fit=crop', alt: 'AI model training interface' }, { url: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=600&auto=format&fit=crop', alt: 'Collaborative AI project workspace' }] } },
+      { type: 'text', data: { heading: 'Simplifying Complexity', body: 'The design system, built on a dark-mode-first philosophy, uses a vibrant, futuristic color palette to highlight key data points and actions. We created a modular dashboard system that allows users to customize their workspace, and developed a library of data visualization components that could present complex information in a clear, digestible format.' } },
+      { type: 'stats', data: { stats: [{ value: '40%', label: 'Faster Data Analysis' }, { value: '300+', label: 'Enterprise Clients' }, { value: '$50M', label: 'Series A Funding' }] } }
     ]
   },
-  { id: 'aura-health', title: 'Aura Health - Medical Device Launch', subtitle: 'Developed a trustworthy and accessible brand identity and patient portal UI/UX, simplifying complex medical information.', client: 'Aura Health Inc.', tags: ['Branding', 'UI/UX Design', 'Patient Portal', 'Healthcare'], heroImage: { url: 'https://picsum.photos/seed/aura/800/600', alt: 'Aura Health user interface on a tablet' },
+  {
+    id: 'journeyman-gear',
+    title: 'Journeyman Travel Gear',
+    client: 'Odyssey Outfitters',
+    tags: ['E-commerce', 'Art Direction', 'Lifestyle', 'Retail'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=1200&auto=format&fit=crop', alt: 'A durable travel backpack in a rugged, mountainous landscape.' },
+    homePageTitle: 'Journeyman Gear',
+    homePageSubtitle: 'Building a direct-to-consumer brand for durable, modern travel gear.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=800&auto=format&fit=crop', alt: 'A person looking out over a stunning travel destination.' },
     contentBlocks: [
-      { type: 'hero', data: { images: [{ url: 'https://picsum.photos/seed/aura/800/600', alt: 'Aura Health user interface on a tablet' }, { url: 'https://picsum.photos/seed/aura-gallery1/1200/800', alt: 'Aura Health dashboard view' }], style: 'duo' } },
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1200&auto=format&fit=crop', alt: 'A hiker with a Journeyman backpack overlooking a mountain range.' }], style: 'single' } },
       { type: 'title', data: {} },
-      { type: 'text', data: { heading: 'The Challenge', body: 'Launching a new medical device requires building immediate trust with both patients and healthcare providers. The challenge was to create a brand that felt clinical and reliable, yet warm and approachable. We needed to design a patient portal that could present complex health data in a simple, intuitive, and actionable way, ensuring high user adoption and adherence.' } },
-      { type: 'textWithImages', data: { heading: 'Strategy & Execution', body: 'Our strategy was rooted in human-centered design. We conducted extensive user research with patients and doctors to understand their needs and pain points. This led to a brand identity centered around calm colors, clear typography, and an optimistic tone. For the UI/UX, we developed a modular dashboard that prioritized key information, used data visualizations to make trends understandable, and created a secure messaging system to connect patients with their care teams seamlessly.<br/><br/>Accessibility was a core principle throughout the project. We adhered to WCAG 2.1 AA standards, ensuring the portal was usable for people with various disabilities. We also implemented a comprehensive onboarding process within the app, using guided tours and contextual help to reduce the learning curve and empower patients to take control of their health data from day one.', images: [{ url: 'https://picsum.photos/seed/aura-process1/400/800', alt: 'Aura Health design process sketch' }, { url: 'https://picsum.photos/seed/aura-process2/400/800', alt: 'Aura Health user flow diagram' }], imagePosition: 'right', imageAspectRatio: 'extraTall' } },
-      { type: 'image', data: { image: { url: 'https://picsum.photos/seed/aura-footer1/800/600', alt: 'Aura Health branding materials' }, size: 'medium', caption: 'Branding materials created for the launch.' } },
-      { type: 'text', data: { heading: 'Impact', body: 'The launch was highly successful, exceeding initial patient sign-up targets by 60% in the first quarter. Post-launch surveys showed a 95% user satisfaction rate with the portal\'s ease of use. The clear branding and intuitive design were frequently cited by healthcare providers as key factors in their decision to adopt the Aura Health system.' } },
+      { type: 'text', data: { heading: 'The Brand Vision', body: 'Create Journeyman, a new e-commerce brand for travelers who demand both rugged durability and minimalist design. The brand needed to inspire adventure while showcasing the premium quality and thoughtful features of its products.' } },
+      { type: 'imageRow', data: { images: [{ url: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?q=80&w=1920&auto=format&fit=crop', alt: 'Product shots of the Journeyman gear' }], style: 'singleWide' } },
+      { type: 'quote', data: { quotes: [{ text: 'Journeyman gear is the perfect companion for the modern explorer. Built to last, designed to impress.', author: 'Wanderlust Magazine' }], style: 'single' } },
+      { type: 'textWithImages', data: { heading: 'Art Direction & E-commerce', body: 'We established an art direction that contrasts the clean, minimal product design with raw, epic landscapes. The e-commerce experience was built to be highly visual, with large-format photography, video content, and interactive modules that highlighted key features like waterproof zippers and modular compartments. A streamlined checkout process ensured a frictionless path to purchase.', images: [{ url: 'https://images.unsplash.com/photo-1604754742629-0e58855135f6?q=80&w=800&auto=format&fit=crop', alt: 'Detail shot of the backpack\'s waterproof material' }, { url: 'https://images.unsplash.com/photo-1572293498184-17635a11a1d9?q=80&w=800&auto=format=fit=crop', alt: 'Close up of the bag\'s custom hardware' }], imagePosition: 'left', imageAspectRatio: 'square' } },
     ]
   },
-  { id: 'elysian-beauty', title: 'Elysian Beauty - Cosmetics Line', subtitle: 'Created elegant packaging and a cohesive digital campaign that navigated complex cosmetic regulations while appealing to a luxury market.', client: 'Elysian Beauty Co.', tags: ['Packaging Design', 'Art Direction', 'Digital Campaign', 'Luxury Branding'], heroImage: { url: 'https://picsum.photos/seed/elysian/800/600', alt: 'Elysian Beauty product lineup' }, contentBlocks: [] },
-  { id: 'nomad-escapes', title: 'Nomad Escapes - Travel Booking', subtitle: 'Designed a mobile-first booking platform focused on intuitive user flow and immersive destination visuals to drive conversions.', client: 'Nomad Escapes Ltd.', tags: ['Mobile App Design', 'UI/UX', 'Conversion Optimization', 'Travel Tech'], heroImage: { url: 'https://picsum.photos/seed/nomad/800/600', alt: 'Nomad Escapes app showing a destination' }, contentBlocks: [] },
-  { id: 'streamline-corp', title: 'Streamline - B2B SaaS', subtitle: 'Led the creative for a B2B platform launch, focusing on clear value propositions and a professional, data-driven aesthetic.', client: 'Streamline Corp.', tags: ['B2B Branding', 'SaaS', 'Product Launch', 'Data Visualization'], heroImage: { url: 'https://picsum.photos/seed/streamline/800/600', alt: 'Streamline SaaS dashboard' }, contentBlocks: [] },
+  {
+    id: 'echo-acoustics',
+    title: 'Echo High-Fidelity Audio',
+    client: 'Resonance Labs',
+    tags: ['Product Design', 'Branding', 'CPG', 'Luxury'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1518731967223-a2629c41a4a3?q=80&w=1200&auto=format&fit=crop', alt: 'A sleek, minimalist high-fidelity speaker in a modern living room.' },
+    homePageTitle: 'Echo Acoustics',
+    homePageSubtitle: 'Launching a new brand of premium, minimalist audio equipment.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1593902341396-e24c47d337a2?q=80&w=800&auto=format=fit=crop', alt: 'Close-up detail of a high-end speaker.' },
+    contentBlocks: [
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1620986341238-bbc8429e1f54?q=80&w=800&auto=format&fit=crop', alt: 'Front view of the Echo speaker' }, { url: 'https://images.unsplash.com/photo-1620986341204-3755b4142f38?q=80&w=800&auto=format&fit=crop', alt: 'Side profile of the Echo speaker' }, { url: 'https://images.unsplash.com/photo-1620986341290-002a5f78b7b2?q=80&w=800&auto=format&fit=crop', alt: 'Detail of the Echo speaker controls' }], style: 'trio' } },
+      { type: 'title', data: {} },
+      { type: 'text', data: { heading: 'The Concept', body: 'Introduce Echo, a new player in the high-fidelity audio market. The brand strategy was to merge superior acoustic engineering with a minimalist, Scandinavian-inspired design aesthetic, appealing to audiophiles who also value interior design.' } },
+      { type: 'textWithImages', data: { heading: 'Precision in Sound & Design', body: 'The brand identity is built on clean lines, geometric shapes, and a monochrome palette. Product photography emphasizes texture and form, highlighting materials like brushed aluminum and natural wood. The launch website was designed as an immersive gallery, showcasing the speakers as functional works of art.', images: [{ url: 'https://images.unsplash.com/photo-1589138096954-a3f8a939f8a3?q=80&w=800&auto=format&fit=crop', alt: 'The Echo speaker in a beautifully designed home' }], imagePosition: 'right', imageAspectRatio: 'extraTall' } },
+      { type: 'quote', data: { quotes: [{ text: 'Echo speakers sound as good as they look, and they look incredible.', author: 'Design Milk' }, { text: 'A triumph of minimalist design and acoustic perfection.', author: 'Hi-Fi World' }], style: 'duo' } },
+      { type: 'image', data: { image: { url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop', alt: 'The full Echo product line including headphones.' }, size: 'medium', caption: 'The Echo ecosystem, designed for a seamless audio experience.' } },
+    ]
+  },
+  {
+    id: 'civic-connect',
+    title: 'CivicConnect Urban Planning',
+    client: 'Metropolis Foundation',
+    tags: ['Public Sector', 'Social Impact', 'Data Visualization', 'Web Platform'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1549880181-56a44cf4a9a5?q=80&w=1200&auto=format&fit=crop', alt: 'An aerial view of a complex city interchange, representing urban planning.' },
+    homePageTitle: 'CivicConnect Platform',
+    homePageSubtitle: 'A digital platform to foster community engagement in urban development.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1479839672679-a46483c0f748?q=80&w=800&auto=format=fit=crop', alt: 'A vibrant city street with people and activity.' },
+    contentBlocks: [
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop', alt: 'A community meeting for urban planning.' }], style: 'single' } },
+      { type: 'title', data: {} },
+      { type: 'text', data: { heading: 'The Goal', body: 'Create CivicConnect, a web platform to bridge the gap between city planners and residents. The tool needed to visualize complex urban development projects, gather public feedback, and make civic engagement more accessible and transparent.' } },
+      { type: 'stats', data: { stats: [{ value: '+400%', label: 'Increase in Public Feedback' }, { value: '15+', label: 'Municipalities Adopted' }, { value: 'Award', label: 'for Digital Democracy' }] } },
+      { type: 'image', data: { image: { url: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=1200&auto=format&fit=crop', alt: 'The CivicConnect platform dashboard shown on a laptop and tablet.' }, size: 'medium', caption: 'The platform features interactive maps, surveys, and project timelines.' } },
+      { type: 'text', data: { heading: 'Informing and Empowering', body: 'The UI/UX was designed for ultimate clarity, using interactive maps, data visualizations, and simple language to explain zoning changes, infrastructure projects, and environmental impacts. A key feature was the feedback module, which allowed residents to comment directly on project plans and upvote ideas from their neighbors, fostering a truly collaborative planning process.' } },
+    ]
+  },
+  {
+    id: 'retrograde-game',
+    title: 'Retrograde Video Game Launch',
+    client: 'PixelHeart Studios',
+    tags: ['Entertainment', 'Game Design', 'Pixel Art', 'Digital'],
+    heroImage: { url: 'https://images.unsplash.com/photo-1555864449-41a94235be48?q=80&w=1200&auto=format&fit=crop', alt: 'A person intensely playing a video game on a controller.' },
+    homePageTitle: 'Retrograde Game Launch',
+    homePageSubtitle: 'Launching a new indie game with a nostalgic pixel art aesthetic.',
+    homePageImage: { url: 'https://images.unsplash.com/photo-1580234811497-9df7fd2f357e?q=80&w=800&auto=format=fit=crop', alt: 'Close-up of a classic arcade game joystick and buttons.' },
+    contentBlocks: [
+      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1612036782180-6f0b6cd84627?q=80&w=800&auto=format&fit=crop', alt: 'Promotional art for the game Retrograde' }, { url: 'https://images.unsplash.com/photo-1636654211181-7098bb4f9715?q=80&w=800&auto=format&fit=crop', alt: 'A character from the game Retrograde' }, { url: 'https://images.unsplash.com/photo-1636654211287-350756da528a?q=80&w=800&auto=format&fit=crop', alt: 'A scene from the game Retrograde' }], style: 'trio' } },
+      { type: 'title', data: {} },
+      { type: 'text', data: { heading: 'The Game', body: 'Retrograde is a love letter to 16-bit gaming, combining classic pixel art with modern game mechanics. The launch campaign needed to capture the hearts of nostalgic gamers while also appealing to a new generation of players.' } },
+      { type: 'carousel', data: { images: [{ url: 'https://images.unsplash.com/photo-1639946231645-3d4b6840455a?q=80&w=1200&auto=format&fit=crop', alt: 'Gameplay screenshot 1' }, { url: 'https://images.unsplash.com/photo-1636654211234-a657e2a4a758?q=80&w=1200&auto=format&fit=crop', alt: 'Gameplay screenshot 2' }, { url: 'https://images.unsplash.com/photo-1636654211287-350756da528a?q=80&w=1200&auto=format&fit=crop', alt: 'Gameplay screenshot 3' }] } },
+      { type: 'text', data: { heading: 'Digital-First Campaign', body: 'We built a vibrant online presence with a retro-themed website, animated trailers, and a strong social media campaign focused on community engagement. We partnered with gaming influencers for early access streams and ran a contest for fans to design their own pixel art characters, building a dedicated fanbase before the game even launched.' } },
+      { type: 'quote', data: { quotes: [{ text: 'Retrograde is a pixel-perfect masterpiece of nostalgia and innovation.', author: 'IGN' }, { text: 'The game I didn\'t know I was waiting for. An instant classic.', author: 'Kotaku' }], style: 'duo' } }
+    ]
+  }
 ];
 const ABOUT_ME = {
   name: 'David Gaines', title: 'Creative Director & Brand Strategist', logoText: 'GD!', headerIcon: { url: '', alt: 'Site Icon' }, heroImage: { url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'A portrait of David Gaines, Creative Director' }, introStatement: "A highly accomplished Creative Leader with 20+ years of experience solving complex marketing challenges by leading and mentoring creative teams. Committed to elevating craft standards and translating brand strategy into high-impact digital-first concepts.", heroIntro: "A creative leader translating complex brand strategy into high-impact, pixel-perfect design across digital, print, and retail experiences.", philosophy: [{ title: 'Strategy-Driven Creative', text: 'I believe great creative is driven by strategic insight, not just aesthetics. My process begins with understanding the business challenge to ensure every design choice has a purpose and delivers measurable results.' }, { title: 'Mentorship & Team Building', text: "My role as a leader is to mentor the next generation of creatives. I focus on building collaborative, empowered teams where talent can thrive and produce their best work." }, { title: 'Bridging Complexity and User Experience', text: "I specialize in bridging complicated technical requirements with compelling user experiences, translating product features into emotional connections that resonate with audiences." },], obsessions: ['Swiss Typography', 'Japanese Denim', 'Vintage Synthesizers', 'Perfect Espresso', 'Mid-Century Furniture', 'Film Photography'], travelLog: [{ text: 'Tokyo, Japan', completed: true }, { text: 'Reykjavik, Iceland', completed: false }, { text: 'Berlin, Germany', completed: true }, { text: 'Kyoto, Japan', completed: false }, { text: 'Mexico City', completed: false }, { text: 'Copenhagen, Denmark', completed: false }, { text: 'Buenos Aires', completed: false }, { text: 'Seoul, South Korea', completed: false }, { text: 'Lisbon, Portugal', completed: false }], quotes: [{ text: "Good design is as little design as possible.", author: "Dieter Rams" }, { text: "The details are not the details. They make the design.", author: "Charles Eames" }], favorites: { movies: ['Blade Runner 2049', 'Arrival', 'Grand Budapest Hotel'], shows: ['Severance', 'The Bear', 'Succession'], podcasts: ['99% Invisible', 'Design Matters', 'How I Built This'], audiobooks: ['The Creative Act', 'Steve Jobs', 'Kitchen Confidential'] }, panorama: { url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2000&auto=format&fit=crop', alt: 'A beautiful panoramic landscape for visual inspiration' }, inspirationGrid: [{ url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 1' }, { url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 2' }, { url: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 3' }, { url: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 4' }, { url: 'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 5' }, { url: 'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 6' }], resumeUrl: '#', socialLinks: [{ iconUrl: 'linkedin', linkUrl: 'https://linkedin.com/in/davidrgaines' }], email: 'dave@gainesdg.com', phone: '949.463.1867', brandPrimary: '#0891b2', brandSecondary: '#f0f9ff', headerBgColor: '#0f172a', heroBgColor: '#0f172a', seoTitle: 'David Gaines | Creative Director Portfolio', seoDescription: 'A personal portfolio website for Creative Director David Gaines, showcasing impact, strategy, leadership, and adaptability through curated case studies and recent work.',
@@ -486,9 +557,13 @@ const ContentProvider = ({ children }) => {
   };
 
   const resetToDefaults = () => {
-    setHeroProjects(HERO_PROJECTS); setAboutMe(ABOUT_ME); setClientLogos(CLIENT_LOGOS); setBrandLogos(BRAND_LOGOS);
-    localStorage.removeItem('heroProjects'); localStorage.removeItem('aboutMe'); localStorage.removeItem('clientLogos'); localStorage.removeItem('brandLogos');
-    alert("Local data reset.");
+    if (confirm('Are you sure? This will replace ALL content with the latest template. If you are logged in, this change will be saved to the server and overwrite any customizations.')) {
+      // Use the existing update functions which handle state, localStorage, and Firebase persistence
+      updateHeroProjects(HERO_PROJECTS);
+      updateAboutMe(ABOUT_ME);
+      updateLogos(CLIENT_LOGOS, BRAND_LOGOS);
+      alert("Content has been reset to the default template. Your changes have been saved.");
+    }
   };
 
   return (
@@ -839,7 +914,7 @@ const HeroBlock = ({ data }) => {
   if (!data.images || data.images.length === 0) return null;
   const { images, style } = data;
   if (style === 'trio') {
-    return <div className="hidden md:grid grid-cols-3 gap-4 md:gap-8">{images.slice(0,3).map((img, i) => (<div key={i} className="relative overflow-hidden rounded-lg shadow-xl aspect-[16/9] sm:aspect-[16/27]"><img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" /></div>))}</div>;
+    return <div className="hidden md:grid grid-cols-3 gap-4 md:gap-8">{images.slice(0,3).map((img, i) => (<div key={i} className="relative overflow-hidden rounded-lg shadow-xl aspect-[16/9] sm:aspect-[2/3]"><img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" /></div>))}</div>;
   }
   if (style === 'duo') {
     return <div className="hidden md:grid grid-cols-2 gap-4 md:gap-8 md:aspect-[16/9]">{images.slice(0,2).map((img, i) => (<div key={i} className="relative w-full aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-lg shadow-xl"><img src={img.url} alt={img.alt} className="w-full h-full object-cover" /></div>))}</div>;
@@ -854,8 +929,10 @@ const TitleBlock = ({ project }) => (
   </div>
 );
 const TextBlock = ({ data }) => {
+  const isStandalone = !data.isPairedWithImage;
+  const maxWidthClass = isStandalone ? 'max-w-2xl' : 'max-w-none';
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-xl my-8 md:my-10">
+    <div className={`container mx-auto px-4 sm:px-6 lg:px-8 ${maxWidthClass} my-8 md:my-10`}>
       <div className="prose max-w-none mx-auto text-slate-600">
         {data.heading && <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">{data.heading}</h2>}
         {data.body && <p dangerouslySetInnerHTML={{ __html: data.body }}></p>}
@@ -921,13 +998,13 @@ const ImageGridBlock = ({ data }) => {
         3: 'sm:grid-cols-3',
         4: 'sm:grid-cols-2 md:grid-cols-4',
     };
-    const numImages = data.images.length;
+    const numImages = Math.min(data.images.length, 4);
     const gridClass = gridClasses[numImages] || 'sm:grid-cols-3';
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10">
             <div className={`grid grid-cols-1 ${gridClass} gap-4 md:gap-8`}>
-                {data.images.map((img, i) => (
+                {data.images.slice(0,4).map((img, i) => (
                     <div key={i} className="overflow-hidden rounded-lg shadow-xl aspect-square">
                         <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
                     </div>
@@ -949,16 +1026,16 @@ const ImageRowBlock = ({ data }) => {
     const { images, style = 'threeSquare' } = data;
     
     const styleConfig = {
-        singleWide: { grid: 'grid-cols-1', aspect: 'aspect-[16/9] sm:aspect-[21/9]' },
-        twoNarrow: { grid: 'grid-cols-1 sm:grid-cols-2', aspect: 'aspect-[3/4]' },
-        threeSquare: { grid: 'grid-cols-1 sm:grid-cols-3', aspect: 'aspect-square' },
+        singleWide: { grid: 'grid-cols-1', aspect: 'aspect-[16/9] sm:aspect-[21/9]', count: 1 },
+        twoNarrow: { grid: 'grid-cols-1 sm:grid-cols-2', aspect: 'aspect-[3/4]', count: 2 },
+        threeSquare: { grid: 'grid-cols-1 sm:grid-cols-3', aspect: 'aspect-square', count: 3 },
     };
     const config = styleConfig[style];
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10">
             <div className={`grid ${config.grid} gap-4 md:gap-8`}>
-                {images.slice(0, style === 'singleWide' ? 1 : (style === 'twoNarrow' ? 2 : 3)).map((img, i) => (
+                {images.slice(0, config.count).map((img, i) => (
                     <div key={i} className={`overflow-hidden rounded-lg shadow-xl ${config.aspect}`}>
                         <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
                     </div>
@@ -1020,6 +1097,13 @@ const CaseStudyDetailPage = ({ projectId }) => {
   );
   
   const renderBlock = (block, index) => {
+    // Inject a flag for TextBlock if it's part of TextWithImages for padding adjustment
+    if (block.type === 'text' && (project.contentBlocks[index-1]?.type === 'textWithImages' || project.contentBlocks[index+1]?.type === 'textWithImages')) {
+      block.data.isPairedWithImage = false; // This logic might need refinement based on desired layout rules
+    } else if (block.type === 'text') {
+      block.data.isPairedWithImage = false;
+    }
+
     switch (block.type) {
         case 'hero': return <header key={index} className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl mt-10 md:mt-20 relative group"><HeroBlock data={block.data} /><ProjectNavigation currentProjectId={project.id} projects={heroProjects} /></header>;
         case 'title': return <TitleBlock key={index} project={project} />;
@@ -1271,20 +1355,31 @@ const AdminPage = () => {
     };
 
     const ProjectEditor = () => {
-        const [projects, setProjects] = useState(heroProjects);
+        const { heroProjects, updateHeroProjects } = useContent();
         const [editingProject, setEditingProject] = useState(null);
-        useEffect(() => setProjects(heroProjects), [heroProjects]);
         
-        const handleAddNew = () => setEditingProject({ id: `new-project-${Date.now()}`, title: 'New Project', subtitle: '', client: '', tags: [], heroImage: {url:'', alt:''}, homePageTitle: '', homePageSubtitle: '', homePageImage: {url:'', alt:''}, contentBlocks: [] });
+        const handleAddNew = () => setEditingProject({ id: `new-project-${Date.now()}`, title: 'New Project', client: '', tags: [], heroImage: {url:'', alt:''}, homePageTitle: '', homePageSubtitle: '', homePageImage: {url:'', alt:''}, contentBlocks: [] });
         const handleEdit = (project) => setEditingProject(JSON.parse(JSON.stringify(project)));
-        const handleDelete = (id) => { if (confirm('Are you sure? This action cannot be undone.')) { const updated = projects.filter(p => p.id !== id); setProjects(updated); updateHeroProjects(updated); } };
+        
+        const handleDelete = (id) => {
+            if (confirm('Are you sure? This action cannot be undone.')) {
+                const updated = heroProjects.filter(p => p.id !== id);
+                updateHeroProjects(updated);
+            }
+        };
+        
         const handleSave = (projectToSave) => {
-            const index = projects.findIndex(p => p.id === projectToSave.id);
+            const index = heroProjects.findIndex(p => p.id === projectToSave.id);
             let updated;
             if (index > -1) {
-                updated = [...projects]; updated[index] = projectToSave;
-            } else { updated = [...projects, projectToSave]; }
-            setProjects(updated); updateHeroProjects(updated); setEditingProject(null); alert('Project saved!');
+                updated = [...heroProjects];
+                updated[index] = projectToSave;
+            } else {
+                updated = [...heroProjects, projectToSave];
+            }
+            updateHeroProjects(updated);
+            setEditingProject(null);
+            alert('Project saved!');
         };
         
         if (editingProject) {
@@ -1298,7 +1393,7 @@ const AdminPage = () => {
                     <button onClick={handleAddNew} className={buttonClasses}>Add New Project</button>
                 </div>
                 <div className="bg-base-medium rounded-lg shadow-lg">
-                    <ul className="divide-y divide-base-light">{projects.map(p => (
+                    <ul className="divide-y divide-base-light">{heroProjects.map(p => (
                         <li key={p.id} className="p-4 flex justify-between items-center">
                             <div><p className="font-bold text-text-primary">{p.title}</p><p className="text-sm text-text-tertiary">{p.id}</p></div>
                             <div className="flex gap-2">
@@ -1824,11 +1919,13 @@ const AdminPage = () => {
     };
 
     const DangerZone = () => (
-        <div className="bg-red-900/20 border border-red-700 p-6 rounded-lg">
-            <h2 className="text-2xl font-bold text-red-400 mb-4">Danger Zone</h2>
-            <p className="text-red-300 mb-4">This will clear any content stored in your browser's local storage and revert to the default content. This action cannot be undone and does not affect data saved in Firebase.</p>
-            <button onClick={() => {if(confirm('Are you sure you want to reset all local data to defaults?')) { resetToDefaults(); }}} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Reset Local Content</button>
-        </div>
+      <div className="bg-red-900/20 border border-red-700 p-6 rounded-lg">
+        <h2 className="text-2xl font-bold text-red-400 mb-4">Danger Zone</h2>
+        <h3 className="text-lg font-bold text-red-300">Reset All Content</h3>
+        <p className="text-red-300 my-4">This is a powerful action that will completely overwrite all your current content (projects, about page, logos, etc.) with the latest default template from the codebase. This is useful for starting over or fixing data sync issues, like the one you're seeing now.</p>
+        <p className="text-red-200 font-bold mb-4">Warning: If you are logged in, this will permanently overwrite the data on your Firebase server. This action cannot be undone.</p>
+        <button onClick={resetToDefaults} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Reset Content to Template Defaults</button>
+      </div>
     );
 
 
@@ -2023,7 +2120,7 @@ const showErrorOverlay = (message) => {
     Object.assign(overlay.style, { position: 'fixed', inset: '0', backgroundColor: '#0f172a', color: '#f8fafc', padding: '2rem', fontFamily: 'monospace', zIndex: '99999', overflow: 'auto', cursor: 'auto' });
     document.body.appendChild(overlay);
   }
-  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: break-all; color: '#cbd5e1';">${message}</pre>`;
+  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: 'break-all'; color: '#cbd5e1';">${message}</pre>`;
 };
 window.addEventListener('error', (event) => { showErrorOverlay(`Error: ${event.message}\nSource: ${event.filename}\nLine: ${event.lineno}, Col: ${event.colno}`); });
 window.addEventListener('unhandledrejection', (event) => { let reason = event.reason; if (reason instanceof Error) { reason = `${reason.message}\n${reason.stack}`; } showErrorOverlay(`Unhandled Promise Rejection:\nReason: ${reason}`); });
