@@ -523,16 +523,16 @@ const Header = () => {
         <div
           onMouseEnter={handleContactEnter}
           onMouseLeave={handleContactLeave}
-          style={{ backgroundColor: aboutMe.heroBgColor }}
-          className={`absolute top-0 right-4 w-64 transition-transform duration-300 ease-out z-40 shadow-lg rounded-b-lg
+          style={{ backgroundColor: aboutMe.brandPrimary }}
+          className={`absolute top-0 right-4 w-56 transition-transform duration-300 ease-out z-40 shadow-lg rounded-b-lg
             ${isContactOpen ? 'translate-y-0' : '-translate-y-full'}`
           }
         >
           <div className="pt-20 pb-6 px-6 text-right space-y-2">
-            <a href={`mailto:${aboutMe.email}`} className="block text-sm text-text-secondary hover:text-text-primary transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
+            <a href={`mailto:${aboutMe.email}`} className="block text-sm text-brand-secondary hover:text-white transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
               {aboutMe.email}
             </a>
-            <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} className="block text-sm text-text-secondary hover:text-text-primary transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
+            <a href={`tel:${aboutMe.phone.replace(/[^0-9+]/g, '')}`} className="block text-sm text-brand-secondary hover:text-white transition-colors" role="menuitem" onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>
               {aboutMe.phone}
             </a>
           </div>
@@ -603,7 +603,7 @@ const PartnersSection = () => {
     );
   };
   return (
-    <section className="py-12 bg-white">
+    <section className="pt-6 pb-12 bg-white">
       <div className="flex flex-col items-center w-full">
         <h3 className="text-center text-xs font-bold text-slate-500 tracking-[0.25em] uppercase mb-6">CLIENTS</h3>
         <div className="w-full flex flex-col gap-3 mb-6">
@@ -617,16 +617,18 @@ const PartnersSection = () => {
 };
 
 const WorkOverviewSection = () => {
-  const { heroProjects, aboutMe } = useContent();
+  const { heroProjects } = useContent();
   const allProjects = heroProjects.map(p => ({ 
       id: p.id, 
       title: p.homePageTitle || p.title, 
       description: p.homePageSubtitle || p.subtitle, 
       image: p.homePageImage || p.heroImage 
   })).filter(p => p.image && p.image.url);
+  
   const WorkCard = ({ project, index }) => {
     const { setHoverState } = useCursorHover();
     const handleNavigation = (e) => { e.preventDefault(); window.location.hash = `#/project/${project.id}`; };
+    
     const cardContent = (
       <>
         <img src={project.image.url} alt={project.image.alt} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
@@ -635,20 +637,35 @@ const WorkOverviewSection = () => {
           <h3 className="text-lg md:text-xl font-bold text-text-primary">{project.title}</h3>
           <p className="text-text-secondary text-xs md:text-sm mt-1 max-w-sm">{project.description}</p>
         </div>
-        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <span className="text-sm font-bold tracking-widest uppercase text-slate-300">VIEW</span>
-        </div>
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </>
     );
+
     return (
-      <a href={`#/project/${project.id}`} onClick={handleNavigation} className="group block relative overflow-hidden rounded-lg bg-base-medium shadow-lg aspect-[4/3] sm:aspect-[16/9] opacity-0 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }} onMouseEnter={() => setHoverState({ isHovering: true })} onMouseLeave={() => setHoverState({ isHovering: false })}>{cardContent}</a>
+      <a 
+        href={`#/project/${project.id}`} 
+        onClick={handleNavigation} 
+        className="group block relative overflow-hidden rounded-lg bg-base-medium shadow-lg aspect-[4/3] sm:aspect-[16/9] opacity-0 animate-fade-in-up" 
+        style={{ animationDelay: `${index * 100}ms` }} 
+        onMouseEnter={() => setHoverState({ isHovering: false, text: 'VIEW' })} 
+        onMouseLeave={() => setHoverState({ isHovering: false, text: undefined })}
+      >
+        {cardContent}
+      </a>
     );
   };
+
   return (
-    <section className="py-12 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8"><div className="flex flex-wrap justify-center -m-4">
-        {allProjects.map((project, index) => (<div key={project.id} className="w-full md:w-1/2 lg:w-1/3 p-4"><WorkCard project={project} index={index} /></div>))}
-      </div></div>
+    <section className="pt-12 pb-6 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap justify-center -m-4">
+          {allProjects.map((project, index) => (
+            <div key={project.id} className="w-full md:w-1/2 lg:w-1/3 p-4">
+              <WorkCard project={project} index={index} />
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
@@ -1471,11 +1488,11 @@ const Footer = () => {
   return (
     <footer className="bg-base-medium border-t border-base-light">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-row justify-between items-center gap-4">
+        <div className="flex flex-row justify-between items-start gap-4">
           <div className="text-text-tertiary text-xs">
-            <p>&copy; {new Date().getFullYear()} {aboutMe.logoText}. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} David Gaines. All rights reserved.</p>
             <div className="mt-1">
-              <a href="#/admin" onClick={handleAdminClick} className="text-base-light hover:text-text-tertiary transition-colors">Admin</a>
+              <a href="#/admin" onClick={handleAdminClick} className="text-base-medium hover:text-text-tertiary transition-colors">Admin</a>
             </div>
           </div>
           <div>
@@ -1581,7 +1598,7 @@ const showErrorOverlay = (message) => {
     Object.assign(overlay.style, { position: 'fixed', inset: '0', backgroundColor: '#0f172a', color: '#f8fafc', padding: '2rem', fontFamily: 'monospace', zIndex: '99999', overflow: 'auto', cursor: 'auto' });
     document.body.appendChild(overlay);
   }
-  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: break-all; color: #cbd5e1;">${message}</pre>`;
+  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: break-all; color: '#cbd5e1';">${message}</pre>`;
 };
 window.addEventListener('error', (event) => { showErrorOverlay(`Error: ${event.message}\nSource: ${event.filename}\nLine: ${event.lineno}, Col: ${event.colno}`); });
 window.addEventListener('unhandledrejection', (event) => { let reason = event.reason; if (reason instanceof Error) { reason = `${reason.message}\n${reason.stack}`; } showErrorOverlay(`Unhandled Promise Rejection:\nReason: ${reason}`); });
