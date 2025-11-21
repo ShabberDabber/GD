@@ -930,7 +930,7 @@ const HeroBlock = ({ data }) => {
 };
 const TitleBlock = ({ project }) => (
   <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl mt-12 md:mt-16 text-center">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{project.title}</h1>
+    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase whitespace-nowrap">{project.title}</h1>
     {project.client && <p className="mt-2 text-lg md:text-xl font-medium text-brand-primary">{project.client}</p>}
     <ProjectTags tags={project.tags} />
   </div>
