@@ -230,6 +230,8 @@ const HERO_PROJECTS = [
 ];
 const ABOUT_ME = {
   name: 'David Gaines', title: 'Creative Director & Brand Strategist', logoText: 'GD!', headerIcon: { url: '', alt: 'Site Icon' }, heroImage: { url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format=fit&crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'A portrait of David Gaines, Creative Director' }, introStatement: "A highly accomplished Creative Leader with 20+ years of experience solving complex marketing challenges by leading and mentoring creative teams. Committed to elevating craft standards and translating brand strategy into high-impact digital-first concepts.", heroIntro: "A creative leader translating complex brand strategy into high-impact, pixel-perfect design across digital, print, and retail experiences.", philosophy: [{ title: 'Strategy-Driven Creative', text: 'I believe great creative is driven by strategic insight, not just aesthetics. My process begins with understanding the business challenge to ensure every design choice has a purpose and delivers measurable results.' }, { title: 'Mentorship & Team Building', text: "My role as a leader is to mentor the next generation of creatives. I focus on building collaborative, empowered teams where talent can thrive and produce their best work." }, { title: 'Bridging Complexity and User Experience', text: "I specialize in bridging complicated technical requirements with compelling user experiences, translating product features into emotional connections that resonate with audiences." },], obsessions: ['Swiss Typography', 'Japanese Denim', 'Vintage Synthesizers', 'Perfect Espresso', 'Mid-Century Furniture', 'Film Photography'], travelLog: [{ text: 'Tokyo, Japan', completed: true }, { text: 'Reykjavik, Iceland', completed: false }, { text: 'Berlin, Germany', completed: true }, { text: 'Kyoto, Japan', completed: false }, { text: 'Mexico City', completed: false }, { text: 'Copenhagen, Denmark', completed: false }, { text: 'Buenos Aires', completed: false }, { text: 'Seoul, South Korea', completed: false }, { text: 'Lisbon, Portugal', completed: false }], quotes: [{ text: "Good design is as little design as possible.", author: "Dieter Rams" }, { text: "The details are not the details. They make the design.", author: "Charles Eames" }], favorites: { movies: ['Blade Runner 2049', 'Arrival', 'Grand Budapest Hotel'], shows: ['Severance', 'The Bear', 'Succession'], podcasts: ['99% Invisible', 'Design Matters', 'How I Built This'], audiobooks: ['The Creative Act', 'Steve Jobs', 'Kitchen Confidential'] }, panorama: { url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2000&auto=format&fit=crop', alt: 'A beautiful panoramic landscape for visual inspiration' }, inspirationGrid: [{ url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 1' }, { url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 2' }, { url: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 3' }, { url: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 4' }, { url: 'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 5' }, { url: 'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?q=80&w=1200&auto=format&fit=crop', alt: 'Inspiration image 6' }], resumeUrl: '#', socialLinks: [{ iconUrl: 'linkedin', linkUrl: 'https://linkedin.com/in/davidrgaines' }], email: 'dave@gainesdg.com', phone: '949.463.1867', brandPrimary: '#0891b2', brandSecondary: '#f0f9ff', headerBgColor: '#0f172a', heroBgColor: '#0f172a', textPrimaryColor: '#f8fafc', bgLightColor: '#ffffff', seoTitle: 'David Gaines | Creative Director Portfolio', seoDescription: 'A personal portfolio website for Creative Director David Gaines, showcasing impact, strategy, leadership, and adaptability through curated case studies and recent work.',
+  useSingleColorLogos: false,
+  logoSingleColor: '#FFFFFF',
   pageHeadings: {
     aboutTitle: 'About Me <span class="text-brand-primary">&</span> <br/>The Process',
     philosophySubtitle: 'Strategy first. <br/> Design second.',
@@ -418,6 +420,8 @@ const ContentProvider = ({ children }) => {
       favorites: (typeof partialData.favorites === 'object' && partialData.favorites !== null) ? { ...ABOUT_ME.favorites, ...partialData.favorites } : ABOUT_ME.favorites,
       pageHeadings: (typeof partialData.pageHeadings === 'object' && partialData.pageHeadings !== null) ? { ...ABOUT_ME.pageHeadings, ...partialData.pageHeadings } : ABOUT_ME.pageHeadings,
       socialLinks: toSocialLinkArray(partialData.socialLinks || ABOUT_ME.socialLinks),
+      useSingleColorLogos: typeof partialData.useSingleColorLogos === 'boolean' ? partialData.useSingleColorLogos : ABOUT_ME.useSingleColorLogos,
+      logoSingleColor: partialData.logoSingleColor || ABOUT_ME.logoSingleColor,
     };
   };
   
@@ -730,6 +734,7 @@ const HeroSection = () => {
 const PartnersSection = () => {
   const { clientLogos, brandLogos } = useContent();
   const Marquee = ({ logos, direction }) => {
+    const { aboutMe } = useContent();
     if (!logos || logos.length === 0) return null;
     const allLogos = [...logos, ...logos]; 
     const animationClass = direction === 'left' ? 'animate-infinite-scroll-left' : 'animate-infinite-scroll-right';
@@ -738,7 +743,24 @@ const PartnersSection = () => {
         <ul className={`flex items-center justify-center md:justify-start [&_img]:max-w-none ${animationClass}`}>
           {allLogos.map((logo, index) => (
             <li key={index} className={`flex-shrink-0 w-48 h-16 flex justify-center items-center px-4`} aria-hidden={true}>
-              <img src={logo} alt="" className="max-w-full max-h-full object-contain hover:scale-110 transition-transform duration-300" />
+              {aboutMe.useSingleColorLogos ? (
+                <div
+                  className="w-full h-full hover:scale-110 transition-transform duration-300"
+                  style={{
+                    backgroundColor: aboutMe.logoSingleColor || '#FFFFFF',
+                    maskImage: `url(${logo})`,
+                    maskSize: 'contain',
+                    maskPosition: 'center',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskImage: `url(${logo})`,
+                    WebkitMaskSize: 'contain',
+                    WebkitMaskPosition: 'center',
+                    WebkitMaskRepeat: 'no-repeat',
+                  }}
+                ></div>
+              ) : (
+                <img src={logo} alt="" className="max-w-full max-h-full object-contain hover:scale-110 transition-transform duration-300" />
+              )}
             </li>
           ))}
         </ul>
@@ -1390,6 +1412,28 @@ const AdminPage = () => {
                             <input id="bgLightColor" name="bgLightColor" type="text" value={data.bgLightColor || '#ffffff'} onChange={handleChange} className={inputClasses} placeholder="#ffffff" />
                         </div>
                     </div>
+                </AdminSection>
+                <AdminSection title="Logo Display Settings">
+                    <div className="md:col-span-2 flex items-center gap-4">
+                        <input 
+                            type="checkbox"
+                            id="useSingleColorLogos"
+                            name="useSingleColorLogos"
+                            checked={!!data.useSingleColorLogos}
+                            onChange={e => setData(prev => ({ ...prev, useSingleColorLogos: e.target.checked }))}
+                            className="h-5 w-5 rounded text-brand-primary focus:ring-brand-primary bg-base-light border-base-light"
+                        />
+                        <label htmlFor="useSingleColorLogos" className="text-text-secondary">Use Single Color for Logos</label>
+                    </div>
+                    {data.useSingleColorLogos && (
+                        <div className="animate-fade-in-up" style={{animationDuration: '300ms'}}>
+                            <label htmlFor="logoSingleColor" className={labelClasses}>Logo Color</label>
+                            <div className="flex items-center gap-2">
+                                <div className="w-10 h-10 rounded-md border border-base-light flex-shrink-0" style={{ backgroundColor: data.logoSingleColor || '#ffffff' }}></div>
+                                <input id="logoSingleColor" name="logoSingleColor" type="text" value={data.logoSingleColor || '#ffffff'} onChange={handleChange} className={inputClasses} placeholder="#ffffff" />
+                            </div>
+                        </div>
+                    )}
                 </AdminSection>
             </div>
         );
