@@ -245,7 +245,6 @@ const ABOUT_ME = {
   seoTitle: 'David Gaines | Creative Director Portfolio', seoDescription: 'A personal portfolio website for Creative Director David Gaines, showcasing impact, strategy, leadership, and adaptability through curated case studies and recent work.',
   // Logos
   useMonochromeLogos: false,
-  logoColor: '#FFFFFF',
   // Page Headings (About Page)
   pageHeadings: {
     aboutTitle: 'About Me <span class="text-brand-primary">&</span> <br/>The Process',
@@ -428,7 +427,7 @@ const ContentProvider = ({ children }) => {
     if (partialData.textPrimaryColor) { partialData.heroTextColor = partialData.textPrimaryColor; delete partialData.textPrimaryColor; }
     if (partialData.bgLightColor) { partialData.pageBackgroundColor = partialData.bgLightColor; delete partialData.bgLightColor; }
     if (partialData.useSingleColorLogos !== undefined) { partialData.useMonochromeLogos = partialData.useSingleColorLogos; delete partialData.useSingleColorLogos; }
-    if (partialData.logoSingleColor) { partialData.logoColor = partialData.logoSingleColor; delete partialData.logoSingleColor; }
+    if (partialData.logoSingleColor) { delete partialData.logoSingleColor; }
 
 
     return {
@@ -446,7 +445,6 @@ const ContentProvider = ({ children }) => {
       pageHeadings: (typeof partialData.pageHeadings === 'object' && partialData.pageHeadings !== null) ? { ...ABOUT_ME.pageHeadings, ...partialData.pageHeadings } : ABOUT_ME.pageHeadings,
       socialLinks: toSocialLinkArray(partialData.socialLinks || ABOUT_ME.socialLinks),
       useMonochromeLogos: typeof partialData.useMonochromeLogos === 'boolean' ? partialData.useMonochromeLogos : ABOUT_ME.useMonochromeLogos,
-      logoColor: partialData.logoColor || ABOUT_ME.logoColor,
     };
   };
   
@@ -770,24 +768,15 @@ const PartnersSection = () => {
         <ul className={`flex items-center justify-center md:justify-start [&_img]:max-w-none ${animationClass}`}>
           {allLogos.map((logo, index) => (
             <li key={index} className={`flex-shrink-0 w-48 h-16 flex justify-center items-center px-4`} aria-hidden={true}>
-              {aboutMe.useMonochromeLogos ? (
-                <div
-                  className="w-full h-full hover:scale-110 transition-transform duration-300"
-                  style={{
-                    backgroundColor: aboutMe.logoColor || '#FFFFFF',
-                    maskImage: `url(${logo})`,
-                    maskSize: 'contain',
-                    maskPosition: 'center',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskImage: `url(${logo})`,
-                    WebkitMaskSize: 'contain',
-                    WebkitMaskPosition: 'center',
-                    WebkitMaskRepeat: 'no-repeat',
-                  }}
-                ></div>
-              ) : (
-                <img src={logo} alt="" className="max-w-full max-h-full object-contain hover:scale-110 transition-transform duration-300" />
-              )}
+              <img 
+                src={logo} 
+                alt="" 
+                className="max-w-full max-h-full object-contain hover:scale-110 transition-all duration-300"
+                style={aboutMe.useMonochromeLogos ? {
+                    filter: 'grayscale(100%) contrast(0%) brightness(70%)',
+                    opacity: 0.7,
+                } : {}}
+              />
             </li>
           ))}
         </ul>
@@ -1426,13 +1415,8 @@ const AdminPage = () => {
                             onChange={e => setData(prev => ({ ...prev, useMonochromeLogos: e.target.checked }))}
                             className="h-5 w-5 rounded text-brand-primary focus:ring-brand-primary bg-base-light border-base-light"
                         />
-                        <label htmlFor="useMonochromeLogos" className="text-text-secondary">Use Monochrome Logos</label>
+                        <label htmlFor="useMonochromeLogos" className="text-text-secondary">Display all partner logos in grayscale</label>
                     </div>
-                    {data.useMonochromeLogos && (
-                        <div className="animate-fade-in-up md:col-span-2" style={{animationDuration: '300ms'}}>
-                           <ColorInput label="Logo Color" name="logoColor" />
-                        </div>
-                    )}
                 </AdminSection>
             </div>
         );
