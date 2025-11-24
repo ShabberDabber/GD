@@ -167,7 +167,7 @@ const HERO_PROJECTS = [
     heroImage: { url: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=1200&auto=format&fit=crop', alt: 'A durable travel backpack in a rugged, mountainous landscape.' },
     homePageTitle: 'Journeyman Gear',
     homePageSubtitle: 'Building a direct-to-consumer brand for durable, modern travel gear.',
-    homePageImage: { url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=800&auto=format&fit=crop', alt: 'A person looking out over a stunning travel destination.' },
+    homePageImage: { url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=800&auto=format=fit&crop', alt: 'A person looking out over a stunning travel destination.' },
     contentBlocks: [
       { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1200&auto=format&fit=crop', alt: 'A hiker with a Journeyman backpack overlooking a mountain range.' }], style: 'single' } },
       { type: 'title', data: {} },
@@ -244,6 +244,7 @@ const ABOUT_ME = {
   bodyHeadingsColor: '#1e293b',
   bodyTextColor: '#475569',
   projectTagBackgroundColor: '#1e293b',
+  projectTagTextColor: '#f8fafc',
   // SEO
   seoTitle: 'David Gaines | Creative Director Portfolio', seoDescription: 'A personal portfolio website for Creative Director David Gaines, showcasing impact, strategy, leadership, and adaptability through curated case studies and recent work.',
   // Logos
@@ -523,7 +524,7 @@ const ContentProvider = ({ children }) => {
     document.documentElement.style.setProperty('--body-headings-color', aboutMe.bodyHeadingsColor || '#1e293b');
     document.documentElement.style.setProperty('--body-text-color', aboutMe.bodyTextColor || '#475569');
     document.documentElement.style.setProperty('--project-tag-bg-color', aboutMe.projectTagBackgroundColor || '#1e293b');
-    document.documentElement.style.setProperty('--project-tag-text-color', aboutMe.pageBackgroundColor || '#ffffff');
+    document.documentElement.style.setProperty('--project-tag-text-color', aboutMe.projectTagTextColor || '#f8fafc');
 
     const setMetaTag = (attr, key, value) => {
         let element = document.querySelector(`meta[${attr}='${key}']`);
@@ -778,7 +779,7 @@ const PartnersSection = () => {
                 alt="" 
                 className="max-w-full max-h-full object-contain hover:scale-110 transition-all duration-300"
                 style={aboutMe.useMonochromeLogos ? {
-                    filter: 'grayscale(100%) contrast(0%) brightness(70%)',
+                    filter: 'grayscale(100%)',
                     opacity: 0.7,
                 } : {}}
               />
@@ -958,7 +959,7 @@ const ProjectImageCarousel = ({ images }) => {
 const ProjectTags = ({ tags }) => {
   if (!tags) return null;
   const tagList = Array.isArray(tags) ? tags : String(tags).split(/, ?/);
-  return (<div className="mt-6 flex justify-center gap-2 flex-wrap">{tagList.map(tag => (<span key={tag} className="inline-block bg-tag-bg text-tag-text text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-sm">{tag}</span>))}</div>);
+  return (<div className="mt-6 flex justify-center gap-2 flex-wrap">{tagList.map(tag => (<span key={tag} className="inline-block bg-tag-bg text-tag-text text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">{tag}</span>))}</div>);
 };
 
 // --- Block Components ---
@@ -974,7 +975,7 @@ const HeroBlock = ({ data }) => {
   return <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-xl">{images[0].url ? <img src={images[0].url} alt={images[0].alt} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-base-light" />}</div>;
 };
 const TitleBlock = ({ project }) => (
-  <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl mt-12 md:mt-16 text-center">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl mt-12 md:mt-16 text-center">
     <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-body-headings tracking-tighter uppercase whitespace-nowrap">{project.title}</h1>
     {project.client && <p className="mt-2 text-2xl md:text-4xl font-bold text-brand-primary">{project.client}</p>}
     <ProjectTags tags={project.tags} />
@@ -985,9 +986,9 @@ const TextBlock = ({ data }) => {
   const maxWidthClass = isStandalone ? 'max-w-3xl' : 'max-w-none';
   return (
     <div className={`container mx-auto px-4 sm:px-6 lg:px-8 ${maxWidthClass} my-8 md:my-10`}>
-      <div className={`prose max-w-none mx-auto text-body-text ${isStandalone ? 'text-center' : ''}`}>
-        {data.heading && <h2 className="text-xl md:text-2xl font-bold text-body-headings mb-2">{data.heading}</h2>}
-        {data.body && <p dangerouslySetInnerHTML={{ __html: data.body }}></p>}
+      <div className={`prose prose-lg max-w-none mx-auto text-body-text ${isStandalone ? 'text-center' : ''}`}>
+        {data.heading && <h2 className="text-2xl md:text-3xl font-bold text-body-headings mb-2" style={{ fontSize: '1.8rem' }}>{data.heading}</h2>}
+        {data.body && <p dangerouslySetInnerHTML={{ __html: data.body }} style={{ fontSize: '1.2rem' }}></p>}
       </div>
     </div>
   );
@@ -1080,9 +1081,9 @@ const TextWithImagesBlock = ({ data }) => {
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-                <div className={`prose max-w-none mx-auto text-body-text ${textOrder}`}>
-                    {heading && <h2 className="text-xl md:text-2xl font-bold text-body-headings mb-2">{heading}</h2>}
-                    <p dangerouslySetInnerHTML={{ __html: body }}></p>
+                <div className={`prose prose-lg max-w-none mx-auto text-body-text ${textOrder}`}>
+                    {heading && <h2 className="text-2xl md:text-3xl font-bold text-body-headings mb-2" style={{ fontSize: '1.8rem' }}>{heading}</h2>}
+                    <p dangerouslySetInnerHTML={{ __html: body }} style={{ fontSize: '1.2rem' }}></p>
                 </div>
                 <div className={`self-center ${imageOrder} w-full max-w-[20rem] mx-auto md:max-w-none md:mx-0`}>
                     {renderImages()}
@@ -1245,7 +1246,7 @@ const CaseStudyDetailPage = ({ projectId }) => {
     }
 
     switch (block.type) {
-        case 'hero': return <header key={index} className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl mt-10 md:mt-20 relative group"><HeroBlock data={block.data} /><ProjectNavigation currentProjectId={project.id} projects={heroProjects} /></header>;
+        case 'hero': return <header key={index} className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative group"><HeroBlock data={block.data} /><ProjectNavigation currentProjectId={project.id} projects={heroProjects} /></header>;
         case 'title': return <TitleBlock key={index} project={project} />;
         case 'text': return <TextBlock key={index} data={block.data} />;
         case 'image': return <ImageBlock key={index} data={block.data} />;
@@ -1260,7 +1261,7 @@ const CaseStudyDetailPage = ({ projectId }) => {
   }
 
   return (
-    <article className="animate-fade-in-up pb-10" style={{ backgroundColor: 'var(--page-background-color)' }}>
+    <article className="animate-fade-in-up pb-10 pt-5 md:pt-10" style={{ backgroundColor: 'var(--page-background-color)' }}>
       {isPreview && <PreviewBanner />}
       <div className={isPreview ? 'pt-10' : ''}>
         {(project.contentBlocks && project.contentBlocks.length > 0) 
@@ -1410,8 +1411,9 @@ const AdminPage = () => {
                   <ColorInput label="Body Headings" name="bodyHeadingsColor" />
                   <ColorInput label="Body Text" name="bodyTextColor" />
                 </AdminSection>
-                <AdminSection title="Project Page UI">
+                <AdminSection title="Project Page UI" gridCols="md:grid-cols-2">
                   <ColorInput label="Project Tag Background" name="projectTagBackgroundColor" />
+                  <ColorInput label="Project Tag Text" name="projectTagTextColor" />
                 </AdminSection>
                 <AdminSection title="Monochrome Logo Settings">
                     <div className="md:col-span-2 flex items-center gap-4">
