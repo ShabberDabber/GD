@@ -41,9 +41,9 @@
         -webkit-backdrop-filter: blur(12px); /* Corresponds to backdrop-blur-lg */
         backdrop-filter: blur(12px);
       }
-      .logo-dragging, .project-dragging {
+      .logo-dragging, .project-dragging, .block-dragging {
         opacity: 0.5;
-        transform: scale(1.05);
+        transform: scale(1.02);
         box-shadow: 0 0 20px rgba(8, 145, 178, 0.7);
         background: #1e293b;
       }
@@ -92,7 +92,6 @@
         }
       }
     </script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="importmap">
 {
   "imports": {
@@ -129,7 +128,46 @@
 </head>
   <body class="bg-base-dark text-text-primary font-sans">
     <div id="root"></div>
-    <script type="text/babel" data-type="module">
+    <script>
+      // Pre-compiled code will be placed here by the build process.
+      // For development, we'll use the Babel transformer script below.
+    </script>
+    <script type="module">
+      // This is a simplified bootstrap script to catch runtime errors
+      // and mount the React application.
+      try {
+        const rootElement = document.getElementById('root');
+        if (!rootElement) {
+          throw new Error("Could not find root element to mount to");
+        }
+        // The main, pre-compiled application code would be imported here in production.
+        // Since we are using an in-browser transformer, we will define it inline.
+
+        const showErrorOverlay = (message) => {
+          const appRoot = document.getElementById('root');
+          if (appRoot) appRoot.style.display = 'none';
+          let overlay = document.getElementById('error-overlay');
+          if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'error-overlay';
+            Object.assign(overlay.style, { position: 'fixed', inset: '0', backgroundColor: '#0f172a', color: '#f8fafc', padding: '2rem', fontFamily: 'monospace', zIndex: '99999', overflow: 'auto', cursor: 'auto' });
+            document.body.appendChild(overlay);
+          }
+          overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: break-all; color: #cbd5e1;">${message}</pre>`;
+        };
+
+        window.addEventListener('error', (event) => { showErrorOverlay(`Error: ${event.message}\nSource: ${event.filename}\nLine: ${event.lineno}, Col: ${event.colno}`); });
+        window.addEventListener('unhandledrejection', (event) => { let reason = event.reason; if (reason instanceof Error) { reason = `${reason.message}\n${reason.stack}`; } showErrorOverlay(`Unhandled Promise Rejection:\nReason: ${reason}`); });
+        
+        // This is a necessary hack to ensure React is available globally for Babel
+        window.React = await import('react'); 
+        
+      } catch (error) {
+        console.error("Bootstrap error:", error);
+        showErrorOverlay(`Bootstrap Error: ${error.message}\n${error.stack}`);
+      }
+    </script>
+    <script type="text/babel" data-type="module" data-presets="react,env">
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { initializeApp } from 'firebase/app';
@@ -1418,7 +1456,7 @@ const AdminPage = () => {
                  <AdminSection title="Social Media Links" gridCols="md:grid-cols-1">
                     {(data.socialLinks || []).map((item, index) => (
                       <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-end bg-base-dark p-4 rounded-md">
-                        <AdminInput label={`Icon URL ${index + 1}`} value={item.iconUrl} onChange={e => handleSocialLinkChange(index, 'iconUrl', e.target.value)} placeholder="URL or 'linkedin'" recommendation="Use 'linkedin' for the default icon, otherwise provide a full image URL." />
+                        <AdminInput label={`Icon URL ${index + 1}`} value={item.iconUrl} onChange={e => handleSocialLinkChange(index, 'iconUrl', e.target.value)} placeholder="URL or 'linkedin'" recommendation="Use 'linkedin' for the default icon, otherwise provide a full image URL (SVG recommended, 24x24px)." />
                         <AdminInput label={`Link URL ${index + 1}`} value={item.linkUrl} onChange={e => handleSocialLinkChange(index, 'linkUrl', e.target.value)} placeholder="https://..." />
                         <button onClick={() => removeSocialLink(index)} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded h-10 mb-1">X</button>
                       </div>
@@ -1556,26 +1594,6 @@ const AdminPage = () => {
     const ProjectEditor = () => {
         const { heroProjects, updateHeroProjects } = useContent();
         const [editingProject, setEditingProject] = useState(null);
-        const [dragging, setDragging] = useState(false);
-        const dragItem = useRef();
-        const dragOverItem = useRef();
-        
-        const handleDragStart = (e, index) => {
-            dragItem.current = index;
-            setDragging(true);
-            e.dataTransfer.effectAllowed = 'move';
-        };
-        const handleDragEnter = (e, index) => { dragOverItem.current = index; };
-        const handleDragEnd = () => {
-            const projectsCopy = [...heroProjects];
-            const draggedItemContent = projectsCopy[dragItem.current];
-            projectsCopy.splice(dragItem.current, 1);
-            projectsCopy.splice(dragOverItem.current, 0, draggedItemContent);
-            dragItem.current = null;
-            dragOverItem.current = null;
-            setDragging(false);
-            updateHeroProjects(projectsCopy);
-        };
         
         const handleAddNew = () => setEditingProject({ id: `new-project-${Date.now()}`, title: 'New Project', client: '', tags: [], heroImage: {url:'', alt:''}, homePageTitle: '', homePageSubtitle: '', homePageImage: {url:'', alt:''}, contentBlocks: [] });
         const handleEdit = (project) => setEditingProject(JSON.parse(JSON.stringify(project)));
@@ -1615,6 +1633,28 @@ const AdminPage = () => {
             alert('Project saved!');
         };
         
+        // --- Drag and Drop for Projects ---
+        const [dragging, setDragging] = useState(false);
+        const dragItem = useRef();
+        const dragOverItem = useRef();
+        
+        const handleDragStart = (e, index) => {
+            dragItem.current = index;
+            setDragging(true);
+            e.dataTransfer.effectAllowed = 'move';
+        };
+        const handleDragEnter = (e, index) => { dragOverItem.current = index; };
+        const handleDragEnd = () => {
+            const projectsCopy = [...heroProjects];
+            const draggedItemContent = projectsCopy[dragItem.current];
+            projectsCopy.splice(dragItem.current, 1);
+            projectsCopy.splice(dragOverItem.current, 0, draggedItemContent);
+            dragItem.current = null;
+            dragOverItem.current = null;
+            setDragging(false);
+            updateHeroProjects(projectsCopy);
+        };
+
         if (editingProject) {
             return <ProjectBuilder initialProject={editingProject} onSave={handleSave} onCancel={() => setEditingProject(null)} />;
         }
@@ -1655,6 +1695,11 @@ const AdminPage = () => {
         const [project, setProject] = useState(initialProject);
         const [editingBlock, setEditingBlock] = useState({ block: null, index: -1 });
         const [rawTags, setRawTags] = useState((initialProject.tags || []).join('\n'));
+        
+        // --- Drag and Drop for Content Blocks ---
+        const [draggingBlock, setDraggingBlock] = useState(false);
+        const dragBlockItem = useRef();
+        const dragOverBlockItem = useRef();
 
         useEffect(() => {
             const tagsArray = rawTags.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
@@ -1703,27 +1748,22 @@ const AdminPage = () => {
             }
         };
 
-        const moveBlock = (index, direction) => {
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= project.contentBlocks.length) return;
-            const updatedBlocks = [...project.contentBlocks];
-            const item = updatedBlocks.splice(index, 1)[0];
-            updatedBlocks.splice(newIndex, 0, item);
-            setProject(p => ({ ...p, contentBlocks: updatedBlocks }));
+        const handleBlockDragStart = (e, index) => { dragBlockItem.current = index; setDraggingBlock(true); e.dataTransfer.effectAllowed = 'move'; };
+        const handleBlockDragEnter = (e, index) => { dragOverBlockItem.current = index; };
+        const handleBlockDragEnd = () => {
+            const blocksCopy = [...project.contentBlocks];
+            const draggedItemContent = blocksCopy[dragBlockItem.current];
+            blocksCopy.splice(dragBlockItem.current, 1);
+            blocksCopy.splice(dragOverBlockItem.current, 0, draggedItemContent);
+            dragBlockItem.current = null;
+            dragOverBlockItem.current = null;
+            setDraggingBlock(false);
+            setProject(p => ({ ...p, contentBlocks: blocksCopy }));
         };
         
         const BlockTypeIcon = ({ type }) => {
             const icons = {
-                hero: 'M4 16l-2-2 8-8 8 8-2 2H4z',
-                title: 'M3 12h3v7h3v-7h3V9H3v3zm10-5h-1v6h1V7zm3-2h-1v8h1V5zm3 2h-1v6h1V7z',
-                text: 'M4 6h16M4 12h16M4 18h16',
-                textWithImages: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z',
-                image: 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z',
-                imageGrid: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z',
-                carousel: 'M6 5h2v14H6V5zm10 0h2v14h-2V5z',
-                imageRow: 'M2 13h4v4H2v-4zm6 0h4v4H8v-4zm6 0h4v4h-4v-4z',
-                quote: 'M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z',
-                stats: 'M7 17v-4h3v4H7zm4 0v-8h3v8h-3zm4 0v-6h3v6h-3z',
+                hero: 'M4 16l-2-2 8-8 8 8-2 2H4z', title: 'M3 12h3v7h3v-7h3V9H3v3zm10-5h-1v6h1V7zm3-2h-1v8h1V5zm3 2h-1v6h1V7z', text: 'M4 6h16M4 12h16M4 18h16', textWithImages: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', image: 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z', imageGrid: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', carousel: 'M6 5h2v14H6V5zm10 0h2v14h-2V5z', imageRow: 'M2 13h4v4H2v-4zm6 0h4v4H8v-4zm6 0h4v4h-4v-4z', quote: 'M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z', stats: 'M7 17v-4h3v4H7zm4 0v-8h3v8h-3zm4 0v-6h3v6h-3z',
             };
             return <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-text-tertiary" viewBox="0 0 24 24" fill="currentColor"><path d={icons[type] || 'M0 0h24v24H0z'} /></svg>;
         };
@@ -1757,15 +1797,23 @@ const AdminPage = () => {
                         <AdminSection title="Content Blocks" gridCols="md:grid-cols-1">
                             <div className="space-y-2">
                                 {(project.contentBlocks || []).map((block, index) => (
-                                    <div key={index} className="flex items-center justify-between bg-base-dark p-2 rounded-md border border-base-light">
+                                    <div 
+                                        key={index}
+                                        draggable
+                                        onDragStart={(e) => handleBlockDragStart(e, index)}
+                                        onDragEnter={(e) => handleBlockDragEnter(e, index)}
+                                        onDragEnd={handleBlockDragEnd}
+                                        onDragOver={(e) => e.preventDefault()}
+                                        className={`flex items-center justify-between bg-base-dark p-2 rounded-md border border-base-light cursor-move transition-all duration-300 ${
+                                            draggingBlock && dragBlockItem.current === index ? 'block-dragging' : ''
+                                        }`}
+                                    >
                                         <div className="flex items-center">
                                             <BlockTypeIcon type={block.type} />
                                             <span className="font-medium text-text-secondary capitalize">{block.type.replace(/([A-Z])/g, ' $1')}</span>
                                             <span className="text-sm text-text-tertiary ml-4 truncate">{block.data.heading || block.data.caption || ''}</span>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <button onClick={() => moveBlock(index, -1)} disabled={index === 0} className="p-1 disabled:opacity-30"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" /></svg></button>
-                                            <button onClick={() => moveBlock(index, 1)} disabled={index === project.contentBlocks.length - 1} className="p-1 disabled:opacity-30"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg></button>
                                             <button onClick={() => setEditingBlock({ block, index })} className="text-sm bg-base-light hover:bg-brand-primary text-white font-bold py-1 px-3 rounded">Edit</button>
                                             <button onClick={() => removeBlock(index)} className="text-sm bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Del</button>
                                         </div>
@@ -1828,7 +1876,7 @@ const AdminPage = () => {
                         <AdminSelect label="Style" name="style" value={editedBlock.data.style} onChange={handleChange}>
                             <option value="single">Single Full Image</option><option value="duo">Two-Column</option><option value="trio">Three-Column</option>
                         </AdminSelect>
-                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Single:</b> 1 image (16:9 ratio, e.g., 1920x1080px). <b>Duo:</b> 2 images. <b>Trio:</b> 3 images. Format: JPG, WEBP"/>
+                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Single:</b> 1 image (16:9 ratio, e.g., 1920x1080px). <b>Duo:</b> 2 images (1:1 ratio). <b>Trio:</b> 3 images (2:3 ratio). Format: JPG, WEBP"/>
                     </div>
                 );
                 case 'title': return <p className="text-text-tertiary">This block has no editable content. It automatically displays the project's title, client, and tags.</p>;
@@ -1878,7 +1926,7 @@ const AdminPage = () => {
                 );
                  case 'imageGrid': case 'carousel': return (
                     <div className="space-y-4">
-                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Grid:</b> Use square images (e.g. 800x800). <b>Carousel:</b> use 16:9 images (e.g. 1200x675)." />
+                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Grid:</b> Use square images (e.g. 800x800px). <b>Carousel:</b> use 16:9 images (e.g. 1200x675px)." />
                     </div>
                 );
                 case 'imageRow': {
@@ -2380,7 +2428,7 @@ const showErrorOverlay = (message) => {
     Object.assign(overlay.style, { position: 'fixed', inset: '0', backgroundColor: '#0f172a', color: '#f8fafc', padding: '2rem', fontFamily: 'monospace', zIndex: '99999', overflow: 'auto', cursor: 'auto' });
     document.body.appendChild(overlay);
   }
-  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: 'break-all'; color: '#cbd5e1';">${message}</pre>`;
+  overlay.innerHTML = `<h1 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">A critical error occurred</h1><p style="color: #fca5a5; margin-bottom: 1rem;">The application could not start.</p><pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; word-break: break-all; color: #cbd5e1;">${message}</pre>`;
 };
 window.addEventListener('error', (event) => { showErrorOverlay(`Error: ${event.message}\nSource: ${event.filename}\nLine: ${event.lineno}, Col: ${event.colno}`); });
 window.addEventListener('unhandledrejection', (event) => { let reason = event.reason; if (reason instanceof Error) { reason = `${reason.message}\n${reason.stack}`; } showErrorOverlay(`Unhandled Promise Rejection:\nReason: ${reason}`); });
