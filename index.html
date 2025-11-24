@@ -1026,7 +1026,7 @@ const ProjectTags = ({ tags }) => {
 
 // --- Block Components ---
 const HeroBlock = ({ data }) => {
-  if (!data.images || data.images.length === 0) return null;
+  if (!data.images || data.images.length === 0) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative group"><div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-xl bg-base-light"></div></div>;
   const { images, style } = data;
   if (style === 'trio') {
     return <div className="hidden md:grid grid-cols-3 gap-4 md:gap-8">{images.slice(0,3).map((img, i) => (<div key={i} className="relative overflow-hidden rounded-lg shadow-xl aspect-[16/9] sm:aspect-[2/3]">{img.url ? <img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" /> : <div className="absolute inset-0 w-full h-full bg-base-light" />}</div>))}</div>;
@@ -1057,7 +1057,7 @@ const TextBlock = ({ data }) => {
 };
 const ImageBlock = ({ data }) => {
   const { image, size = 'full', caption } = data;
-  if (!image) return null;
+  if (!image) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10"><div className="w-full aspect-[16/9] bg-base-light rounded-lg shadow-xl"></div></div>;
   const sizeClasses = {
     full: 'max-w-6xl',
     medium: 'max-w-4xl',
@@ -1074,21 +1074,29 @@ const ImageBlock = ({ data }) => {
     </div>
   );
 };
+const BannerImageBlock = ({ data }) => {
+  const { image, height = 'normal' } = data;
+  const heightClasses = {
+    normal: 'aspect-[21/9]',    // Cinematic banner
+    tall: 'aspect-[14/9]',      // 1.5x Taller
+    extraTall: 'aspect-[7/6]',  // 2x Taller (almost square)
+  };
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10">
+      <div className={`relative w-full ${heightClasses[height]} overflow-hidden rounded-lg shadow-xl`}>
+        {image?.url ?
+          <img src={image.url} alt={image.alt} className="w-full h-full object-cover" /> :
+          <div className="w-full h-full bg-base-light"></div>
+        }
+      </div>
+    </div>
+  );
+};
 const TextWithImagesBlock = ({ data }) => {
-    const { heading, body, images, imagePosition = 'right', imageLayout, imageAspectRatio } = data;
-    if (!body || !images || images.length === 0) return null;
+    const { heading, body, images, imagePosition = 'right', imageLayout } = data;
+    if (!body || !images || images.length === 0) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10"><div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"><div className="bg-base-light/50 h-32 rounded-lg"></div><div className="bg-base-light h-32 rounded-lg"></div></div></div>;
     const textOrder = imagePosition === 'right' ? 'md:order-1' : 'md:order-2';
     const imageOrder = imagePosition === 'right' ? 'md:order-2' : 'md:order-1';
-
-    // Backward compatibility for old `imageAspectRatio` property
-    let finalLayout = imageLayout;
-    if (!finalLayout) {
-        switch (imageAspectRatio) {
-            case 'tall': finalLayout = 'singleTall'; break;
-            case 'extraTall': finalLayout = 'singleExtraTall'; break;
-            case 'square': default: finalLayout = 'singleSquare'; break;
-        }
-    }
     
     const renderImages = () => {
         const ImageComponent = ({ img }) => (
@@ -1097,46 +1105,18 @@ const TextWithImagesBlock = ({ data }) => {
             <div className="w-full h-full bg-base-light"></div>
         );
 
-        switch (finalLayout) {
+        switch (imageLayout) {
             case 'stackTwoSquare':
-                return (
-                    <div className="flex flex-col gap-4">
-                        {images.slice(0, 2).map((img, i) => (
-                            <div key={i} className="relative overflow-hidden rounded-lg shadow-md aspect-square">
-                                <ImageComponent img={img} />
-                            </div>
-                        ))}
-                    </div>
-                );
+                return <div className="flex flex-col gap-4">{images.slice(0, 2).map((img, i) => (<div key={i} className="relative overflow-hidden rounded-lg shadow-md aspect-square"><ImageComponent img={img} /></div>))}</div>;
             case 'stackThreeSquare':
-                 return (
-                    <div className="flex flex-col gap-4">
-                        {images.slice(0, 3).map((img, i) => (
-                            <div key={i} className="relative overflow-hidden rounded-lg shadow-md aspect-square">
-                                <ImageComponent img={img} />
-                            </div>
-                        ))}
-                    </div>
-                );
+                 return <div className="flex flex-col gap-4">{images.slice(0, 3).map((img, i) => (<div key={i} className="relative overflow-hidden rounded-lg shadow-md aspect-square"><ImageComponent img={img} /></div>))}</div>;
             case 'singleTall':
-                return (
-                    <div className="relative overflow-hidden rounded-lg shadow-md aspect-[2/3]">
-                        <ImageComponent img={images[0]} />
-                    </div>
-                );
+                return <div className="relative overflow-hidden rounded-lg shadow-md aspect-[2/3]"><ImageComponent img={images[0]} /></div>;
             case 'singleExtraTall':
-                return (
-                    <div className="relative overflow-hidden rounded-lg shadow-md aspect-[1/2]">
-                        <ImageComponent img={images[0]} />
-                    </div>
-                );
+                return <div className="relative overflow-hidden rounded-lg shadow-md aspect-[1/2]"><ImageComponent img={images[0]} /></div>;
             case 'singleSquare':
             default:
-                 return (
-                    <div className="relative overflow-hidden rounded-lg shadow-md aspect-square">
-                        <ImageComponent img={images[0]} />
-                    </div>
-                );
+                 return <div className="relative overflow-hidden rounded-lg shadow-md aspect-square"><ImageComponent img={images[0]} /></div>;
         }
     };
 
@@ -1155,13 +1135,8 @@ const TextWithImagesBlock = ({ data }) => {
     );
 };
 const ImageGridBlock = ({ data }) => {
-    if (!data.images || data.images.length === 0) return null;
-    const gridClasses = {
-        1: 'grid-cols-1',
-        2: 'sm:grid-cols-2',
-        3: 'sm:grid-cols-3',
-        4: 'sm:grid-cols-2 md:grid-cols-4',
-    };
+    if (!data.images || data.images.length === 0) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10"><div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8"><div className="aspect-square bg-base-light rounded-lg"></div><div className="aspect-square bg-base-light rounded-lg"></div><div className="aspect-square bg-base-light rounded-lg"></div></div></div>;
+    const gridClasses = { 1: 'grid-cols-1', 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-3', 4: 'sm:grid-cols-2 md:grid-cols-4' };
     const numImages = Math.min(data.images.length, 4);
     const gridClass = gridClasses[numImages] || 'sm:grid-cols-3';
 
@@ -1178,7 +1153,7 @@ const ImageGridBlock = ({ data }) => {
     );
 };
 const CarouselBlock = ({ data }) => {
-    if (!data.images || data.images.length === 0) return null;
+    if (!data.images || data.images.length === 0) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10"><div className="w-full aspect-[16/9] bg-base-light rounded-lg shadow-xl"></div></div>;
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10">
             <ProjectImageCarousel images={data.images} />
@@ -1186,7 +1161,7 @@ const CarouselBlock = ({ data }) => {
     );
 };
 const ImageRowBlock = ({ data }) => {
-    if (!data.images || data.images.length === 0) return null;
+    if (!data.images || data.images.length === 0) return <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl my-8 md:my-10"><div className="w-full aspect-[21/9] bg-base-light rounded-lg shadow-xl"></div></div>;
     const { images, style = 'threeSquare' } = data;
     
     const styleConfig = {
@@ -1312,6 +1287,7 @@ const CaseStudyDetailPage = ({ projectId }) => {
         case 'title': return <TitleBlock key={index} project={project} />;
         case 'text': return <TextBlock key={index} data={block.data} />;
         case 'image': return <ImageBlock key={index} data={block.data} />;
+        case 'bannerImage': return <BannerImageBlock key={index} data={block.data} />;
         case 'textWithImages': return <TextWithImagesBlock key={index} data={block.data} />;
         case 'imageGrid': return <ImageGridBlock key={index} data={block.data} />;
         case 'carousel': return <CarouselBlock key={index} data={block.data} />;
@@ -1727,6 +1703,7 @@ const AdminPage = () => {
                 case 'text': newBlock.data = { heading: '', body: '' }; break;
                 case 'textWithImages': newBlock.data = { heading: '', body: '', images: [], imagePosition: 'right', imageLayout: 'singleSquare' }; break;
                 case 'image': newBlock.data = { image: { url: '', alt: '' }, size: 'full', caption: '' }; break;
+                case 'bannerImage': newBlock.data = { image: { url: '', alt: '' }, height: 'normal' }; break;
                 case 'imageGrid': case 'carousel': newBlock.data = { images: [] }; break;
                 case 'imageRow': newBlock.data = { images: [], style: 'threeSquare' }; break;
                 case 'quote': newBlock.data = { quotes: [{ text: '', author: '' }], style: 'single' }; break;
@@ -1763,7 +1740,7 @@ const AdminPage = () => {
         
         const BlockTypeIcon = ({ type }) => {
             const icons = {
-                hero: 'M4 16l-2-2 8-8 8 8-2 2H4z', title: 'M3 12h3v7h3v-7h3V9H3v3zm10-5h-1v6h1V7zm3-2h-1v8h1V5zm3 2h-1v6h1V7z', text: 'M4 6h16M4 12h16M4 18h16', textWithImages: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', image: 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z', imageGrid: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', carousel: 'M6 5h2v14H6V5zm10 0h2v14h-2V5z', imageRow: 'M2 13h4v4H2v-4zm6 0h4v4H8v-4zm6 0h4v4h-4v-4z', quote: 'M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z', stats: 'M7 17v-4h3v4H7zm4 0v-8h3v8h-3zm4 0v-6h3v6h-3z',
+                hero: 'M4 16l-2-2 8-8 8 8-2 2H4z', title: 'M3 12h3v7h3v-7h3V9H3v3zm10-5h-1v6h1V7zm3-2h-1v8h1V5zm3 2h-1v6h1V7z', text: 'M4 6h16M4 12h16M4 18h16', textWithImages: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', image: 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z', bannerImage: 'M3 19h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V5H3v2z', imageGrid: 'M4 4h7v7H4V4zm10 0h7v7h-7V4zM4 15h7v7H4v-7zm10 0h7v7h-7v-7z', carousel: 'M6 5h2v14H6V5zm10 0h2v14h-2V5z', imageRow: 'M2 13h4v4H2v-4zm6 0h4v4H8v-4zm6 0h4v4h-4v-4z', quote: 'M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z', stats: 'M7 17v-4h3v4H7zm4 0v-8h3v8h-3zm4 0v-6h3v6h-3z',
             };
             return <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-text-tertiary" viewBox="0 0 24 24" fill="currentColor"><path d={icons[type] || 'M0 0h24v24H0z'} /></svg>;
         };
@@ -1833,6 +1810,7 @@ const AdminPage = () => {
                                 <button onClick={() => addBlock('text')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Text</button>
                                 <button onClick={() => addBlock('textWithImages')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Text + Images</button>
                                 <button onClick={() => addBlock('image')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Single Image</button>
+                                <button onClick={() => addBlock('bannerImage')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Banner Image</button>
                                 <button onClick={() => addBlock('imageRow')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Image Row</button>
                                 <button onClick={() => addBlock('imageGrid')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Image Grid</button>
                                 <button onClick={() => addBlock('carousel')} className="bg-base-light hover:bg-brand-primary p-2 rounded text-sm">Carousel</button>
@@ -1922,6 +1900,16 @@ const AdminPage = () => {
                         </AdminSelect>
                         <AdminInput label="Caption (Optional)" name="caption" value={editedBlock.data.caption} onChange={handleChange} />
                         <div className="text-xs text-text-tertiary p-3 bg-base-dark rounded-md"><b>Size Guide (16:9 ratio):</b><br/><b>Full:</b> ~1920px wide. <b>Medium:</b> ~1200px wide. <b>Small:</b> ~800px wide.</div>
+                    </div>
+                );
+                case 'bannerImage': return (
+                     <div className="space-y-4">
+                        <AdminImageInput label="Image" value={editedBlock.data.image} onChange={handleImageChange} recommendation="Recommended width: 1920px. Use a high-quality JPG or WEBP."/>
+                        <AdminSelect label="Banner Height" name="height" value={editedBlock.data.height} onChange={handleChange}>
+                            <option value="normal">Normal (Cinematic)</option>
+                            <option value="tall">Tall (1.5x)</option>
+                            <option value="extraTall">Extra Tall (2x)</option>
+                        </AdminSelect>
                     </div>
                 );
                  case 'imageGrid': case 'carousel': return (
