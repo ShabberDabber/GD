@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -40,10 +41,11 @@
         -webkit-backdrop-filter: blur(12px); /* Corresponds to backdrop-blur-lg */
         backdrop-filter: blur(12px);
       }
-      .logo-dragging {
+      .logo-dragging, .project-dragging {
         opacity: 0.5;
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(8, 145, 178, 0.7);
+        background: #1e293b;
       }
     </style>
     <script>
@@ -108,6 +110,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+
       gtag('config', 'G-KN0LN28WLD');
 
       function trackPageView() {
@@ -242,7 +245,7 @@ const HERO_PROJECTS = [
     heroImage: { url: 'https://images.unsplash.com/photo-1555864449-41a94235be48?q=80&w=1200&auto=format&fit=crop', alt: 'A person intensely playing a video game on a controller.' },
     homePageTitle: 'Retrograde Game Launch',
     homePageSubtitle: 'Launching a new indie game with a nostalgic pixel art aesthetic.',
-    homePageImage: { url: 'https://images.unsplash.com/photo-1580234811497-9df7fd2f357e?q=80&w=800&auto=format&fit=crop', alt: 'Close-up of a classic arcade game joystick and buttons.' },
+    homePageImage: { url: 'https://images.unsplash.com/photo-1580234811497-9df7fd2f357e?q=80&w=800&auto=format=fit&crop', alt: 'Close-up of a classic arcade game joystick and buttons.' },
     contentBlocks: [
       { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1612036782180-6f0b6cd84627?q=80&w=800&auto=format&fit=crop', alt: 'Promotional art for the game Retrograde' }, { url: 'https://images.unsplash.com/photo-1636654211181-7098bb4f9715?q=80&w=800&auto=format&fit=crop', alt: 'A character from the game Retrograde' }, { url: 'https://images.unsplash.com/photo-1636654211287-350756da528a?q=80&w=800&auto=format&fit=crop', alt: 'A scene from the game Retrograde' }], style: 'trio' } },
       { type: 'title', data: {} },
@@ -1408,7 +1411,7 @@ const AdminPage = () => {
                 <div className="sticky top-0 bg-base-dark/80 backdrop-blur-sm z-10 py-4 mb-4 flex justify-end"><button onClick={handleSave} className={buttonClasses}>Save Settings</button></div>
                 <AdminSection title="General Information">
                     <AdminInput label="Header Logo Text" name="logoText" value={data.logoText} onChange={handleChange} />
-                    <AdminImageInput label="Header Icon" name="headerIcon" value={data.headerIcon} onChange={value => setData(prev => ({...prev, headerIcon: value}))} />
+                    <AdminImageInput label="Header Icon" name="headerIcon" value={data.headerIcon} onChange={value => setData(prev => ({...prev, headerIcon: value}))} recommendation="Optional. Recommended size: 48x48px, use SVG for best results."/>
                     <AdminInput label="Email" name="email" value={data.email} onChange={handleChange} />
                     <AdminInput label="Phone" name="phone" value={data.phone} onChange={handleChange} />
                 </AdminSection>
@@ -1543,8 +1546,8 @@ const AdminPage = () => {
                     <AdminTextarea label="Audiobooks (one per line)" name="audiobooks" value={(data.favorites.audiobooks || []).join('\n')} onChange={handleFavoritesChange} rows={4} />
                 </AdminSection>
                  <AdminSection title="Inspiration Images" gridCols="md:grid-cols-1">
-                    <AdminImageInput label="Panorama Image" name="panorama" value={data.panorama} onChange={v => setData(p => ({...p, panorama: v}))} recommendation="Compress images with TinyPNG or Squoosh. Recommended size: 2000x600px." />
-                    <AdminImageArrayInput label="Inspiration Grid Images (6 recommended)" value={data.inspirationGrid} onChange={v => setData(p => ({...p, inspirationGrid: v}))} recommendation="Compress images with TinyPNG or Squoosh. Recommended size: 1200x800px." />
+                    <AdminImageInput label="Panorama Image" name="panorama" value={data.panorama} onChange={v => setData(p => ({...p, panorama: v}))} recommendation="Recommended size: 2000px wide. Format: JPG, WEBP" />
+                    <AdminImageArrayInput label="Inspiration Grid Images" value={data.inspirationGrid} onChange={v => setData(p => ({...p, inspirationGrid: v}))} recommendation="6 images recommended. Use 1200x800px (3:2 ratio). Format: JPG, WEBP" />
                  </AdminSection>
             </div>
         );
@@ -1553,6 +1556,26 @@ const AdminPage = () => {
     const ProjectEditor = () => {
         const { heroProjects, updateHeroProjects } = useContent();
         const [editingProject, setEditingProject] = useState(null);
+        const [dragging, setDragging] = useState(false);
+        const dragItem = useRef();
+        const dragOverItem = useRef();
+        
+        const handleDragStart = (e, index) => {
+            dragItem.current = index;
+            setDragging(true);
+            e.dataTransfer.effectAllowed = 'move';
+        };
+        const handleDragEnter = (e, index) => { dragOverItem.current = index; };
+        const handleDragEnd = () => {
+            const projectsCopy = [...heroProjects];
+            const draggedItemContent = projectsCopy[dragItem.current];
+            projectsCopy.splice(dragItem.current, 1);
+            projectsCopy.splice(dragOverItem.current, 0, draggedItemContent);
+            dragItem.current = null;
+            dragOverItem.current = null;
+            setDragging(false);
+            updateHeroProjects(projectsCopy);
+        };
         
         const handleAddNew = () => setEditingProject({ id: `new-project-${Date.now()}`, title: 'New Project', client: '', tags: [], heroImage: {url:'', alt:''}, homePageTitle: '', homePageSubtitle: '', homePageImage: {url:'', alt:''}, contentBlocks: [] });
         const handleEdit = (project) => setEditingProject(JSON.parse(JSON.stringify(project)));
@@ -1603,8 +1626,18 @@ const AdminPage = () => {
                     <button onClick={handleAddNew} className={buttonClasses}>Add New Project</button>
                 </div>
                 <div className="bg-base-medium rounded-lg shadow-lg">
-                    <ul className="divide-y divide-base-light">{heroProjects.map(p => (
-                        <li key={p.id} className="p-4 flex justify-between items-center">
+                    <ul className="divide-y divide-base-light">{heroProjects.map((p, index) => (
+                        <li 
+                            key={p.id} 
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, index)}
+                            onDragEnter={(e) => handleDragEnter(e, index)}
+                            onDragEnd={handleDragEnd}
+                            onDragOver={(e) => e.preventDefault()}
+                            className={`p-4 flex justify-between items-center cursor-move transition-all duration-300 ${
+                                dragging && dragItem.current === index ? 'project-dragging' : ''
+                            }`}
+                        >
                             <div><p className="font-bold text-text-primary">{p.title}</p><p className="text-sm text-text-tertiary">{p.id}</p></div>
                             <div className="flex gap-2">
                                 <button onClick={() => handleEdit(p)} className="text-sm bg-base-light hover:bg-brand-primary text-white font-bold py-1 px-3 rounded">Edit</button>
@@ -1719,7 +1752,7 @@ const AdminPage = () => {
                         <AdminSection title="Homepage Display (Optional)">
                             <AdminInput label="Homepage Title" name="homePageTitle" value={project.homePageTitle || ''} onChange={handleProjectChange} placeholder="Defaults to main project title" />
                             <AdminInput label="Homepage Subtitle" name="homePageSubtitle" value={project.homePageSubtitle || ''} onChange={handleProjectChange} placeholder="Defaults to main project subtitle" />
-                            <div className="md:col-span-2"><AdminImageInput label="Homepage Image" name="homePageImage" value={project.homePageImage} onChange={v => setProject(p => ({...p, homePageImage: v}))} /></div>
+                            <div className="md:col-span-2"><AdminImageInput label="Homepage Image" name="homePageImage" value={project.homePageImage} onChange={v => setProject(p => ({...p, homePageImage: v}))} recommendation="Recommended size: 800x600px (4:3 ratio). Format: JPG, WEBP" /></div>
                         </AdminSection>
                         <AdminSection title="Content Blocks" gridCols="md:grid-cols-1">
                             <div className="space-y-2">
@@ -1795,7 +1828,7 @@ const AdminPage = () => {
                         <AdminSelect label="Style" name="style" value={editedBlock.data.style} onChange={handleChange}>
                             <option value="single">Single Full Image</option><option value="duo">Two-Column</option><option value="trio">Three-Column</option>
                         </AdminSelect>
-                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="1 image for Single, 2 for Duo, 3 for Trio."/>
+                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Single:</b> 1 image (16:9 ratio, e.g., 1920x1080px). <b>Duo:</b> 2 images. <b>Trio:</b> 3 images. Format: JPG, WEBP"/>
                     </div>
                 );
                 case 'title': return <p className="text-text-tertiary">This block has no editable content. It automatically displays the project's title, client, and tags.</p>;
@@ -1807,11 +1840,11 @@ const AdminPage = () => {
                 );
                 case 'textWithImages': {
                     const recommendationTexts = {
-                        singleSquare: "Upload 1 image.",
-                        singleTall: "Upload 1 image.",
-                        singleExtraTall: "Upload 1 image.",
-                        stackTwoSquare: "Upload 2 images.",
-                        stackThreeSquare: "Upload 3 images.",
+                        singleSquare: "<b>Layout:</b> 1 square image. <b>Size:</b> ~800x800px.",
+                        singleTall: "<b>Layout:</b> 1 tall image. <b>Size:</b> ~800x1200px (2:3 ratio).",
+                        singleExtraTall: "<b>Layout:</b> 1 extra-tall image. <b>Size:</b> ~800x1600px (1:2 ratio).",
+                        stackTwoSquare: "<b>Layout:</b> 2 stacked square images. <b>Size:</b> ~800x800px each.",
+                        stackThreeSquare: "<b>Layout:</b> 3 stacked square images. <b>Size:</b> ~800x800px each.",
                     };
                     const currentLayout = editedBlock.data.imageLayout || 'singleSquare';
 
@@ -1829,7 +1862,7 @@ const AdminPage = () => {
                                 <option value="stackTwoSquare">Two Stacked Square Images</option>
                                 <option value="stackThreeSquare">Three Stacked Square Images</option>
                             </AdminSelect>
-                            <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation={recommendationTexts[currentLayout] || "Recommended width: 600px."}/>
+                            <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation={recommendationTexts[currentLayout] || ""}/>
                         </div>
                     );
                 }
@@ -1840,19 +1873,19 @@ const AdminPage = () => {
                             <option value="full">Full Width</option><option value="medium">Medium</option><option value="small">Small</option>
                         </AdminSelect>
                         <AdminInput label="Caption (Optional)" name="caption" value={editedBlock.data.caption} onChange={handleChange} />
-                        <div className="text-xs text-text-tertiary p-3 bg-base-dark rounded-md"><b>Size Guide:</b><br/>Full: ~1920px wide, Medium: ~1200px wide, Small: ~800px wide. Use 16:9 aspect ratio.</div>
+                        <div className="text-xs text-text-tertiary p-3 bg-base-dark rounded-md"><b>Size Guide (16:9 ratio):</b><br/><b>Full:</b> ~1920px wide. <b>Medium:</b> ~1200px wide. <b>Small:</b> ~800px wide.</div>
                     </div>
                 );
                  case 'imageGrid': case 'carousel': return (
                     <div className="space-y-4">
-                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="Grid: Use square images (e.g. 800x800). Carousel: use 16:9 images (e.g. 1200x675)." />
+                        <AdminImageArrayInput label="Images" value={editedBlock.data.images} onChange={handleImageArrayChange} recommendation="<b>Grid:</b> Use square images (e.g. 800x800). <b>Carousel:</b> use 16:9 images (e.g. 1200x675)." />
                     </div>
                 );
                 case 'imageRow': {
                     const guides = {
-                        singleWide: "<b>1 image.</b> Recommended size: 1920x1080px (16:9).",
-                        twoNarrow: "<b>2 images.</b> Recommended size: 800x1067px (3:4).",
-                        threeSquare: "<b>3 images.</b> Recommended size: 800x800px (1:1)."
+                        singleWide: "<b>Layout:</b> 1 image. <b>Size:</b> 1920x822px (21:9 ratio).",
+                        twoNarrow: "<b>Layout:</b> 2 images. <b>Size:</b> 800x1067px (3:4 ratio).",
+                        threeSquare: "<b>Layout:</b> 3 images. <b>Size:</b> 800x800px (1:1 ratio)."
                     };
                     return (
                         <div className="space-y-4">
@@ -1982,11 +2015,11 @@ const AdminPage = () => {
                  <div className="sticky top-0 bg-base-dark/80 backdrop-blur-sm z-10 py-4 mb-4 flex justify-end"><button onClick={handleSave} className={buttonClasses}>Save Logos</button></div>
                  <AdminSection title="Client Logos" gridCols="md:grid-cols-1">
                     <DraggableLogoGrid logos={localClientLogos} onUpdate={setLocalClientLogos} onRemove={(index) => removeLogo('client', index)} />
-                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Client Logo URL" value={newClientLogo} onChange={(e) => setNewClientLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/v0/b/your-project.appspot.com/o/file.jpg?alt=media&token=..." recommendation="In Firebase Storage, click the file, then copy the full 'Download URL' from the 'File location' panel. It must start with `https://firebasestorage.googleapis.com/...` and include an access token. A `gs://` link will not work." /><button onClick={() => addLogo('client')} className={buttonClasses + " self-end"}>Add</button></div>
+                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Client Logo URL" value={newClientLogo} onChange={(e) => setNewClientLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/..." recommendation="In Firebase Storage, copy the full 'Download URL'. It must include an access token." /><button onClick={() => addLogo('client')} className={buttonClasses + " self-end"}>Add</button></div>
                  </AdminSection>
                  <AdminSection title="Brand Logos" gridCols="md:grid-cols-1">
                     <DraggableLogoGrid logos={localBrandLogos} onUpdate={setLocalBrandLogos} onRemove={(index) => removeLogo('brand', index)} />
-                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Brand Logo URL" value={newBrandLogo} onChange={(e) => setNewNewBrandLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/v0/b/your-project.appspot.com/o/file.jpg?alt=media&token=..." recommendation="In Firebase Storage, click the file, then copy the full 'Download URL' from the 'File location' panel. It must start with `https://firebasestorage.googleapis.com/...` and include an access token. A `gs://` link will not work." /><button onClick={() => addLogo('brand')} className={buttonClasses + " self-end"}>Add</button></div>
+                    <div className="flex gap-2 mt-4"><AdminInput label="Add New Brand Logo URL" value={newBrandLogo} onChange={(e) => setNewNewBrandLogo(e.target.value)} placeholder="https://firebasestorage.googleapis.com/..." recommendation="In Firebase Storage, copy the full 'Download URL'. It must include an access token." /><button onClick={() => addLogo('brand')} className={buttonClasses + " self-end"}>Add</button></div>
                  </AdminSection>
             </div>
         );
