@@ -1758,39 +1758,48 @@
           images,
           style
         } = data;
+        const allImages = images.filter(img => img.url);
+        const useCarousel = allImages.length > 1;
+
+        // Mobile Carousel
+        if (useCarousel) {
+          return /*#__PURE__*/React.createElement("div", {
+            className: "md:hidden"
+          }, /*#__PURE__*/React.createElement(ProjectImageCarousel, {
+            images: allImages
+          }));
+        }
         if (style === 'trio') {
           return /*#__PURE__*/React.createElement("div", {
             className: "hidden md:grid grid-cols-3 gap-4 md:gap-8"
-          }, images.slice(0, 3).map((img, i) => /*#__PURE__*/React.createElement("div", {
+          }, allImages.slice(0, 3).map((img, i) => /*#__PURE__*/React.createElement("div", {
             key: i,
             className: "relative overflow-hidden rounded-lg shadow-xl aspect-[16/9] sm:aspect-[2/3]"
-          }, img.url ? /*#__PURE__*/React.createElement("img", {
+          }, /*#__PURE__*/React.createElement("img", {
             src: img.url,
             alt: img.alt,
             className: "absolute inset-0 w-full h-full object-cover"
-          }) : /*#__PURE__*/React.createElement("div", {
-            className: "absolute inset-0 w-full h-full bg-base-light"
           }))));
         }
         if (style === 'duo') {
           return /*#__PURE__*/React.createElement("div", {
             className: "hidden md:grid grid-cols-2 gap-4 md:gap-8 md:aspect-[16/9]"
-          }, images.slice(0, 2).map((img, i) => /*#__PURE__*/React.createElement("div", {
+          }, allImages.slice(0, 2).map((img, i) => /*#__PURE__*/React.createElement("div", {
             key: i,
             className: "relative w-full aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-lg shadow-xl"
-          }, img.url ? /*#__PURE__*/React.createElement("img", {
+          }, /*#__PURE__*/React.createElement("img", {
             src: img.url,
             alt: img.alt,
             className: "w-full h-full object-cover"
-          }) : /*#__PURE__*/React.createElement("div", {
-            className: "w-full h-full bg-base-light"
           }))));
         }
+
+        // Single Image (and fallback)
         return /*#__PURE__*/React.createElement("div", {
           className: "relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-xl"
-        }, images[0].url ? /*#__PURE__*/React.createElement("img", {
-          src: images[0].url,
-          alt: images[0].alt,
+        }, allImages.length > 0 ? /*#__PURE__*/React.createElement("img", {
+          src: allImages[0].url,
+          alt: allImages[0].alt,
           className: "w-full h-full object-cover"
         }) : /*#__PURE__*/React.createElement("div", {
           className: "w-full h-full bg-base-light"
@@ -3186,16 +3195,16 @@
                   height: 'medium'
                 };
                 break;
-              case 'imageGrid':
-              case 'carousel':
-                newBlock.data = {
-                  images: []
-                };
-                break;
               case 'imageRow':
                 newBlock.data = {
                   images: [],
                   style: 'threeSquare'
+                };
+                break;
+              case 'imageGrid':
+              case 'carousel':
+                newBlock.data = {
+                  images: []
                 };
                 break;
               case 'quote':
@@ -3358,7 +3367,7 @@
               ...p,
               homePageImage: v
             })),
-            recommendation: "Recommended size: 800x600px (4:3 ratio). Format: JPG, WEBP"
+            recommendation: "<b>Recommended size:</b> 800x600px (4:3 ratio). <b>Format:</b> JPG, WEBP"
           }))), /*#__PURE__*/React.createElement(AdminSection, {
             title: "Content Blocks",
             gridCols: "md:grid-cols-1"
@@ -3611,7 +3620,7 @@
                   label: "Image",
                   value: editedBlock.data.image,
                   onChange: handleImageChange,
-                  recommendation: "Recommended width: 1920px. Use a high-quality JPG or WEBP."
+                  recommendation: "<b>Recommended width:</b> 1920px. Use a high-quality JPG or WEBP."
                 }), /*#__PURE__*/React.createElement(AdminSelect, {
                   label: "Pano Height",
                   name: "height",
