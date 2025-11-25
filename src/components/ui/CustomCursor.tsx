@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, createContext, useContext, useRef, ReactNode } from 'react';
 
 const CursorStateContext = createContext<string>('default');
@@ -6,6 +5,15 @@ const CursorDispatchContext = createContext<any>(null);
 
 export const CustomCursorProvider = ({ children }: { children: ReactNode }) => {
   const [hoverState, setHoverState] = useState('default');
+  
+  useEffect(() => {
+    // Hide default cursor when the custom cursor provider is active
+    document.body.classList.add('hide-cursor');
+    return () => {
+      document.body.classList.remove('hide-cursor');
+    };
+  }, []);
+
   return (
     <CursorStateContext.Provider value={hoverState}>
       <CursorDispatchContext.Provider value={{ setHoverState }}>
