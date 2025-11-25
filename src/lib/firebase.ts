@@ -8,7 +8,7 @@ let auth: Auth | undefined;
 let db: Firestore | undefined;
 
 try {
-  const firebaseConfigStr = import.meta.env.VITE_FIREBASE_CONFIG;
+  const firebaseConfigStr = (import.meta as any).env.VITE_FIREBASE_CONFIG;
   if (firebaseConfigStr) {
     const firebaseConfig = JSON.parse(firebaseConfigStr);
     firebaseApp = initializeApp(firebaseConfig);
