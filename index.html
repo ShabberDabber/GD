@@ -4,8 +4,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>David Gaines | Creative Director Portfolio</title>
+    <title>David Gaines | GD!</title>
     <meta name="description" content="A personal portfolio website for Creative Director David Gaines."/>
+    <!-- Redirect for SPA on 404/reload handling -->
     <script>
       (function() {
         const path = window.location.pathname;
@@ -15,26 +16,9 @@
         }
       })();
     </script>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='10' fill='%230f172a' /><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='50' font-weight='900' fill='%23f8fafc'>GD!</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='10' fill='%230f172a' /><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='50' font-weight='900' fill='%23f8fafc'>GD!</text></svg>" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-      body.hide-cursor, body.hide-cursor * { cursor: none; }
-      .text-textured { color: var(--accent-color, #0891b2); }
-      .header-with-blur::before {
-        content: ''; position: absolute; inset: 0; z-index: -1;
-        background-color: rgba(var(--header-bg-color-rgb, 15, 23, 42), 0.8);
-        backdrop-filter: blur(12px);
-      }
-      .logo-dragging, .project-dragging, .block-dragging {
-        opacity: 0.5; transform: scale(1.02); box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); background: #1e293b;
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #0f172a; }
-      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #475569; }
-    </style>
     <script>
       tailwind.config = {
         theme: {
@@ -53,33 +37,38 @@
               'body-text': 'var(--body-text-color, #475569)',
               'tag-bg': 'var(--project-tag-bg-color, #1e293b)',
               'tag-text': 'var(--project-tag-text-color, #f8fafc)',
+              'page-background': 'var(--page-background-color, #ffffff)',
             },
             animation: {
-              'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
               'infinite-scroll-left': 'infinite-scroll-left 60s linear infinite',
-              'infinite-scroll-right': 'infinite-scroll-right 60s linear infinite',
             },
             keyframes: {
-              'fade-in-up': { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
               'infinite-scroll-left': { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-              'infinite-scroll-right': { '0%': { transform: 'translateX(-50%)' }, '100%': { transform: 'translateX(0)' } },
             }
           }
         }
       }
     </script>
-    <script type="importmap">
-    {
-      "imports": {
-        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-        "react": "https://esm.sh/react@18.2.0",
-        "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-        "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+    <style>
+      body.hide-cursor, body.hide-cursor * { cursor: none; }
+      .header-with-blur::before {
+        content: ''; position: absolute; inset: 0; z-index: -1;
+        background-color: rgba(var(--header-bg-color-rgb, 15, 23, 42), 0.95);
+        backdrop-filter: blur(12px);
       }
-    }
-    </script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+      .logo-dragging, .project-dragging, .block-dragging {
+        opacity: 0.5; transform: scale(1.02); box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); background: #1e293b; border: 2px solid #0891b2;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0f172a; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #475569; }
+      .mask-gradient {
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      }
+    </style>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KN0LN28WLD"></script>
     <script>
@@ -95,9 +84,22 @@
       window.addEventListener('load', trackPageView);
       window.addEventListener('hashchange', trackPageView);
     </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+          "react": "https://esm.sh/react@18.2.0",
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+          "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+          "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        }
+      }
+    </script>
 </head>
 <body class="bg-base-dark text-text-primary font-sans antialiased selection:bg-brand-primary selection:text-white">
 <div id="root"></div>
+
 <script type="text/babel" data-type="module">
 import React, { useState, useEffect, createContext, useContext, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
@@ -106,33 +108,29 @@ import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
 
 // --- Constants & Defaults ---
-const CLIENT_LOGOS = ['https://logo.clearbit.com/google.com', 'https://logo.clearbit.com/nike.com', 'https://logo.clearbit.com/apple.com'];
-const BRAND_LOGOS = ['https://logo.clearbit.com/sony.com', 'https://logo.clearbit.com/spotify.com', 'https://logo.clearbit.com/tesla.com'];
-
-const HERO_PROJECTS = [
+const HERO_PROJECTS_DEFAULT = [
   {
-    id: 'aura-app',
-    title: 'Aura Health',
-    client: 'Mindful Tech',
-    tags: ['Product Design', 'Strategy'],
-    heroImage: { url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200', alt: 'App Interface' },
-    homePageTitle: 'Aura Health',
-    homePageSubtitle: 'Redefining mental wellness through design.',
-    homePageImage: { url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800', alt: 'Aura' },
+    id: 'sample-project',
+    title: 'Sample Project',
+    client: 'Client Name',
+    tags: ['Strategy', 'Design'],
+    heroImage: { url: '', alt: '' },
+    homePageTitle: 'Sample Project',
+    homePageSubtitle: 'A brief description.',
     contentBlocks: [
-      { type: 'hero', data: { images: [{ url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200', alt: 'Hero' }], style: 'single' } },
+      { type: 'hero', data: { images: [{url: '', alt: ''}], style: 'single' } },
       { type: 'title', data: {} },
-      { type: 'text', data: { heading: 'Challenge', body: 'To create a calming experience.' } }
+      { type: 'text', data: { heading: 'Challenge', body: 'Description of the challenge.' } }
     ]
   }
 ];
 
-const ABOUT_ME = {
+const ABOUT_ME_DEFAULT = {
   name: 'David Gaines',
   title: 'Creative Director',
   logoText: 'GD!',
   headerIcon: { url: '', alt: '' },
-  heroImage: { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800', alt: 'Portrait' },
+  heroImage: { url: '', alt: '' },
   introStatement: "A highly accomplished Creative Leader...",
   heroIntro: "A creative leader translating complex brand strategy...",
   philosophy: [{ title: 'Strategy First', text: 'Design without strategy is art.' }],
@@ -140,11 +138,11 @@ const ABOUT_ME = {
   travelLog: [{ text: 'Tokyo', completed: true }],
   quotes: [],
   favorites: { movies: [], shows: [], podcasts: [], audiobooks: [] },
-  panorama: { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1600', alt: 'Pano' },
+  panorama: { url: '', alt: '' },
   inspirationGrid: [],
   socialLinks: [],
   email: 'dave@gainesdg.com',
-  phone: '949.463.1867',
+  phone: '555.555.5555',
   accentColor: '#0891b2',
   accentSecondaryColor: '#f0f9ff',
   headerBackgroundColor: '#0f172a',
@@ -158,7 +156,6 @@ const ABOUT_ME = {
   seoTitle: 'David Gaines Portfolio',
   seoDescription: 'Creative Director Portfolio',
   useMonochromeLogos: true,
-  pageHeadings: { aboutTitle: 'About Me', philosophySubtitle: 'Philosophy', obsessionsTitle: 'Obsessed With', bucketListTitle: 'Bucket List', mediaDietTitle: 'Media Diet', mediaDietMovies: 'Movies', mediaDietShows: 'Shows', mediaDietPodcasts: 'Podcasts', mediaDietAudiobooks: 'Audiobooks' }
 };
 
 // --- Firebase ---
@@ -182,7 +179,7 @@ const CursorHoverStateContext = createContext();
 const CursorHoverDispatchContext = createContext();
 
 const CursorHoverProvider = ({ children }) => {
-  const [hoverState, setHoverState] = useState({ isHovering: false, text: undefined });
+  const [hoverState, setHoverState] = useState({ isHovering: false });
   return (
     <CursorHoverStateContext.Provider value={hoverState}>
       <CursorHoverDispatchContext.Provider value={setHoverState}>
@@ -196,46 +193,44 @@ const ContentContext = createContext();
 const useContent = () => useContext(ContentContext);
 
 const ContentProvider = ({ children }) => {
-  const [heroProjects, setHeroProjects] = useState(HERO_PROJECTS);
-  const [aboutMe, setAboutMe] = useState(ABOUT_ME);
-  const [clientLogos, setClientLogos] = useState(CLIENT_LOGOS);
-  const [brandLogos, setBrandLogos] = useState(BRAND_LOGOS);
+  const [heroProjects, setHeroProjects] = useState(HERO_PROJECTS_DEFAULT);
+  const [aboutMe, setAboutMe] = useState(ABOUT_ME_DEFAULT);
+  const [clientLogos, setClientLogos] = useState([]);
+  const [brandLogos, setBrandLogos] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Local Load
-    const localP = localStorage.getItem('heroProjects');
-    if (localP) setHeroProjects(JSON.parse(localP));
-    const localA = localStorage.getItem('aboutMe');
-    if (localA) setAboutMe(JSON.parse(localA));
-    const localC = localStorage.getItem('clientLogos');
-    if (localC) setClientLogos(JSON.parse(localC));
-    const localB = localStorage.getItem('brandLogos');
-    if (localB) setBrandLogos(JSON.parse(localB));
-
-    if (db) {
-       // Firebase listeners would go here
-       // Simplified for stability in this turn
-    }
-    if (auth) onAuthStateChanged(auth, u => setIsAuthenticated(!!u));
-  }, []);
+    // CSS Variables Injection
+    const r = document.documentElement;
+    r.style.setProperty('--accent-color', aboutMe.accentColor);
+    r.style.setProperty('--accent-secondary-color', aboutMe.accentSecondaryColor);
+    r.style.setProperty('--header-bg-color-rgb', hexToRgb(aboutMe.headerBackgroundColor));
+    r.style.setProperty('--hero-bg-color', aboutMe.heroBackgroundColor);
+    r.style.setProperty('--hero-text-color', aboutMe.heroTextColor);
+    r.style.setProperty('--page-background-color', aboutMe.pageBackgroundColor);
+    r.style.setProperty('--body-headings-color', aboutMe.bodyHeadingsColor);
+    r.style.setProperty('--body-text-color', aboutMe.bodyTextColor);
+    r.style.setProperty('--project-tag-bg-color', aboutMe.projectTagBackgroundColor);
+    r.style.setProperty('--project-tag-text-color', aboutMe.projectTagTextColor);
+  }, [aboutMe]);
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--accent-color', aboutMe.accentColor);
-    document.documentElement.style.setProperty('--accent-secondary-color', aboutMe.accentSecondaryColor);
-    document.documentElement.style.setProperty('--header-bg-color-rgb', hexToRgb(aboutMe.headerBackgroundColor));
-    document.documentElement.style.setProperty('--hero-bg-color', aboutMe.heroBackgroundColor);
-    document.documentElement.style.setProperty('--hero-text-color', aboutMe.heroTextColor);
-    document.documentElement.style.setProperty('--page-background-color', aboutMe.pageBackgroundColor);
-    document.documentElement.style.setProperty('--body-headings-color', aboutMe.bodyHeadingsColor);
-    document.documentElement.style.setProperty('--body-text-color', aboutMe.bodyTextColor);
-    document.documentElement.style.setProperty('--project-tag-bg-color', aboutMe.projectTagBackgroundColor);
-    document.documentElement.style.setProperty('--project-tag-text-color', aboutMe.projectTagTextColor);
-  }, [aboutMe]);
+    const load = (key, setter) => {
+      const stored = localStorage.getItem(key);
+      if (stored) setter(JSON.parse(stored));
+    };
+    load('heroProjects', setHeroProjects);
+    load('aboutMe', setAboutMe);
+    load('clientLogos', setClientLogos);
+    load('brandLogos', setBrandLogos);
+    
+    if (auth) onAuthStateChanged(auth, u => setIsAuthenticated(!!u));
+    // Firebase listeners would typically go here for live updates
+  }, []);
 
   const save = (key, data) => {
     localStorage.setItem(key, JSON.stringify(data));
-    if (db && isAuthenticated) setDoc(doc(db, 'content', key), { data }).catch(console.error);
+    if (db && isAuthenticated) setDoc(doc(db, 'content', key), { data }).catch(e => console.error("Save error", e));
   };
 
   return (
@@ -243,10 +238,11 @@ const ContentProvider = ({ children }) => {
       heroProjects, updateHeroProjects: (d) => { setHeroProjects(d); save('heroProjects', d); },
       aboutMe, updateAboutMe: (d) => { setAboutMe(d); save('aboutMe', d); },
       clientLogos, brandLogos, updateLogos: (c, b) => { setClientLogos(c); setBrandLogos(b); save('clientLogos', c); save('brandLogos', b); },
-      isAuthenticated, resetToDefaults: () => { 
-        setHeroProjects(HERO_PROJECTS); save('heroProjects', HERO_PROJECTS);
-        setAboutMe(ABOUT_ME); save('aboutMe', ABOUT_ME);
-        alert("Reset complete");
+      isAuthenticated,
+      resetToDefaults: () => {
+         setHeroProjects(HERO_PROJECTS_DEFAULT); save('heroProjects', HERO_PROJECTS_DEFAULT);
+         setAboutMe(ABOUT_ME_DEFAULT); save('aboutMe', ABOUT_ME_DEFAULT);
+         alert("Reset complete. Reload to see changes.");
       }
     }}>
       {children}
@@ -272,13 +268,11 @@ const useRouter = () => {
 };
 
 // --- Icons ---
-const ArrowUpRightIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" /></svg>;
-const ArrowLeftIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>;
-const ArrowRightIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>;
 const MenuIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>;
 const CloseIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+const ArrowLeftIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>;
 
-// --- UI Components ---
+// --- Components ---
 const CustomCursor = () => {
   const hoverState = useContext(CursorHoverStateContext);
   const [pos, setPos] = useState({ x: -100, y: -100 });
@@ -288,7 +282,7 @@ const CustomCursor = () => {
     return () => window.removeEventListener('mousemove', move);
   }, []);
   
-  if (window.innerWidth < 768) return null;
+  if (typeof window !== 'undefined' && window.innerWidth < 768) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999]">
@@ -316,22 +310,12 @@ const Header = () => {
           {aboutMe.headerIcon?.url && <img src={aboutMe.headerIcon.url} alt="icon" className="w-8 h-8 object-contain" />}
           <span className="text-2xl font-black text-white tracking-tighter group-hover:text-brand-primary transition-colors">{aboutMe.logoText || 'GD!'}</span>
         </a>
-
-        {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-12">
           <a href="#/" className="text-sm font-bold tracking-widest uppercase text-white hover:text-brand-primary transition-colors">Home</a>
           <a href="#/about" className="text-sm font-bold tracking-widest uppercase text-white hover:text-brand-primary transition-colors">About</a>
-          <div 
-            className="relative group"
-            onMouseEnter={() => setIsContactOpen(true)}
-            onMouseLeave={() => setIsContactOpen(false)}
-          >
-            <button className="text-sm font-bold tracking-widest uppercase text-white hover:text-brand-primary transition-colors py-2">
-              Contact
-            </button>
-            <div 
-              className={`absolute top-0 right-[-100px] w-[400px] bg-brand-primary transform transition-all duration-500 ease-in-out origin-top ${isContactOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'} pt-24 pb-12 px-8 -z-10 shadow-2xl rounded-bl-3xl`}
-            >
+          <div className="relative group" onMouseEnter={() => setIsContactOpen(true)} onMouseLeave={() => setIsContactOpen(false)}>
+            <button className="text-sm font-bold tracking-widest uppercase text-white hover:text-brand-primary transition-colors py-2">Contact</button>
+            <div className={`absolute top-0 right-[-100px] w-[400px] bg-brand-primary transform transition-all duration-500 ease-in-out origin-top ${isContactOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'} pt-24 pb-12 px-8 -z-10 shadow-2xl rounded-bl-3xl`}>
               <div className="flex flex-col gap-4 text-right">
                 <a href={`mailto:${aboutMe.email}`} className="text-xl font-bold text-white hover:opacity-80 block">{aboutMe.email}</a>
                 <a href={`tel:${aboutMe.phone}`} className="text-xl font-bold text-white hover:opacity-80 block">{aboutMe.phone}</a>
@@ -339,14 +323,10 @@ const Header = () => {
             </div>
           </div>
         </nav>
-
-        {/* Mobile Menu Toggle */}
         <button className="md:hidden z-50 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <CloseIcon className="w-8 h-8" /> : <MenuIcon className="w-8 h-8" />}
         </button>
       </div>
-
-      {/* Mobile Nav */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-base-dark z-40 flex flex-col items-center justify-center gap-8 md:hidden">
           <a href="#/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-bold text-white">Home</a>
@@ -375,8 +355,7 @@ const Footer = () => {
           <div className="flex justify-center md:justify-end gap-6">
              {aboutMe.socialLinks?.map((link, i) => (
                <a key={i} href={link.linkUrl} target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand-primary transition-colors transform hover:scale-110">
-                 {/* Placeholder for icons based on link.iconUrl */}
-                 <span className="uppercase text-xs font-bold border border-white px-2 py-1 rounded">{link.iconUrl}</span>
+                 {link.iconUrl ? <img src={link.iconUrl} alt="social" className="h-6 w-6" /> : <span className="uppercase text-xs font-bold border border-white px-2 py-1 rounded">LINK</span>}
                </a>
              ))}
           </div>
@@ -390,56 +369,55 @@ const Footer = () => {
   );
 };
 
-// --- Block Renderers ---
-
+// --- Renderers ---
 const HeroBlock = ({ data }) => {
   const images = data.images || [];
-  // Mobile Carousel / Desktop Grid
-  if (images.length === 0) return null;
+  if (!images.length) return null;
+  const isMobile = window.innerWidth < 768;
   
-  if (images.length === 2) {
+  if (isMobile && images.length > 1) {
     return (
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 container mx-auto px-4 max-w-7xl my-8">
-         {images.map((img, i) => (
-           <div key={i} className="aspect-video relative overflow-hidden rounded-lg">
-             <img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" />
-           </div>
-         ))}
-       </div>
-    );
-  }
-  
-  if (images.length === 3) {
-     return (
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 container mx-auto px-4 max-w-7xl my-8">
-         {images.map((img, i) => (
-           <div key={i} className="aspect-video relative overflow-hidden rounded-lg">
-             <img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" />
-           </div>
-         ))}
-       </div>
+      <div className="container mx-auto px-4 max-w-7xl my-8 overflow-x-auto flex gap-4 snap-x">
+        {images.map((img, i) => (
+          <div key={i} className="min-w-[90%] snap-center aspect-video relative overflow-hidden rounded-lg">
+            {img.url ? <img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" /> : <div className="bg-gray-200 absolute inset-0" />}
+          </div>
+        ))}
+      </div>
     );
   }
 
-  // Single default
+  const gridClass = images.length === 3 ? 'grid-cols-1 md:grid-cols-3' : images.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1';
   return (
-    <div className="container mx-auto px-4 max-w-7xl my-8">
-      <div className="aspect-video relative overflow-hidden rounded-lg shadow-2xl">
-        <img src={images[0].url} alt={images[0].alt} className="absolute inset-0 w-full h-full object-cover" />
+    <div className={`grid ${gridClass} gap-4 container mx-auto px-4 max-w-7xl my-8`}>
+      {images.map((img, i) => (
+         <div key={i} className="aspect-video relative overflow-hidden rounded-lg shadow-xl">
+           {img.url ? <img src={img.url} alt={img.alt} className="absolute inset-0 w-full h-full object-cover" /> : <div className="bg-gray-200 absolute inset-0" />}
+         </div>
+      ))}
+    </div>
+  );
+};
+
+const PanoImageBlock = ({ data }) => {
+  const { image, height } = data;
+  const h = height || '250';
+  return (
+    <div className="container mx-auto px-4 max-w-7xl my-12">
+      <div className="relative w-full overflow-hidden rounded-lg shadow-lg" style={{ height: `${h}px` }}>
+        {image?.url ? <img src={image.url} alt={image.alt} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">No Image</div>}
       </div>
     </div>
   );
 };
 
 const TitleBlock = ({ project }) => (
-  <div className="container mx-auto px-4 max-w-4xl text-center my-16">
-    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-body-headings mb-4 tracking-tight leading-none whitespace-nowrap overflow-hidden text-ellipsis">{project.title}</h1>
-    <h2 className="text-xl md:text-2xl font-bold text-brand-primary mb-8">{project.client}</h2>
+  <div className="container mx-auto px-4 max-w-5xl text-center my-16">
+    <h1 className="text-4xl md:text-7xl font-black text-body-headings mb-4 leading-none">{project.title}</h1>
+    <h2 className="text-xl md:text-3xl font-bold text-brand-primary mb-8">{project.client}</h2>
     <div className="flex flex-wrap justify-center gap-3">
       {project.tags.map((tag, i) => (
-        <span key={i} className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-tag-bg text-tag-text">
-          {tag}
-        </span>
+        <span key={i} className="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-tag-bg text-tag-text">{tag}</span>
       ))}
     </div>
   </div>
@@ -447,46 +425,20 @@ const TitleBlock = ({ project }) => (
 
 const TextBlock = ({ data }) => (
   <div className="container mx-auto px-4 max-w-3xl my-16">
-    {data.heading && <h3 className="text-2xl font-bold text-body-headings mb-6">{data.heading}</h3>}
-    <div className="prose prose-lg text-body-text leading-relaxed" dangerouslySetInnerHTML={{ __html: data.body }} />
+    {data.heading && <h3 className="text-3xl font-bold text-body-headings mb-6">{data.heading}</h3>}
+    <div className="prose prose-xl text-body-text leading-relaxed" dangerouslySetInnerHTML={{ __html: data.body }} />
   </div>
 );
 
-const PanoImageBlock = ({ data }) => {
-  const { image, height = '250' } = data;
-  const heightClasses = {
-    '100': 'h-[100px]',
-    '125': 'h-[125px]',
-    '200': 'h-[200px]',
-    '250': 'h-[250px]',
-    '300': 'h-[300px]'
-  };
-  const hClass = heightClasses[height] || 'h-[250px]';
-
-  return (
-    <div className="container mx-auto px-4 max-w-7xl my-12">
-      <div className={`relative w-full ${hClass} overflow-hidden rounded-lg shadow-lg`}>
-        {image?.url ? (
-          <img src={image.url} alt={image.alt} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 font-mono text-sm">NO IMAGE SET</div>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const TextWithImagesBlock = ({ data }) => {
   const { heading, body, images = [], align = 'right', layout = 'square' } = data;
-  // Layout logic for image aspect ratios
   const aspectRatio = layout === 'tall' ? 'aspect-[2/3]' : layout === 'extratall' ? 'aspect-[1/2]' : 'aspect-square';
-  
   return (
     <div className="container mx-auto px-4 max-w-6xl my-16">
       <div className={`flex flex-col md:flex-row gap-12 items-start ${align === 'left' ? 'md:flex-row-reverse' : ''}`}>
         <div className="flex-1">
-          {heading && <h3 className="text-2xl font-bold text-body-headings mb-6">{heading}</h3>}
-          <div className="prose prose-lg text-body-text" dangerouslySetInnerHTML={{ __html: body }} />
+          {heading && <h3 className="text-3xl font-bold text-body-headings mb-6">{heading}</h3>}
+          <div className="prose prose-xl text-body-text" dangerouslySetInnerHTML={{ __html: body }} />
         </div>
         <div className="w-full md:w-1/3 flex flex-col gap-6">
            {images.map((img, i) => (
@@ -500,70 +452,13 @@ const TextWithImagesBlock = ({ data }) => {
   );
 };
 
-// --- Page Components ---
-
-const CaseStudyDetailPage = ({ projectId }) => {
-  const { heroProjects } = useContent();
-  const project = heroProjects.find(p => p.id === projectId);
-  
-  useEffect(() => { window.scrollTo(0, 0); }, [projectId]);
-
-  if (!project) return <div className="min-h-screen bg-page-background flex items-center justify-center text-body-headings">Project not found</div>;
-
-  const renderBlock = (block, index) => {
-    switch (block.type) {
-      case 'hero': return <HeroBlock key={index} data={block.data} />;
-      case 'title': return <TitleBlock key={index} project={project} />;
-      case 'text': return <TextBlock key={index} data={block.data} />;
-      case 'textWithImages': return <TextWithImagesBlock key={index} data={block.data} />;
-      case 'panoImage': return <PanoImageBlock key={index} data={block.data} />;
-      // Fallback for other blocks if needed
-      default: return null;
-    }
-  };
-
-  return (
-    <div className="min-h-screen pt-24 pb-32" style={{ backgroundColor: 'var(--page-background-color)' }}>
-      <div className="h-12 w-full" style={{ backgroundColor: 'var(--page-background-color)' }}></div> {/* Top spacer */}
-      {project.contentBlocks?.map((block, i) => renderBlock(block, i))}
-      
-      {/* Navigation */}
-      <div className="container mx-auto px-6 mt-32 border-t border-gray-200 pt-16 flex justify-between">
-         <a href="#/" className="text-body-headings font-bold hover:text-brand-primary flex items-center gap-2"><ArrowLeftIcon className="w-4 h-4" /> Back to Home</a>
-      </div>
-    </div>
-  );
-};
-
+// --- Pages ---
 const HomePage = () => {
-  const { heroProjects, aboutMe, clientLogos, brandLogos, updateHeroProjects } = useContent();
+  const { heroProjects, aboutMe, clientLogos, brandLogos } = useContent();
   const setHoverState = useContext(CursorHoverDispatchContext);
-
-  // Drag and Drop Logic
-  const dragItem = useRef();
-  const dragOverItem = useRef();
-
-  const handleDragStart = (e, position) => {
-    dragItem.current = position;
-    e.target.closest('.project-card').classList.add('project-dragging');
-  };
-  const handleDragEnter = (e, position) => {
-    dragOverItem.current = position;
-  };
-  const handleDragEnd = (e) => {
-    e.target.closest('.project-card').classList.remove('project-dragging');
-    const copy = [...heroProjects];
-    const itemContent = copy[dragItem.current];
-    copy.splice(dragItem.current, 1);
-    copy.splice(dragOverItem.current, 0, itemContent);
-    dragItem.current = null;
-    dragOverItem.current = null;
-    updateHeroProjects(copy);
-  };
 
   return (
     <div className="min-h-screen bg-base-dark text-white">
-      {/* Hero */}
       <section className="min-h-[90vh] flex flex-col justify-center px-6 pt-32 relative overflow-hidden" style={{ backgroundColor: 'var(--hero-bg-color)' }}>
         <div className="container mx-auto relative z-10">
           <h1 className="text-[12vw] leading-[0.9] font-black tracking-tighter mb-8" style={{ color: 'var(--hero-text-color)' }}>
@@ -574,22 +469,15 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Projects */}
-      <section className="py-32 bg-white text-base-dark">
+      <section className="pt-48 pb-24 bg-white text-base-dark">
         <div className="container mx-auto px-4">
            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-24">
-             {heroProjects.map((project, index) => (
-               <a 
-                 key={project.id}
-                 href={`#/project/${project.id}`}
-                 className="project-card group block cursor-none"
-                 onMouseEnter={() => setHoverState({ isHovering: true, text: '' })} // Removed VIEW text
-                 onMouseLeave={() => setHoverState({ isHovering: false, text: undefined })}
-                 draggable // Allow drag if admin enabled? Only enabled in admin actually. Keeping structure simple here.
-               >
-                 <div className="aspect-[4/3] overflow-hidden rounded-lg mb-6 relative">
-                   <img src={project.homePageImage?.url || project.heroImage?.url} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+             {heroProjects.map((project) => (
+               <a key={project.id} href={`#/project/${project.id}`} className="project-card group block cursor-none"
+                  onMouseEnter={() => setHoverState({ isHovering: true })}
+                  onMouseLeave={() => setHoverState({ isHovering: false })}>
+                 <div className="aspect-[4/3] overflow-hidden rounded-lg mb-6 relative bg-gray-100">
+                   {project.homePageImage?.url ? <img src={project.homePageImage.url} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /> : null}
                  </div>
                  <h3 className="text-3xl font-bold mb-2">{project.homePageTitle || project.title}</h3>
                  <p className="text-text-tertiary text-lg">{project.homePageSubtitle}</p>
@@ -601,15 +489,13 @@ const HomePage = () => {
            </div>
         </div>
       </section>
-
-      {/* Partners */}
       <section className="py-24 bg-white text-base-dark overflow-hidden">
         <div className="container mx-auto px-6 mb-12">
            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Clients</h3>
            <div className="flex gap-12 overflow-hidden whitespace-nowrap mask-gradient">
               <div className="animate-infinite-scroll-left flex gap-16 items-center">
                  {[...clientLogos, ...clientLogos].map((logo, i) => (
-                    <img key={i} src={logo} className={`h-8 w-auto object-contain ${aboutMe.useMonochromeLogos ? 'filter grayscale brightness-50 opacity-70' : ''}`} alt="client" />
+                    <img key={i} src={logo} className={`h-12 w-auto object-contain ${aboutMe.useMonochromeLogos ? 'filter grayscale brightness-50 opacity-70' : ''}`} alt="client" />
                  ))}
               </div>
            </div>
@@ -619,7 +505,7 @@ const HomePage = () => {
            <div className="flex gap-12 overflow-hidden whitespace-nowrap mask-gradient">
               <div className="animate-infinite-scroll-left flex gap-16 items-center">
                  {[...brandLogos, ...brandLogos].map((logo, i) => (
-                    <img key={i} src={logo} className={`h-8 w-auto object-contain ${aboutMe.useMonochromeLogos ? 'filter grayscale brightness-50 opacity-70' : ''}`} alt="brand" />
+                    <img key={i} src={logo} className={`h-12 w-auto object-contain ${aboutMe.useMonochromeLogos ? 'filter grayscale brightness-50 opacity-70' : ''}`} alt="brand" />
                  ))}
               </div>
            </div>
@@ -629,158 +515,155 @@ const HomePage = () => {
   );
 };
 
-// --- Admin Components ---
-const AdminPage = () => {
-  const { heroProjects, updateHeroProjects, resetToDefaults } = useContent();
-  const [editingProject, setEditingProject] = useState(null);
-  const [activeTab, setActiveTab] = useState('projects');
-
-  // Simple drag sort for projects
-  const dragItem = useRef();
-  const dragOverItem = useRef();
-  
-  const onDragStart = (e, index) => { dragItem.current = index; };
-  const onDragEnter = (e, index) => { dragOverItem.current = index; };
-  const onDragEnd = () => {
-      const copy = [...heroProjects];
-      const item = copy[dragItem.current];
-      copy.splice(dragItem.current, 1);
-      copy.splice(dragOverItem.current, 0, item);
-      dragItem.current = null; dragOverItem.current = null;
-      updateHeroProjects(copy);
-  };
-
-  if (editingProject) {
-     return <ProjectBuilder 
-        initialProject={editingProject} 
-        onSave={(p) => {
-           const updated = heroProjects.map(prj => prj.id === p.id ? p : prj);
-           if(!heroProjects.find(x => x.id === p.id)) updated.push(p);
-           updateHeroProjects(updated);
-           setEditingProject(null);
-        }}
-        onCancel={() => setEditingProject(null)}
-     />;
-  }
-
+const AboutPage = () => {
+  const { aboutMe } = useContent();
   return (
-    <div className="min-h-screen bg-base-dark text-white p-8 pt-32">
-      <div className="container mx-auto max-w-5xl">
-        <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
-        <div className="flex gap-4 mb-8 border-b border-gray-700 pb-4">
-          <button onClick={() => setActiveTab('projects')} className={`px-4 py-2 rounded ${activeTab === 'projects' ? 'bg-brand-primary' : 'bg-base-medium'}`}>Projects</button>
-          <button onClick={() => setActiveTab('danger')} className={`px-4 py-2 rounded ${activeTab === 'danger' ? 'bg-red-600' : 'bg-base-medium'}`}>Danger Zone</button>
-        </div>
-
-        {activeTab === 'projects' && (
-          <div className="space-y-4">
-            <button onClick={() => setEditingProject({ id: `new-${Date.now()}`, title: 'New Project', contentBlocks: [] })} className="bg-brand-primary px-6 py-3 rounded font-bold mb-4">+ Add New Project</button>
-            <div className="space-y-2">
-               {heroProjects.map((p, index) => (
-                 <div key={p.id} 
-                      draggable 
-                      onDragStart={(e) => onDragStart(e, index)}
-                      onDragEnter={(e) => onDragEnter(e, index)}
-                      onDragEnd={onDragEnd}
-                      className="bg-base-medium p-4 rounded flex justify-between items-center cursor-move hover:bg-gray-800 transition-colors"
-                 >
-                    <span>{p.title}</span>
-                    <div className="flex gap-2">
-                       <button onClick={() => setEditingProject(p)} className="text-sm bg-base-dark px-3 py-1 rounded">Edit</button>
-                    </div>
+    <div className="min-h-screen bg-page-background text-body-text pt-32 pb-24">
+       <div className="container mx-auto px-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-24">
+           <div>
+             <h1 className="text-4xl md:text-6xl font-black text-body-headings mb-8">{aboutMe.pageHeadings?.aboutTitle || 'About Me'}</h1>
+             <div className="prose prose-lg text-body-text" dangerouslySetInnerHTML={{ __html: aboutMe.introStatement }} />
+           </div>
+           <div className="aspect-[4/5] rounded-lg overflow-hidden bg-gray-200">
+             {aboutMe.heroImage?.url && <img src={aboutMe.heroImage.url} alt="Portrait" className="w-full h-full object-cover" />}
+           </div>
+         </div>
+         
+         <div className="border-t border-gray-200 py-16">
+            <h2 className="text-2xl font-bold text-body-headings mb-8">{aboutMe.pageHeadings?.philosophySubtitle || 'Philosophy'}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               {aboutMe.philosophy.map((item, i) => (
+                 <div key={i}>
+                   <h3 className="font-bold text-brand-primary mb-2">{item.title}</h3>
+                   <p>{item.text}</p>
                  </div>
                ))}
             </div>
-          </div>
-        )}
-
-        {activeTab === 'danger' && (
-          <div className="bg-red-900/30 border border-red-500 p-6 rounded">
-             <h3 className="text-red-500 font-bold mb-2">Reset Content</h3>
-             <p className="text-sm mb-4">This will overwrite all your current data with the template defaults. This cannot be undone.</p>
-             <button onClick={resetToDefaults} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Reset Content to Template Defaults</button>
-          </div>
-        )}
-      </div>
+         </div>
+         
+         <div className="border-t border-gray-200 py-16">
+            <h2 className="text-2xl font-bold text-body-headings mb-8">{aboutMe.pageHeadings?.bucketListTitle || 'Bucket List'}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {aboutMe.travelLog.map((item, i) => (
+                 <div key={i} className="flex items-center gap-4">
+                    <div className={`w-4 h-4 border border-gray-400 ${item.completed ? 'bg-brand-primary border-brand-primary' : ''}`} />
+                    <span className={item.completed ? 'line-through text-gray-400' : ''}>{item.text}</span>
+                 </div>
+               ))}
+            </div>
+         </div>
+       </div>
     </div>
   );
 };
 
+const CaseStudyDetailPage = ({ projectId }) => {
+  const { heroProjects } = useContent();
+  const project = heroProjects.find(p => p.id === projectId);
+  
+  useEffect(() => { window.scrollTo(0, 0); }, [projectId]);
+
+  if (!project) return <div className="min-h-screen pt-32 text-center">Project not found</div>;
+
+  return (
+    <div className="min-h-screen bg-page-background pt-24 pb-32">
+       {project.contentBlocks?.map((block, i) => {
+          switch(block.type) {
+             case 'hero': return <HeroBlock key={i} data={block.data} />;
+             case 'title': return <TitleBlock key={i} project={project} />;
+             case 'text': return <TextBlock key={i} data={block.data} />;
+             case 'textWithImages': return <TextWithImagesBlock key={i} data={block.data} />;
+             case 'panoImage': return <PanoImageBlock key={i} data={block.data} />;
+             default: return null;
+          }
+       })}
+       <div className="container mx-auto px-6 mt-24 pt-12 border-t border-gray-200">
+          <a href="#/" className="flex items-center gap-2 font-bold text-body-headings hover:text-brand-primary"><ArrowLeftIcon className="w-4 h-4" /> Back to Home</a>
+       </div>
+    </div>
+  );
+};
+
+// --- Admin ---
 const ProjectBuilder = ({ initialProject, onSave, onCancel }) => {
   const [project, setProject] = useState(initialProject);
   const [editingBlockIndex, setEditingBlockIndex] = useState(null);
+  
+  // Drag Sort for Blocks
+  const dragItem = useRef();
+  const dragOverItem = useRef();
+  const onDragStart = (e, i) => { dragItem.current = i; };
+  const onDragEnter = (e, i) => { dragOverItem.current = i; };
+  const onDragEnd = () => {
+     const copy = [...project.contentBlocks];
+     const item = copy[dragItem.current];
+     copy.splice(dragItem.current, 1);
+     copy.splice(dragOverItem.current, 0, item);
+     dragItem.current = null; dragOverItem.current = null;
+     setProject({...project, contentBlocks: copy});
+  };
 
   const addBlock = (type) => {
-    let data = {};
-    if (type === 'panoImage') data = { image: { url: '', alt: '' }, height: '250' };
-    else if (type === 'text') data = { heading: 'Heading', body: 'Content goes here.' };
-    
-    setProject({ ...project, contentBlocks: [...(project.contentBlocks || []), { type, data }] });
-  };
-  
-  const updateBlock = (index, newData) => {
-     const updated = [...project.contentBlocks];
-     updated[index].data = newData;
-     setProject({ ...project, contentBlocks: updated });
-     setEditingBlockIndex(null);
-  };
-  
-  const removeBlock = (index) => {
-     const updated = [...project.contentBlocks];
-     updated.splice(index, 1);
-     setProject({ ...project, contentBlocks: updated });
+     let data = {};
+     if (type === 'panoImage') data = { image: {url: '', alt: ''}, height: '250' };
+     else if (type === 'hero') data = { images: [{url: '', alt: ''}], style: 'single' };
+     else if (type === 'text') data = { heading: '', body: '' };
+     setProject({...project, contentBlocks: [...(project.contentBlocks||[]), {type, data}]});
   };
 
   return (
     <div className="min-h-screen bg-base-dark text-white p-8 pt-32">
-      {editingBlockIndex !== null && (
-        <BlockEditorModal 
-           block={project.contentBlocks[editingBlockIndex]} 
-           onSave={(data) => updateBlock(editingBlockIndex, data)} 
-           onClose={() => setEditingBlockIndex(null)} 
-        />
-      )}
-      
-      <div className="container mx-auto flex gap-8">
-        {/* Main Content */}
-        <div className="flex-1 space-y-8">
-           <div className="bg-base-medium p-6 rounded">
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Project Title</label>
-              <input value={project.title} onChange={e => setProject({...project, title: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white" />
-           </div>
-
-           <div className="space-y-4">
-              {project.contentBlocks?.map((block, i) => (
-                 <div key={i} className="bg-base-medium p-4 rounded border border-gray-700 flex justify-between items-center">
-                    <span className="font-mono text-sm text-brand-primary">{block.type}</span>
-                    <div className="flex gap-2">
-                       <button onClick={() => setEditingBlockIndex(i)} className="text-xs bg-blue-600 px-2 py-1 rounded">Edit</button>
-                       <button onClick={() => removeBlock(i)} className="text-xs bg-red-600 px-2 py-1 rounded">Delete</button>
-                    </div>
-                 </div>
-              ))}
-           </div>
-           
-           <div className="flex justify-between pt-8">
-              <button onClick={onCancel} className="text-gray-400">Cancel</button>
-              <button onClick={() => onSave(project)} className="bg-green-600 px-8 py-3 rounded font-bold">Save Project</button>
-           </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="w-64 space-y-4">
-           <div className="bg-base-medium p-4 rounded sticky top-32">
-              <h3 className="font-bold mb-4">Add Content Block</h3>
-              <div className="space-y-2 flex flex-col">
-                 <button onClick={() => addBlock('hero')} className="bg-base-dark hover:bg-gray-700 p-2 rounded text-left text-sm">Hero Section</button>
-                 <button onClick={() => addBlock('title')} className="bg-base-dark hover:bg-gray-700 p-2 rounded text-left text-sm">Title Block</button>
-                 <button onClick={() => addBlock('text')} className="bg-base-dark hover:bg-gray-700 p-2 rounded text-left text-sm">Text Block</button>
-                 <button onClick={() => addBlock('textWithImages')} className="bg-base-dark hover:bg-gray-700 p-2 rounded text-left text-sm">Text + Images</button>
-                 <button onClick={() => addBlock('panoImage')} className="bg-brand-primary hover:bg-blue-600 p-2 rounded text-left text-sm font-bold">Pano Image</button>
-              </div>
-           </div>
-        </div>
-      </div>
+       {editingBlockIndex !== null && <BlockEditorModal block={project.contentBlocks[editingBlockIndex]} onSave={(d) => {
+          const blocks = [...project.contentBlocks];
+          blocks[editingBlockIndex].data = d;
+          setProject({...project, contentBlocks: blocks});
+          setEditingBlockIndex(null);
+       }} onClose={() => setEditingBlockIndex(null)} />}
+       
+       <div className="container mx-auto flex gap-8">
+          <div className="flex-1">
+             <div className="bg-base-medium p-6 rounded mb-8">
+                <h2 className="text-xl font-bold mb-4">Project Details</h2>
+                <input className="w-full bg-base-dark border border-gray-700 p-2 rounded mb-2 text-white" value={project.title} onChange={e => setProject({...project, title: e.target.value})} placeholder="Title" />
+                <input className="w-full bg-base-dark border border-gray-700 p-2 rounded mb-2 text-white" value={project.client} onChange={e => setProject({...project, client: e.target.value})} placeholder="Client" />
+             </div>
+             
+             <div className="space-y-2">
+                {project.contentBlocks?.map((block, i) => (
+                   <div key={i} draggable onDragStart={(e) => onDragStart(e, i)} onDragEnter={(e) => onDragEnter(e, i)} onDragEnd={onDragEnd} className="bg-base-medium p-4 rounded border border-gray-700 flex justify-between items-center cursor-move hover:bg-gray-800">
+                      <span className="font-mono text-brand-primary">{block.type}</span>
+                      <div className="flex gap-2">
+                         <button onClick={() => setEditingBlockIndex(i)} className="text-xs bg-blue-600 px-2 py-1 rounded">Edit</button>
+                         <button onClick={() => {
+                            const blocks = [...project.contentBlocks];
+                            blocks.splice(i, 1);
+                            setProject({...project, contentBlocks: blocks});
+                         }} className="text-xs bg-red-600 px-2 py-1 rounded">Delete</button>
+                      </div>
+                   </div>
+                ))}
+             </div>
+             
+             <div className="flex justify-end gap-4 mt-8">
+                <button onClick={onCancel} className="text-gray-400">Cancel</button>
+                <button onClick={() => onSave(project)} className="bg-green-600 px-6 py-2 rounded font-bold">Save Project</button>
+             </div>
+          </div>
+          
+          <div className="w-64">
+             <div className="bg-base-medium p-4 rounded sticky top-32">
+                <h3 className="font-bold mb-4">Add Content Block</h3>
+                <div className="flex flex-col gap-2">
+                   <button onClick={() => addBlock('hero')} className="text-left p-2 bg-base-dark rounded hover:bg-gray-700 text-sm">Hero Section</button>
+                   <button onClick={() => addBlock('title')} className="text-left p-2 bg-base-dark rounded hover:bg-gray-700 text-sm">Title Block</button>
+                   <button onClick={() => addBlock('text')} className="text-left p-2 bg-base-dark rounded hover:bg-gray-700 text-sm">Text Block</button>
+                   <button onClick={() => addBlock('textWithImages')} className="text-left p-2 bg-base-dark rounded hover:bg-gray-700 text-sm">Text + Images</button>
+                   <button onClick={() => addBlock('panoImage')} className="text-left p-2 bg-brand-primary rounded hover:bg-blue-600 text-sm font-bold">Pano Image</button>
+                </div>
+             </div>
+          </div>
+       </div>
     </div>
   );
 };
@@ -814,11 +697,44 @@ const BlockEditorModal = ({ block, onSave, onClose }) => {
               )}
               {block.type === 'text' && (
                  <>
-                   <input value={data.heading} onChange={e => setData({...data, heading: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white font-bold" placeholder="Heading" />
-                   <textarea value={data.body} onChange={e => setData({...data, body: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white h-48" placeholder="Content..." />
+                   <input value={data.heading || ''} onChange={e => setData({...data, heading: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white font-bold" placeholder="Heading" />
+                   <textarea value={data.body || ''} onChange={e => setData({...data, body: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white h-48" placeholder="Content..." />
                  </>
               )}
-              {/* Other block forms omitted for brevity but logic is similar */}
+               {block.type === 'hero' && (
+                   <div>
+                       <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Images (Add 1, 2, or 3)</label>
+                       {data.images?.map((img, i) => (
+                           <div key={i} className="flex gap-2 mb-2">
+                               <input value={img.url} onChange={e => {
+                                   const newImages = [...data.images];
+                                   newImages[i].url = e.target.value;
+                                   setData({...data, images: newImages});
+                               }} className="flex-1 bg-base-dark border border-gray-700 p-2 rounded text-white" placeholder="URL" />
+                               <button onClick={() => {
+                                   const newImages = [...data.images];
+                                   newImages.splice(i, 1);
+                                   setData({...data, images: newImages});
+                               }} className="text-red-500">X</button>
+                           </div>
+                       ))}
+                       <button onClick={() => setData({...data, images: [...(data.images||[]), {url: '', alt: ''}]})} className="text-brand-primary text-sm">+ Add Image</button>
+                   </div>
+               )}
+               {block.type === 'textWithImages' && (
+                   <>
+                       <textarea value={data.body || ''} onChange={e => setData({...data, body: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white h-32" placeholder="Body Text" />
+                       <div>
+                           <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Layout</label>
+                           <select value={data.layout || 'square'} onChange={e => setData({...data, layout: e.target.value})} className="w-full bg-base-dark border border-gray-700 p-2 rounded text-white">
+                               <option value="square">Square</option>
+                               <option value="tall">Tall</option>
+                               <option value="extratall">Extra Tall</option>
+                           </select>
+                       </div>
+                        <button onClick={() => setData({...data, images: [...(data.images||[]), {url: '', alt: ''}]})} className="text-brand-primary text-sm mt-4">+ Add Side Image</button>
+                   </>
+               )}
            </div>
 
            <div className="flex justify-end gap-4 mt-8 pt-4 border-t border-gray-700">
@@ -830,13 +746,53 @@ const BlockEditorModal = ({ block, onSave, onClose }) => {
    );
 };
 
-// --- App Root ---
+const AdminPage = () => {
+  const { heroProjects, updateHeroProjects } = useContent();
+  const [editingProject, setEditingProject] = useState(null);
+  const dragItem = useRef();
+  const dragOverItem = useRef();
+  
+  const onDragStart = (e, index) => { dragItem.current = index; };
+  const onDragEnter = (e, index) => { dragOverItem.current = index; };
+  const onDragEnd = () => {
+      const copy = [...heroProjects];
+      const item = copy[dragItem.current];
+      copy.splice(dragItem.current, 1);
+      copy.splice(dragOverItem.current, 0, item);
+      dragItem.current = null; dragOverItem.current = null;
+      updateHeroProjects(copy);
+  };
+
+  if(editingProject) return <ProjectBuilder initialProject={editingProject} onSave={(p) => {
+      const updated = heroProjects.map(x => x.id === p.id ? p : x);
+      if(!heroProjects.find(x => x.id === p.id)) updated.push(p);
+      updateHeroProjects(updated);
+      setEditingProject(null);
+  }} onCancel={() => setEditingProject(null)} />;
+
+  return (
+    <div className="min-h-screen bg-base-dark text-white p-8 pt-32">
+       <div className="container mx-auto max-w-4xl">
+          <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+          <button onClick={() => setEditingProject({ id: `new-${Date.now()}`, title: 'New', contentBlocks: [] })} className="bg-brand-primary px-4 py-2 rounded mb-4 font-bold">+ New Project</button>
+          <div className="space-y-2">
+             {heroProjects.map((p, i) => (
+                <div key={p.id} draggable onDragStart={(e) => onDragStart(e, i)} onDragEnter={(e) => onDragEnter(e, i)} onDragEnd={onDragEnd} className="bg-base-medium p-4 rounded flex justify-between items-center cursor-move hover:bg-gray-800">
+                   <span>{p.title}</span>
+                   <button onClick={() => setEditingProject(p)} className="text-sm bg-base-dark px-3 py-1 rounded">Edit</button>
+                </div>
+             ))}
+          </div>
+       </div>
+    </div>
+  );
+};
+
 const MainApp = () => {
   const { path } = useRouter();
-  const parts = path.split('/');
-  
-  if (path === '#/admin') return <AdminPage />;
-  if (parts[1] === 'project') return <><Header /><CaseStudyDetailPage projectId={parts[2]} /><Footer /><CustomCursor /></>;
+  if (path === '/admin') return <AdminPage />;
+  if (path.startsWith('/project/')) return <><Header /><CaseStudyDetailPage projectId={path.split('/')[2]} /><Footer /><CustomCursor /></>;
+  if (path === '/about') return <><Header /><AboutPage /><Footer /><CustomCursor /></>;
   return <><Header /><HomePage /><Footer /><CustomCursor /></>;
 };
 
