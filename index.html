@@ -110,8 +110,10 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
+      // The 'config' command sends an initial pageview.
       gtag('config', 'G-KN0LN28WLD');
 
+      // This function is for tracking SPA navigations *after* the initial load.
       function trackPageView() {
         if (typeof gtag !== 'function') { return; }
         const pagePath = window.location.hash.substring(1) || '/';
@@ -121,7 +123,8 @@
           page_title: document.title
         });
       }
-      window.addEventListener('load', trackPageView);
+      
+      // We only need to listen for hash changes for subsequent page views.
       window.addEventListener('hashchange', trackPageView);
     </script>
     <!-- End Google Analytics -->
